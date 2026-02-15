@@ -579,17 +579,31 @@ def nclt_get_details(bench, filing_no):
             
         # 5. Connected Matters (using IA/MA list or similar)
         connected = []
+        ia_details = []
         ias = data.get('mainFilnowithIaNoList') or []
         for ia in ias:
-            connected.append({
+            ia_entry = {
                 "filing_no": ia.get('filing_no'),
                 "case_no": ia.get('case_no'),
                 "title": f"{ia.get('case_title1')} VS {ia.get('case_title2')}",
                 "status": ia.get('status')
+            }
+            connected.append(ia_entry)
+            
+            ia_details.append({
+                "ia_no": ia.get('case_no'),
+                "ia_number": ia.get('case_no'),
+                "description": f"{ia.get('case_title1')} VS {ia.get('case_title2')}",
+                "party": ia.get('case_title1'),
+                "filing_date": _normalize_order_date(ia.get('date_of_filing')),
+                "next_date": None,
+                "status": ia.get('status'),
+                "disposal_date": None,
+                "cin_no": ia.get('filing_no'),
             })
             
         # Construct result
-        return {
+        res = {
             "cin_no": filing_no, # Using filing_no as cin_no for now
             "registration_no": reg_info.get('registration_no'), # or case_no?
             "filling_no": filing_no,
@@ -631,6 +645,7 @@ def nclt_get_details(bench, filing_no):
             "history": [], # Detailed history is in orders/proceedings
             "acts": None,
             "orders": orders,
+            "ia_details": ia_details,
             "additional_info": {
                 "case_status": case_status,
                 "party_name": f"{', '.join(pet_names)} VS {', '.join(res_names)}",
@@ -640,6 +655,8 @@ def nclt_get_details(bench, filing_no):
             },
             "original_json": data,
         }
+            
+        return res
 
     except requests.exceptions.RequestException as e:
         logger.error(f"Request failed: {e}")
