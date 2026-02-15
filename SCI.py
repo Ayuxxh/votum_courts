@@ -701,6 +701,47 @@ def sci_get_details(diary_no, diary_year):
 
         listings = _parse_listing_dates(listing_html) if listing_html else []
 
+        ia_details = []
+        if listings:
+            seen_ias = set()
+            for entry in listings:
+                ia_text = entry.get("ia")
+                if ia_text and ia_text != "IA": # Skip header if it got mixed in
+                    ia_list = [i.strip() for i in ia_text.split(",") if i.strip()]
+                    for ia_no in ia_list:
+                        if ia_no not in seen_ias:
+                            seen_ias.add(ia_no)
+                            ia_details.append({
+                                "ia_no": ia_no,
+                                "ia_number": ia_no,
+                                "description": None,
+                                "party": None,
+                                "filing_date": None,
+                                "next_date": entry.get("cl_date"),
+                                "status": entry.get("remarks"),
+                                "disposal_date": None,
+                                "cin_no": None,
+                            })
+
+        office_report_html = None
+        office_report_payload: Optional[dict[str, Any]] = None
+        try:
+            office_report_html, office_report_payload = _fetch_case_tab(
+                diary_no, diary_year, "office_report"
+            )
+        except (requests.exceptions.RequestException, ValueError) as exc:
+            logger.warning("Failed to fetch SCI office report: %s", exc)
+
+        office_reports = []
+        if office_report_html:
+            report_soup = BeautifulSoup(office_report_html, "html.parser")
+            for link in report_soup.find_all("a"):
+                if link.get("href"):
+                    office_reports.append({
+                        "date": link.get_text(strip=True),
+                        "url": link.get("href")
+                    })
+
         judgement_html = None
         judgement_payload: Optional[dict[str, Any]] = None
         try:
@@ -736,12 +777,16 @@ def sci_get_details(diary_no, diary_year):
             "history": None,
             "acts": acts,
             "orders": orders,
+            "ia_details": ia_details,
             "listing_dates": listings,
-            "additional_info": None,
+            "additional_info": {
+                "office_reports": office_reports,
+            },
             "original_json": {
                 "case_details": case_payload,
                 "listing_dates": listing_payload,
                 "judgement_orders": judgement_payload,
+                "office_report": office_report_payload,
             },
         }
 

@@ -501,13 +501,13 @@ def nclt_search_by_advocate_name(bench, advocate_name, year):
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10)
 )
-def nclt_get_details(bench, filing_no):
+def nclt_get_details(bench, filing_no, flag_ia=False):
     # Bench argument is preserved for compatibility but not strictly needed for the detail fetch 
     # as filing_no is unique global identifier in NCLT usually, or at least the API just needs filing_no.
     try:
         params = {
             'filing_no': filing_no,
-            'flagIA': 'false'
+            'flagIA': 'true' if flag_ia else 'false'
         }
         # The endpoint expects GET
         resp = session.get(DETAILS_URL, params=params)
@@ -557,6 +557,8 @@ def nclt_get_details(bench, filing_no):
         final_status = final_status_list[0] if final_status_list else {}
         case_status = final_status.get('current_status')
         listing_date = final_status.get('listing_date')
+        next_listing_date = final_status.get('case_next_list_date') or final_status.get('nextlisting_step')
+        last_listing_date = final_status.get('listing_date_step') or listing_date
         
         # 4. Orders
         orders = []
@@ -596,10 +598,11 @@ def nclt_get_details(bench, filing_no):
                 "description": f"{ia.get('case_title1')} VS {ia.get('case_title2')}",
                 "party": ia.get('case_title1'),
                 "filing_date": _normalize_order_date(ia.get('date_of_filing')),
-                "next_date": None,
+                "next_date": _normalize_order_date(ia.get('next_list_date') or ia.get('listing_date')),
                 "status": ia.get('status'),
-                "disposal_date": None,
+                "disposal_date": _normalize_order_date(ia.get('disposal_date')),
                 "cin_no": ia.get('filing_no'),
+                "purpose": ia.get('purpose') or ia.get('next_listing_purpose') or ia.get('last_purpose_step'),
             })
             
         # Construct result
@@ -611,12 +614,12 @@ def nclt_get_details(bench, filing_no):
             "registration_date": reg_date,
             "filing_date": final_status.get('date_of_filing'),
             "first_listing_date": listing_date,
-            "next_listing_date": None, # Could extract from proceedings
-            "last_listing_date": listing_date,
-            "decision_date": None,
+            "next_listing_date": _normalize_order_date(next_listing_date),
+            "last_listing_date": _normalize_order_date(last_listing_date),
+            "decision_date": _normalize_order_date(final_status.get('disposal_date')),
             "court_no": final_status.get('court_no'),
-            "disposal_nature": None,
-            "purpose_next": None,
+            "disposal_nature": final_status.get('action_type'),
+            "purpose_next": final_status.get('next_listing_purpose') or final_status.get('last_purpose_step'),
             "case_type": final_status.get('case_type'),
             "pet_name": pet_names,
             "res_name": res_names,
