@@ -14,6 +14,7 @@ from urllib.parse import urljoin
 import ddddocr
 import fitz
 import requests
+from bs4 import BeautifulSoup
 from fastapi import APIRouter, Form, HTTPException
 from supabase_client import get_supabase_client
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
@@ -314,8 +315,19 @@ class BombayHCService:
             "court_name": "Bombay High Court",
             "bench_name": None,
             "district": None,
+            "first_hearing_date": None,
+            "next_listing_date": None,
+            "decision_date": None,
             "orders": [],
-            "history": [] 
+            "history": [],
+            "connected_matters": [],
+            "application_appeal_matters": [],
+            "ia_details": [],
+            "original_json": {
+                "documents": [],
+                "objections": [],
+                "ia_details": [],
+            }
         }
 
         # 1. Main Details
@@ -375,6 +387,43 @@ class BombayHCService:
         # Clean text fields
         result["advocates"] = self._clean_text(result.get("advocates"))
 
+        # History / Proceedings
+        history_tab = soup.find('div', id='CaseNoHistory')
+        if history_tab:
+            rows = history_tab.find_all('tr')
+            for row in rows[1:]:
+                cols = row.find_all('td')
+                if len(cols) >= 4:
+                    result["history"].append({
+                        "business_date": self._parse_date(cols[1].get_text(strip=True)),
+                        "hearing_date": self._parse_date(cols[1].get_text(strip=True)),
+                        "purpose": cols[2].get_text(strip=True),
+                        "result": cols[3].get_text(strip=True)
+                    })
+
+        # Connected Matters
+        connected_tab = soup.find('div', id='CaseNoConnected')
+        if connected_tab:
+            rows = connected_tab.find_all('tr')
+            for row in rows[1:]:
+                cols = row.find_all('td')
+                if len(cols) >= 3:
+                    result["connected_matters"].append({
+                        "case_no": cols[1].get_text(strip=True),
+                        "status": cols[2].get_text(strip=True)
+                    })
+
+        # Objections
+        obj_tab = soup.find('div', id='CaseNoObjections')
+        if obj_tab:
+            rows = obj_tab.find_all('tr')
+            for row in rows[1:]:
+                cols = row.find_all('td')
+                if len(cols) >= 3:
+                    result["original_json"]["objections"].append({
+                        "objection": cols[1].get_text(strip=True),
+                        "compliance_date": self._parse_date(cols[2].get_text(strip=True))
+                    })
 
         # Orders
         orders_tab = soup.find('div', id='CaseNoOrders')
@@ -401,6 +450,30 @@ class BombayHCService:
                         "document_url": doc_url
                     }
                     result['orders'].append(order)
+
+        # IA Details
+        ia_tab = soup.find('div', id='CaseNoIA')
+        if ia_tab:
+            rows = ia_tab.find_all('tr')
+            for row in rows[1:]: # Skip header
+                cols = row.find_all('td')
+                if len(cols) >= 5:
+                    ia_no = cols[1].get_text(strip=True)
+                    party = cols[2].get_text(strip=True)
+                    filing_date = self._parse_date(cols[3].get_text(strip=True))
+                    status = cols[4].get_text(strip=True)
+                    
+                    ia_entry = {
+                        "ia_no": ia_no,
+                        "ia_number": ia_no,
+                        "party": party,
+                        "filing_date": filing_date,
+                        "status": status,
+                        "description": f"IA No: {ia_no} | {party}"
+                    }
+                    result['ia_details'].append(ia_entry)
+        
+        result['original_json']['ia_details'] = result['ia_details']
 
         return result
 

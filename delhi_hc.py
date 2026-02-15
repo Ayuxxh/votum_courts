@@ -49,6 +49,29 @@ def parse_listing_date(date_str: Optional[str]) -> datetime:
     raise ValueError("Invalid listing_date format. Use YYYY-MM-DD, DD/MM/YYYY, or DD-MM-YYYY.")
 
 
+def _normalize_date(value: str | None) -> str | None:
+    raw = (value or "").strip()
+    if not raw:
+        return None
+
+    for fmt in ("%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d.%m.%Y", "%d %b %Y", "%d %B %Y"):
+        try:
+            return datetime.strptime(raw, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+
+    # Fallback: find dd-mm-yyyy-ish
+    m = re.search(r"(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})", raw)
+    if not m:
+        return None
+    d, mo, y = m.groups()
+    y = f"20{y}" if len(y) == 2 else y
+    try:
+        return datetime(int(y), int(mo), int(d)).strftime("%Y-%m-%d")
+    except ValueError:
+        return None
+
+
 def _normalize_case_token(case_no: str) -> str:
     token = re.sub(r"\s+", " ", (case_no or "").upper()).strip()
     token = token.replace(" /", "/").replace("/ ", "/")
@@ -506,6 +529,48 @@ class DelhiHCService:
             logger.error(f"Error fetching orders from {orders_url}: {e}")
             return []
 
+    def fetch_ia_details(self, ia_url: str) -> List[Dict[str, Any]]:
+        """
+        Fetch IA details from the given IA URL (JSON endpoint).
+        """
+        try:
+            headers = {'X-Requested-With': 'XMLHttpRequest'}
+            params = {
+                "draw": "1",
+                "start": "0",
+                "length": "200", # Fetch ample history
+                "search[value]": "",
+                "search[regex]": "false"
+            }
+            resp = self.session.get(ia_url, headers=headers, params=params, timeout=30)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            ias = []
+            for item in data.get('data', []):
+                # Expected fields based on standard patterns: ia_no, party, filing_date, next_date, status
+                ia_no = item.get('ia_no') or item.get('ia_number') or item.get('iano')
+                party = item.get('party') or item.get('party_name')
+                filing_date = _normalize_date(item.get('filing_date') or item.get('iadate'))
+                next_date = _normalize_date(item.get('next_date') or item.get('next_hearing_date'))
+                status = item.get('status') or item.get('ia_status')
+                
+                if ia_no or party:
+                    ias.append({
+                        "ia_no": ia_no,
+                        "ia_number": ia_no,
+                        "party": party,
+                        "filing_date": filing_date,
+                        "next_date": next_date,
+                        "status": status
+                    })
+            
+            return ias
+
+        except Exception as e:
+            logger.error(f"Error fetching IA details from {ia_url}: {e}")
+            return []
+
     @retry(
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         stop=stop_after_attempt(3),
@@ -559,7 +624,8 @@ class DelhiHCService:
             # row is a dict like {'DT_RowIndex': 1, 'ctype': 'HTML...', 'pet': 'HTML...', 'orderdate': 'HTML...'}
             
             case_info = {
-                "orders": []
+                "orders": [],
+                "ia_details": []
             }
             
             # Parse 'ctype' column (Diary No. / Case No.[STATUS])
@@ -582,6 +648,21 @@ class DelhiHCService:
                     orders_url = orders_link['href'].strip()
                     # Fetch orders if URL is found
                     case_info['orders'] = self.fetch_orders(orders_url)
+
+                # Extract IA URL
+                ia_link = soup.find('a', string=re.compile(r"Click here for.*", re.IGNORECASE))
+                while ia_link:
+                    link_text = ia_link.get_text(strip=True)
+                    if "orders" in link_text.lower():
+                        pass # already handled
+                    elif "judgments" in link_text.lower():
+                        pass # not needed for now
+                    elif ia_link.get('href'):
+                        ia_url = ia_link['href'].strip()
+                        # This could be IA, CM, or something else
+                        case_info['ia_details'].extend(self.fetch_ia_details(ia_url))
+                    
+                    ia_link = ia_link.find_next('a', string=re.compile(r"Click here for.*", re.IGNORECASE))
                     
             # Parse 'pet' column (Petitioner Vs. Respondent)
             if 'pet' in row:
