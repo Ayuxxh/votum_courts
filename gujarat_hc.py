@@ -1,13 +1,11 @@
 import hashlib
 import json
 import logging
-import os
 import re
 import time
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
-from tempfile import NamedTemporaryFile, TemporaryDirectory
 from typing import Any, Dict, List, Optional
 from urllib.parse import parse_qs, urlparse
 
@@ -15,8 +13,6 @@ import ddddocr
 import fitz
 import httpx
 import requests
-from fastapi import APIRouter, Form, HTTPException
-from supabase_client import get_supabase_client
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
@@ -28,12 +24,6 @@ except ImportError:
         persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
-
-# Router for side-effects/cron usage if needed
-router = APIRouter()
-
-CRON_JOB_RUNS_TABLE = "cron_job_runs"
-VOTUM_NOTIFICATIONS_TABLE = "votum_notifications"
 
 BASE_URL = "https://gujarathc-casestatus.nic.in/gujarathc"
 CASE_TYPE_URL = f"{BASE_URL}/GetCaseTypeDataOnLoad"
@@ -342,16 +332,6 @@ def find_case_entries(pdf_path: str, registration_no: str) -> List[Dict[str, Any
         if target_tail in tails:
             matched_entries.append(entry)
     return matched_entries
-
-def parse_listing_date(date_str: Optional[str]) -> datetime:
-    if not date_str:
-        return datetime.now() + timedelta(days=1)
-    for fmt in ("%Y-%m-%d", "%d/%m/%Y"):
-        try:
-            return datetime.strptime(date_str, fmt)
-        except ValueError:
-            continue
-    raise ValueError("Invalid listing_date format. Use YYYY-MM-DD or DD/MM/YYYY.")
 
 def fetch_cause_list_pdf_bytes(listing_date: datetime) -> bytes:
     listing_date_str = listing_date.strftime("%d/%m/%Y")
@@ -910,137 +890,6 @@ async def persist_orders_to_storage(
     )
 
 
-def _create_cron_job_run(supabase, job_name: str, metadata: Dict[str, Any]) -> str | None:
-    try:
-        payload = {"job_name": job_name, "status": "running", "metadata": metadata}
-        result = supabase.table(CRON_JOB_RUNS_TABLE).insert(payload).execute()
-        if result.data:
-            return result.data[0].get("id")
-    except Exception as exc:
-        logger.warning("Failed to create cron job run: %s", exc)
-    return None
-
-
-def _finish_cron_job_run(
-    supabase,
-    run_id: str | None,
-    status: str,
-    summary: Dict[str, Any] | None = None,
-    error: str | None = None,
-) -> None:
-    if not run_id:
-        return
-    payload: Dict[str, Any] = {
-        "status": status,
-        "finished_at": datetime.now(timezone.utc).isoformat(),
-    }
-    if summary is not None:
-        payload["summary"] = summary
-    if error:
-        payload["error"] = error
-    try:
-        supabase.table(CRON_JOB_RUNS_TABLE).update(payload).eq("id", run_id).execute()
-    except Exception as exc:
-        logger.warning("Failed to update cron job run %s: %s", run_id, exc)
-
-
-
-@router.post("/cause_list/sync")
-async def sync_cause_list(
-    listing_date: Optional[str] = Form(None),
-    dry_run: bool = Form(False),
-    limit: Optional[int] = Form(None),
-):
-    """
-    Fetch the next day's cause list, extract matching case rows by registration number,
-    store extracted text + image path in 'cause_list_entries' table,
-    and generate compiled PDFs per workspace.
-    """
-    supabase = get_supabase_client()
-    run_id = _create_cron_job_run(
-        supabase,
-        "cause_list_sync",
-        {"listing_date": listing_date, "dry_run": dry_run, "limit": limit},
-    )
-    run_status = "failed"
-    run_error: str | None = None
-    run_summary: Dict[str, Any] | None = None
-    pdf_path: str | None = None
-
-    try:
-        try:
-            target_date = parse_listing_date(listing_date)
-        except ValueError as e:
-            run_error = str(e)
-            raise HTTPException(status_code=400, detail=str(e))
-
-        listing_date_token = target_date.strftime("%Y%m%d")
-        listing_date_db = target_date.strftime("%Y-%m-%d")
-
-        try:
-            pdf_bytes = fetch_cause_list_pdf_bytes(target_date)
-        except Exception as e:
-            run_error = f"Failed to fetch cause list PDF: {str(e)}"
-            raise HTTPException(
-                status_code=502,
-                detail=f"Failed to fetch cause list PDF: {str(e)}",
-            )
-
-        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
-            tmp_pdf.write(pdf_bytes)
-            pdf_path = tmp_pdf.name
-
-        storage_bucket = "documents"
-
-        case_query = (
-            supabase.table("votum_cases")
-            .select(
-                "id, workspace_id, registration_no, case_no, cin_no, "
-                "assigned_user_ids, reminder_contacts, court_name"
-            )
-            .execute()
-        )
-        cases = case_query.data or []
-        if limit:
-            cases = cases[:limit]
-
-        totals = {
-            "total_cases": len(cases),
-            "matched_cases": 0,
-            "entries_added": 0,
-            "images_uploaded": 0,
-            "entries_updated": 0,
-            "pdfs_generated": 0,
-        }
-        case_results = []
-        
-        # Accumulate entries for PDF generation: workspace_id -> list of entries
-        workspace_entries: Dict[str, List[Dict[str, Any]]] = {}
-
-        with TemporaryDirectory() as tmp_dir:
-            for case in cases:
-                registration_no = case.get("registration_no")
-                if not registration_no:
-                    continue
-
-                # entries = find_case_entries(pdf_path, registration_no)
-                # if not entries:
-                #     continue
-
-    except Exception as exc:
-        if run_error is None:
-            run_error = str(exc)
-        raise
-    finally:
-        _finish_cron_job_run(
-            supabase,
-            run_id,
-            run_status,
-            summary=run_summary,
-            error=run_error,
-        )
-        if pdf_path and os.path.exists(pdf_path):
-            os.remove(pdf_path)
 
 if __name__ == "__main__":
     # Test

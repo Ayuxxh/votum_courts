@@ -2,12 +2,10 @@
 import hashlib
 import json
 import logging
-import os
 import re
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from pathlib import Path
-from tempfile import NamedTemporaryFile, TemporaryDirectory
 from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
@@ -15,8 +13,6 @@ import ddddocr
 import fitz
 import requests
 from bs4 import BeautifulSoup
-from fastapi import APIRouter, Form, HTTPException
-from supabase_client import get_supabase_client
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
@@ -28,11 +24,6 @@ except ImportError:
         persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
-
-# Router for side-effects/cron usage if needed
-router = APIRouter()
-
-CRON_JOB_RUNS_TABLE = "cron_job_runs"
 
 BASE_URL = "https://bombayhighcourt.gov.in/bhc"
 SEARCH_URL = f"{BASE_URL}/case-status-new"
@@ -549,109 +540,6 @@ def parse_bombay_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
 
 def find_bombay_case_entries(pdf_path: str, registration_no: str) -> List[Dict[str, Any]]:
     return _service.find_case_entries(pdf_path, registration_no)
-
-
-def _create_cron_job_run(supabase, job_name: str, metadata: Dict[str, Any]) -> str | None:
-    try:
-        payload = {"job_name": job_name, "status": "running", "metadata": metadata}
-        result = supabase.table(CRON_JOB_RUNS_TABLE).insert(payload).execute()
-        if result.data:
-            return result.data[0].get("id")
-    except Exception as exc:
-        logger.warning("Failed to create cron job run: %s", exc)
-    return None
-
-
-def _finish_cron_job_run(
-    supabase,
-    run_id: str | None,
-    status: str,
-    summary: Dict[str, Any] | None = None,
-    error: str | None = None,
-) -> None:
-    if not run_id:
-        return
-    payload: Dict[str, Any] = {
-        "status": status,
-        "finished_at": datetime.now(timezone.utc).isoformat(),
-    }
-    if summary is not None:
-        payload["summary"] = summary
-    if error:
-        payload["error"] = error
-    try:
-        supabase.table(CRON_JOB_RUNS_TABLE).update(payload).eq("id", run_id).execute()
-    except Exception as exc:
-        logger.warning("Failed to update cron job run %s: %s", run_id, exc)
-
-
-@router.post("/bombay_cause_list/sync")
-async def sync_bombay_cause_list(
-    listing_date: Optional[str] = Form(None),
-    bench: str = Form("B"),
-    dry_run: bool = Form(False),
-    limit: Optional[int] = Form(None),
-):
-    """
-    Fetch Bombay HC cause list PDF, extract matching case rows,
-    and store extracted text.
-    """
-    supabase = get_supabase_client()
-    run_id = _create_cron_job_run(
-        supabase,
-        "bombay_cause_list_sync",
-        {"listing_date": listing_date, "bench": bench, "dry_run": dry_run, "limit": limit},
-    )
-    run_status = "failed"
-    run_error: str | None = None
-    run_summary: Dict[str, Any] | None = None
-    pdf_path: str | None = None
-
-    try:
-        if listing_date:
-            target_date = datetime.strptime(listing_date, "%Y-%m-%d")
-        else:
-            target_date = datetime.now() + timedelta(days=1)
-
-        try:
-            pdf_bytes = get_bombay_cause_list_pdf(target_date, bench=bench)
-        except Exception as e:
-            run_error = f"Failed to fetch cause list PDF: {str(e)}"
-            raise HTTPException(
-                status_code=502,
-                detail=f"Failed to fetch cause list PDF: {str(e)}",
-            )
-
-        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
-            tmp_pdf.write(pdf_bytes)
-            pdf_path = tmp_pdf.name
-
-        # For now, just parse and log
-        entries = parse_bombay_cause_list_pdf(pdf_path)
-        
-        run_status = "completed"
-        run_summary = {
-            "total_entries": len(entries),
-            "date": target_date.strftime("%Y-%m-%d"),
-            "bench": bench
-        }
-        
-        return {"status": "success", "summary": run_summary}
-
-    except Exception as exc:
-        if run_error is None:
-            run_error = str(exc)
-        raise
-    finally:
-        _finish_cron_job_run(
-            supabase,
-            run_id,
-            run_status,
-            summary=run_summary,
-            error=run_error,
-        )
-        if pdf_path and os.path.exists(pdf_path):
-            os.remove(pdf_path)
 
 
 def _fetch_order_document(url: str, referer: Optional[str] = None) -> requests.Response:
