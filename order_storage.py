@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 ORDER_STORAGE_BUCKET = os.getenv("ORDER_STORAGE_BUCKET", "documents")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 
 
 def get_supabase_client() -> Optional[Client]:
@@ -151,6 +151,83 @@ def _slugify_folder_name(value: str) -> str:
     return slug or "folder"
 
 
+def _ensure_case_folder(
+    supabase_client: Client,
+    workspace_id: str,
+    case_id: str,
+) -> Optional[str]:
+    try:
+        existing = (
+            supabase_client.table("document_folders")
+            .select("id")
+            .eq("workspace_id", workspace_id)
+            .eq("case_id", case_id)
+            .limit(1)
+            .execute()
+        )
+        if existing.data:
+            return existing.data[0].get("id")
+    except Exception as exc:
+        logger.warning("Failed to check case folder for case %s: %s", case_id, exc)
+
+    case_name = str(case_id)
+    try:
+        case_res = (
+            supabase_client.table("votum_cases")
+            .select("registration_no")
+            .eq("id", case_id)
+            .limit(1)
+            .execute()
+        )
+        if case_res.data:
+            registration_no = case_res.data[0].get("registration_no")
+            if registration_no:
+                case_name = str(registration_no).strip() or case_name
+    except Exception as exc:
+        logger.warning("Failed to load case %s registration_no: %s", case_id, exc)
+
+    payload = {
+        "workspace_id": workspace_id,
+        "name": case_name,
+        "slug": _slugify_folder_name(case_name),
+        "parent_id": None,
+        "created_by": None,
+        "case_id": case_id,
+    }
+
+    try:
+        created = supabase_client.table("document_folders").insert(payload).execute()
+        if created.data:
+            if isinstance(created.data, dict):
+                return created.data.get("id")
+            if isinstance(created.data, list) and created.data:
+                return created.data[0].get("id")
+    except Exception as exc:
+        logger.warning("Failed to create case folder for case %s: %s", case_id, exc)
+
+    fallback_name = f"{case_name} ({case_id})"
+    fallback_payload = {
+        **payload,
+        "name": fallback_name,
+        "slug": _slugify_folder_name(fallback_name),
+    }
+    try:
+        fallback = (
+            supabase_client.table("document_folders")
+            .insert(fallback_payload)
+            .execute()
+        )
+        if fallback.data:
+            if isinstance(fallback.data, dict):
+                return fallback.data.get("id")
+            if isinstance(fallback.data, list) and fallback.data:
+                return fallback.data[0].get("id")
+    except Exception as exc:
+        logger.warning("Failed fallback case folder for case %s: %s", case_id, exc)
+
+    return None
+
+
 async def persist_orders_to_storage(
     orders: Optional[List[dict]],
     case_id: Optional[str] = None,
@@ -233,23 +310,7 @@ async def persist_orders_to_storage(
         folder_id = None
         orders_folder_id = None
         if workspace_id:
-            try:
-                folder_res = (
-                    supabase_client.table("document_folders")
-                    .select("id")
-                    .eq("workspace_id", workspace_id)
-                    .eq("case_id", case_id)
-                    .limit(1)
-                    .execute()
-                )
-                if folder_res.data:
-                    folder_id = folder_res.data[0].get("id")
-            except Exception as exc:
-                logger.warning(
-                    "Failed to load document folder for case %s: %s",
-                    case_id,
-                    exc,
-                )
+            folder_id = _ensure_case_folder(supabase_client, workspace_id, case_id)
 
         if workspace_id and folder_id:
             try:

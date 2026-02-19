@@ -3,11 +3,12 @@ import os
 import re
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import ddddocr
 import requests
+import fitz
 from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
@@ -23,6 +24,9 @@ MAIN_URL = f"{BASE_URL}/mainPage.drt"
 CASE_STATUS_URL = f"{BASE_URL}/nclat/case_status.php"
 AJAX_URL = f"{BASE_URL}/nclat/ajax/ajax.php"
 CAPTCHA_URL = f"{BASE_URL}/nclat/captcha.php"
+
+# Cause List URL
+CAUSE_LIST_URL = "https://nclat.nic.in/daily-cause-list"
 
 # /nclat/order_view.php?path=... returns a PDF
 ORDERS_VIEW_PREFIX = f"{BASE_URL}/nclat/order_view.php"
@@ -229,64 +233,13 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
     registration_date: str | None = None
     case_no: str | None = None
     status: str | None = None
+    next_listing_date: str | None = None
 
     def _norm_key(text: str) -> str:
         return re.sub(r"[^a-z0-9]+", " ", (text or "").strip().lower()).strip()
 
-    def _is_case_detail_kv_table(table) -> bool:
-        # Avoid connected-cases grids which have headers like "Sr. No. | Filing No | Case No | Date of filing..."
-        header_text = " ".join(th.get_text(" ", strip=True).lower() for th in table.find_all("th"))
-        if "sr. no" in header_text or "sr no" in header_text:
-            return False
-
-        rows = table.find_all("tr")
-        for tr in rows[:3]:
-            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
-            # Expected shape includes: Filing No, <digits>, (spacer), Date Of Filing, <date>
-            if len(cells) >= 5:
-                k1, v1, _, k2, v2 = cells[:5]
-                if (
-                    _norm_key(k1) == "filing no"
-                    and re.fullmatch(r"\d{10,}", (v1 or "").strip())
-                    and _norm_key(k2) == "date of filing"
-                    and (v2 or "").strip()
-                ):
-                    return True
-        return False
-
-    # Table with Filing No/Date of filing/Case No/Registration Date/Status.
-    # The markup can include spacer cells, so we read label/value pairs with a sliding window.
-    for t in tables:
-        if not _is_case_detail_kv_table(t):
-            continue
-
-        for tr in t.find_all("tr"):
-            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["th", "td"])]
-            if not cells:
-                continue
-
-            if len(cells) == 2 and _norm_key(cells[0]) == "status":
-                status = cells[1].strip() or None
-                continue
-
-            i = 0
-            while i + 1 < len(cells):
-                k = cells[i].strip()
-                v = cells[i + 1].strip()
-                if not k or not v:
-                    i += 1
-                    continue
-                kn = _norm_key(k)
-                if kn in {"filing no", "filing number"}:
-                    filing_no = v or filing_no
-                elif kn == "date of filing":
-                    filing_date = _normalize_date(v) or v
-                elif kn in {"case no", "case number"}:
-                    case_no = v or case_no
-                elif kn == "registration date":
-                    registration_date = _normalize_date(v) or v
-                i += 2
-        break
+    def _clean(text: str) -> str:
+        return re.sub(r"\s+", " ", text or "").strip()
 
     petitioners: list[str] = []
     respondents: list[str] = []
@@ -297,91 +250,139 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         out: list[str] = []
         if not table:
             return out
-        headers = [c.get_text(" ", strip=True).lower() for c in table.find_all("th")]
+        # Filter ths that belong strictly to this table
+        ths = [th for th in table.find_all("th") if th.find_parent("table") == table]
+        headers = [_clean(th.get_text(" ", strip=True)).lower() for th in ths]
+        
         if not any(header_substr in h for h in headers):
             return out
-        for tr in table.find_all("tr"):
-            tds = tr.find_all("td")
+        
+        # Filter trs that belong strictly to this table
+        trs = [tr for tr in table.find_all("tr") if tr.find_parent("table") == table]
+        for tr in trs:
+            tds = tr.find_all("td", recursive=False)
             if len(tds) >= 2:
-                value = tds[1].get_text(" ", strip=True)
+                value = _clean(tds[1].get_text(" ", strip=True))
                 if value and value.lower() != "no data":
                     out.append(value)
         return out
 
-    # Party tables may appear as separate 2-col tables.
-    for t in tables:
-        petitioners.extend(_collect_from_two_col_table(t, "applicant/appellant"))
-        respondents.extend(_collect_from_two_col_table(t, "respodent"))
-
-    # Legal rep tables similarly.
-    for t in tables:
-        pet_advs.extend(_collect_from_two_col_table(t, "legal representative"))
-        # Respondent legal rep table has "Respodent Legal Representative Name"
-        headers = [c.get_text(" ", strip=True).lower() for c in t.find_all("th")]
-        if any("respodent" in h and "legal representative" in h for h in headers):
-            for tr in t.find_all("tr"):
-                tds = tr.find_all("td")
-                if len(tds) >= 2:
-                    value = tds[1].get_text(" ", strip=True)
-                    if value and value.lower() != "no data":
-                        res_advs.append(value)
-
-    # Order history: rows with Download and order_view.php links.
     orders: list[dict] = []
-    for t in tables:
-        ths = [th.get_text(" ", strip=True).lower() for th in t.find_all("th")]
-        if not ths:
-            continue
-        if "order date" in " ".join(ths) and "order type" in " ".join(ths) and "view" in " ".join(ths):
-            for tr in t.find_all("tr"):
-                tds = tr.find_all("td")
-                if len(tds) < 3:
-                    continue
-                order_date_raw = tds[1].get_text(" ", strip=True)
-                order_type = tds[2].get_text(" ", strip=True)
-                href = None
-                link = tr.find("a", href=True)
-                if link:
-                    href = link["href"]
-                else:
-                    # Sometimes Download is rendered without an <a>; fall back to any href in doc.
-                    any_link = soup.find("a", href=re.compile(r"order_view\.php\?path="))
-                    if any_link:
-                        href = any_link.get("href")
-
-                document_url = urljoin(f"{BASE_URL}/nclat/", href) if href else None
-                orders.append(
-                    {
-                        "date": _normalize_date(order_date_raw) or order_date_raw or None,
-                        "description": order_type or "Order",
-                        "document_url": document_url,
-                        "source_document_url": document_url,
-                        "order_type": order_type or None,
-                    }
-                )
-            break
-
-    # Hearing table: keep as raw list for now; can be enriched via case_details_hearing calls.
     hearings: list[dict] = []
-    for t in tables:
-        ths = [th.get_text(" ", strip=True).lower() for th in t.find_all("th")]
-        if not ths:
+
+    # Iterate through each "card" in the accordion structure
+    for card in soup.select(".card"):
+        header = card.select_one(".card-header")
+        if not header:
             continue
-        if "hearing date" in " ".join(ths) and "purpose" in " ".join(ths):
-            for tr in t.find_all("tr"):
-                tds = tr.find_all("td")
-                if len(tds) < 4:
-                    continue
-                hearings.append(
-                    {
-                        "hearing_date": _normalize_date(tds[1].get_text(" ", strip=True))
-                        or tds[1].get_text(" ", strip=True)
-                        or None,
-                        "court_no": tds[2].get_text(" ", strip=True) or None,
-                        "purpose": tds[3].get_text(" ", strip=True) or None,
-                    }
-                )
-            break
+        h_text = _clean(header.get_text(" ", strip=True)).lower()
+        body = card.select_one(".card-body")
+        if not body:
+            continue
+
+        if "case detail" in h_text:
+            table = body.find("table")
+            if table:
+                trs = [tr for tr in table.find_all("tr") if tr.find_parent("table") == table]
+                for tr in trs:
+                    cells = [_clean(c.get_text(" ", strip=True)) for c in tr.find_all(["th", "td"], recursive=False)]
+                    if not cells:
+                        continue
+                    if len(cells) == 2 and _norm_key(cells[0]) == "status":
+                        status = cells[1].strip() or None
+                        continue
+                    i = 0
+                    while i + 1 < len(cells):
+                        kn = _norm_key(cells[i])
+                        v = cells[i + 1].strip()
+                        if kn in {"filing no", "filing number"}:
+                            filing_no = v or filing_no
+                        elif kn == "date of filing":
+                            filing_date = _normalize_date(v) or v
+                        elif kn in {"case no", "case number"}:
+                            case_no = v or case_no
+                        elif kn == "registration date":
+                            registration_date = _normalize_date(v) or v
+                        i += 2
+        
+        elif "party details" in h_text:
+            for pt in body.find_all("table"):
+                petitioners.extend(_collect_from_two_col_table(pt, "applicant/appellant"))
+                respondents.extend(_collect_from_two_col_table(pt, "respodent"))
+        
+        elif "legal representative" in h_text:
+            for lt in body.find_all("table"):
+                pet_advs.extend(_collect_from_two_col_table(lt, "applicant/appellant"))
+                # Respondent legal rep table has "Respodent Legal Representative Name"
+                ths = [th for th in lt.find_all("th") if th.find_parent("table") == lt]
+                headers = [_clean(th.get_text(" ", strip=True)).lower() for th in ths]
+                if any("respodent" in h and "legal representative" in h for h in headers):
+                    trs = [tr for tr in lt.find_all("tr") if tr.find_parent("table") == lt]
+                    for tr in trs:
+                        tds = tr.find_all("td", recursive=False)
+                        if len(tds) >= 2:
+                            value = _clean(tds[1].get_text(" ", strip=True))
+                            if value and value.lower() != "no data":
+                                res_advs.append(value)
+        
+        elif "next hearing details" in h_text:
+            trs = [tr for tr in body.find_all("tr") if tr.find_parent("table") == tr.find_parent("table", recursive=True)] 
+            # Actually simpler: just find all tables and check if they have hearing date
+            for t in body.find_all("table"):
+                if t.find("table"): continue # Skip outer
+                for tr in t.find_all("tr"):
+                    cells = [_clean(c.get_text(" ", strip=True)) for c in tr.find_all(["td", "th"], recursive=False)]
+                    for i in range(len(cells) - 1):
+                        if _norm_key(cells[i]) == "hearing date":
+                            next_listing_date = _normalize_date(cells[i + 1]) or cells[i + 1]
+                            break
+                    if next_listing_date: break
+                if next_listing_date: break
+
+        elif "case history" in h_text:
+            for table in body.find_all("table"):
+                if table.find("table"): continue
+                ths = [_clean(th.get_text(" ", strip=True)).lower() for th in table.find_all("th") if th.find_parent("table") == table]
+                if "hearing date" in " ".join(ths) and "purpose" in " ".join(ths):
+                    trs = [tr for tr in table.find_all("tr") if tr.find_parent("table") == table]
+                    for tr in trs:
+                        tds = tr.find_all("td", recursive=False)
+                        if len(tds) >= 4:
+                            hearings.append(
+                                {
+                                    "hearing_date": _normalize_date(_clean(tds[1].get_text(" ", strip=True)))
+                                    or _clean(tds[1].get_text(" ", strip=True))
+                                    or None,
+                                    "court_no": _clean(tds[2].get_text(" ", strip=True)) or None,
+                                    "purpose": _clean(tds[3].get_text(" ", strip=True)) or None,
+                                }
+                            )
+
+        elif "order history" in h_text:
+            for table in body.find_all("table"):
+                if table.find("table"): continue
+                ths = [_clean(th.get_text(" ", strip=True)).lower() for th in table.find_all("th") if th.find_parent("table") == table]
+                if "order date" in " ".join(ths) and "order type" in " ".join(ths):
+                    trs = [tr for tr in table.find_all("tr") if tr.find_parent("table") == table]
+                    for tr in trs:
+                        tds = tr.find_all("td", recursive=False)
+                        if len(tds) >= 3:
+                            order_date_raw = _clean(tds[1].get_text(" ", strip=True))
+                            order_type = _clean(tds[2].get_text(" ", strip=True))
+                            href = None
+                            link = tr.find("a", href=True)
+                            if link:
+                                href = link["href"]
+                            document_url = urljoin(f"{BASE_URL}/nclat/", href) if href else None
+                            orders.append(
+                                {
+                                    "date": _normalize_date(order_date_raw) or order_date_raw or None,
+                                    "description": order_type or "Order",
+                                    "document_url": document_url,
+                                    "source_document_url": document_url,
+                                    "order_type": order_type or None,
+                                }
+                            )
 
     return {
         "cin_no": filing_no,
@@ -395,7 +396,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         "res_name": respondents or ([res_title] if res_title else []),
         "petitioner_advocates": sorted({a for a in pet_advs if a}),
         "respondent_advocates": sorted({a for a in res_advs if a}),
-        "next_listing_date": None,
+        "next_listing_date": next_listing_date,
         "orders": orders,
         "history": [],
         "additional_info": {
@@ -406,6 +407,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         },
         "original_html": html,
     }
+
 
 
 @retry(
@@ -576,3 +578,178 @@ async def persist_orders_to_storage(
         base_url=BASE_URL,
         referer=CASE_STATUS_URL,
     )
+
+
+def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Parse NCLAT cause-list PDF using coordinates and section headers.
+    """
+    doc = fitz.open(stream=pdf_content, filetype="pdf")
+    entries = []
+    
+    current_entry = None
+    current_stage = None
+    header_found = False
+    stop_parsing = False
+    
+    for page in doc:
+        if stop_parsing:
+            break
+            
+        blocks = page.get_text("dict")["blocks"]
+        lines = []
+        for b in blocks:
+            if b["type"] == 0:
+                for l in b["lines"]:
+                    x0, y0, x1, y1 = l["bbox"]
+                    text = "".join(s["text"] for s in l["spans"]).strip()
+                    if text:
+                        lines.append({"x0": x0, "y0": y0, "x1": x1, "y1": y1, "text": text})
+        
+        lines.sort(key=lambda x: (x["y0"], x["x0"]))
+        
+        for line in lines:
+            txt = line["text"]
+            y0 = line["y0"]
+            
+            if "INSTRUCTIONS FOR" in txt.upper():
+                stop_parsing = True
+                break
+
+            # Detect section headers like "For Admission", "For Hearing", "Part Heard"
+            if line["x0"] > 100 and line["x1"] < 500 and ("For " in txt or "After " in txt or "Admission" in txt or "Hearing" in txt or "Part Heard" in txt):
+                current_stage = txt
+                continue
+
+            if not header_found:
+                if "Case No." in txt or "Name of the parties" in txt:
+                    header_found = True
+                continue
+            
+            # Detect S. No. start (e.g. "1.", "2.", "10.")
+            is_sno = False
+            if line["x0"] < 70:
+                m = re.match(r"^(\d+)\.?\s*$", txt)
+                if m:
+                    # Avoid page numbers (top/bottom)
+                    if 100 < y0 < 800:
+                        if "." in txt or len(txt) <= 2:
+                            is_sno = True
+                            sno_val = m.group(1)
+            
+            if is_sno:
+                if current_entry:
+                    entries.append(current_entry)
+                current_entry = {
+                    "item_no": sno_val,
+                    "case_no": "",
+                    "parties": "",
+                    "counsel_app": "",
+                    "counsel_res": "",
+                    "stage": current_stage,
+                    "court": court_name
+                }
+            elif current_entry:
+                # Skip repeated headers on new pages
+                if "S. No." in txt or "Case No." in txt or "Name of the parties" in txt:
+                    continue
+                if "Counsel for" in txt or "Appellants" in txt or "Respondents" in txt:
+                    continue
+                    
+                # Assign to columns based on x0 coordinates
+                if line["x0"] < 150: # Case No column
+                    current_entry["case_no"] += " " + txt
+                elif line["x0"] < 350: # Parties column
+                    current_entry["parties"] += " " + txt
+                elif line["x0"] < 460: # Counsel App column
+                    current_entry["counsel_app"] += " " + txt
+                else: # Counsel Res column
+                    current_entry["counsel_res"] += " " + txt
+                    
+    if current_entry:
+        entries.append(current_entry)
+        
+    # Clean up whitespace
+    for e in entries:
+        for k in ["case_no", "parties", "counsel_app", "counsel_res"]:
+            e[k] = re.sub(r"\s+", " ", e[k]).strip()
+            
+    return entries
+
+
+@retry(
+    retry=retry_if_exception_type(requests.exceptions.RequestException),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=10),
+)
+def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List[Dict[str, Any]]:
+    """
+    Fetch and parse NCLAT cause list for a given date and bench.
+    """
+    date_str = listing_date.strftime("%Y-%m-%d")
+    params = {
+        "field_final_date_value": date_str,
+        "field_final_date_value_1": date_str,
+    }
+    if bench.lower() == "chennai":
+        params["field_court_name_target_id"] = "43"
+    else:
+        params["field_court_name_target_id"] = "All"
+
+    headers = {
+        "User-Agent": DEFAULT_UA
+    }
+    
+    resp = requests.get(CAUSE_LIST_URL, params=params, headers=headers, timeout=30)
+    resp.raise_for_status()
+    
+    soup = BeautifulSoup(resp.text, "html.parser")
+    table = soup.find("table", {"class": "cols-5"})
+    if not table:
+        logger.info(f"No cause list found for {date_str} and bench {bench}")
+        return []
+    
+    pdf_links = []
+    for row in table.find_all("tr")[1:]: # Skip header
+        cells = row.find_all("td")
+        if len(cells) < 5:
+            continue
+        
+        court_name = cells[1].get_text(strip=True)
+        # If bench is delhi, skip Chennai Bench entries
+        if bench.lower() == "delhi" and "chennai" in court_name.lower():
+            continue
+            
+        link_tag = cells[4].find("a", href=True)
+        if link_tag:
+            pdf_url = urljoin(CAUSE_LIST_URL, link_tag["href"])
+            pdf_links.append({"url": pdf_url, "court": court_name})
+    
+    all_entries = []
+    for link_info in pdf_links:
+        try:
+            pdf_resp = requests.get(link_info["url"], headers=headers, timeout=60)
+            pdf_resp.raise_for_status()
+            entries = nclat_parse_cause_list_pdf(pdf_resp.content, court_name=link_info["court"])
+            all_entries.extend(entries)
+        except Exception as e:
+            logger.error(f"Error parsing PDF {link_info['url']}: {e}")
+            
+    return all_entries
+
+
+def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: str = "delhi") -> List[Dict[str, Any]]:
+    """
+    Search for a specific case number in the cause list.
+    """
+    entries = nclat_fetch_cause_list(listing_date, bench)
+    if not entries:
+        return []
+        
+    target = re.sub(r"[^A-Z0-9]+", "", case_no.upper())
+    matched = []
+    for e in entries:
+        curr = re.sub(r"[^A-Z0-9]+", "", e["case_no"].upper())
+        if target in curr or curr in target:
+            matched.append(e)
+    return matched
