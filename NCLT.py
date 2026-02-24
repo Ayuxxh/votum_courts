@@ -157,18 +157,47 @@ def get_bench_id(bench_name):
             return val
     return '0'
 
-def get_cause_list_bench_id(bench_name):
+def _canonicalize_bench_name(value: str) -> str:
+    return re.sub(r"\s+", " ", value.lower().replace("-", " ").strip())
+
+
+def get_cause_list_bench_ids(bench_name) -> list[str]:
     if not bench_name:
-        return 'All'
-    normalized = bench_name.lower().strip()
+        return ["All"]
+    normalized = _canonicalize_bench_name(str(bench_name))
+
+    # 1) Exact (canonical) match: single, unambiguous ID.
     for key, val in CAUSE_LIST_BENCH_MAP.items():
-        if key in normalized:
-            return val
-    # Fallback to prefix match
+        if _canonicalize_bench_name(key) == normalized:
+            return [val]
+
+    # 2) Bench-only / short input (e.g. "Ahmedabad") -> all matching courts for that bench.
+    contains_matches: list[tuple[str, str]] = []
     for key, val in CAUSE_LIST_BENCH_MAP.items():
-        if normalized in key:
-            return val
-    return 'All'
+        if normalized in _canonicalize_bench_name(key):
+            contains_matches.append((key, val))
+    if contains_matches:
+        # Preserve order, dedupe
+        seen = set()
+        ordered: list[str] = []
+        for _, val in contains_matches:
+            if val not in seen:
+                seen.add(val)
+                ordered.append(val)
+        return ordered
+
+    # 3) Input includes a full court name plus extra text.
+    # Choose the longest matching key to avoid "court-i" matching "court-ii".
+    key_matches: list[tuple[int, str]] = []
+    for key, val in CAUSE_LIST_BENCH_MAP.items():
+        key_canon = _canonicalize_bench_name(key)
+        if key_canon in normalized:
+            key_matches.append((len(key_canon), val))
+    if key_matches:
+        max_len = max(length for length, _ in key_matches)
+        return [val for length, val in key_matches if length == max_len]
+
+    return ["All"]
 
 def _standardize_result(item):
     """
@@ -213,43 +242,46 @@ def fetch_cause_list_pdfs(bench_name: str, date: datetime) -> list[str]:
     Fetch cause list PDFs for a given bench and date.
     Returns a list of URLs to the PDFs.
     """
-    bench_id = get_cause_list_bench_id(bench_name)
+    bench_ids = get_cause_list_bench_ids(bench_name)
     date_str = date.strftime("%m/%d/%Y")
-    
-    # 1. Get initial page to get CAPTCHA
-    resp = requests.get(CAUSE_LIST_URL, verify=False)
-    resp.raise_for_status()
-    
-    try:
-        sid, token, solution = solve_math_captcha(resp.text)
-    except Exception as e:
-        logger.error(f"Failed to solve CAPTCHA: {e}")
-        return []
-        
-    # 2. Submit search
-    params = {
-        'field_nclt_benches_list_target_id': bench_id,
-        'field_cause_date_value': date_str,
-        'field_cause_date_value_1': date_str,
-        'captcha_sid': sid,
-        'captcha_token': token,
-        'captcha_response': solution
-    }
-    
-    resp = requests.get(CAUSE_LIST_URL, params=params, verify=False)
-    resp.raise_for_status()
-    
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    table = soup.find('table', {'class': 'views-table'})
-    if not table:
-        return []
-        
-    pdf_urls = []
-    for row in table.find_all('tr'):
-        link = row.find('a', href=re.compile(r'\.pdf$'))
-        if link:
-            pdf_urls.append(link['href'])
-            
+    pdf_urls: list[str] = []
+    seen_urls = set()
+
+    for bench_id in bench_ids:
+        # 1. Get initial page to get CAPTCHA
+        resp = requests.get(CAUSE_LIST_URL, verify=False)
+        resp.raise_for_status()
+
+        try:
+            sid, token, solution = solve_math_captcha(resp.text)
+        except Exception as e:
+            logger.error(f"Failed to solve CAPTCHA for bench_id=%s: %s", bench_id, e)
+            continue
+
+        # 2. Submit search
+        params = {
+            'field_nclt_benches_list_target_id': bench_id,
+            'field_cause_date_value': date_str,
+            'field_cause_date_value_1': date_str,
+            'captcha_sid': sid,
+            'captcha_token': token,
+            'captcha_response': solution
+        }
+
+        resp = requests.get(CAUSE_LIST_URL, params=params, verify=False)
+        resp.raise_for_status()
+
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        table = soup.find('table', {'class': 'views-table'})
+        if not table:
+            continue
+
+        for row in table.find_all('tr'):
+            link = row.find('a', href=re.compile(r'\.pdf$'))
+            if link and link['href'] not in seen_urls:
+                seen_urls.add(link['href'])
+                pdf_urls.append(link['href'])
+
     return pdf_urls
 
 def _clean_pdf_line(text: str) -> str:

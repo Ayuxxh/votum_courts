@@ -2,14 +2,106 @@ import io
 from typing import List, Dict, Any, Optional
 from xml.sax.saxutils import escape
 from reportlab.lib import colors
+from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
+
+def _build_cause_list_table(
+    entries: List[Dict[str, Any]],
+    styles,
+    *,
+    include_orders: bool | None = None,
+) -> Table:
+    """
+    Build a cause list table with wrapped text cells.
+    """
+    has_orders = any(e.get("orders") for e in entries) if include_orders is None else include_orders
+
+    headers = ["S.No", "Case No", "Court Name", "Item No"]
+    if has_orders:
+        headers.append("Orders / Remarks")
+
+    data = [headers]
+
+    body_style = ParagraphStyle(
+        "CauseListBody",
+        parent=styles["BodyText"],
+        fontSize=9,
+        leading=11,
+    )
+    link_style = ParagraphStyle(
+        "CauseListLink",
+        parent=body_style,
+        textColor=HexColor("#2563eb"),
+        underline=True,
+    )
+    small_style = ParagraphStyle(
+        "CauseListSmall",
+        parent=styles["BodyText"],
+        fontSize=8,
+        leading=10,
+    )
+
+    for idx, entry in enumerate(entries, start=1):
+        case_no = str(entry.get("case_no", "-"))
+        case_url = str(entry.get("case_url") or "").strip()
+        if case_url:
+            case_cell = Paragraph(
+                f'<link href="{case_url}"><u>{escape(case_no)}</u></link>',
+                link_style,
+            )
+        else:
+            case_cell = Paragraph(escape(case_no), body_style)
+
+        row = [
+            Paragraph(str(entry.get("sno", idx)), body_style),
+            case_cell,
+            Paragraph(escape(str(entry.get("court_name", "-"))), body_style),
+            Paragraph(escape(str(entry.get("item_no", "-"))), body_style),
+        ]
+        if has_orders:
+            row.append(Paragraph(escape(str(entry.get("orders", "-"))), small_style))
+        data.append(row)
+
+    table_style = TableStyle(
+        [
+            ("BACKGROUND", (0, 0), (-1, 0), HexColor("#1f2937")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("ALIGN", (0, 0), (-1, 0), "CENTER"),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, 0), 11),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
+            ("TOPPADDING", (0, 0), (-1, 0), 8),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [HexColor("#f8fafc"), HexColor("#eef2f7")]),
+            ("GRID", (0, 0), (-1, -1), 0.5, HexColor("#cbd5e1")),
+            ("ALIGN", (0, 1), (-1, -1), "LEFT"),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+            ("TOPPADDING", (0, 1), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 1), (-1, -1), 6),
+        ]
+    )
+
+    # Available width ~780 (Landscape A4).
+    col_widths = [40, 150, 200, 60]
+    if has_orders:
+        col_widths.append(330)
+    else:
+        col_widths = [50, 220, 360, 150]
+
+    t = Table(data, colWidths=col_widths, repeatRows=1)
+    t.setStyle(table_style)
+    return t
 
 def generate_cause_list_pdf(
     entries: List[Dict[str, Any]],
     title: str,
-    subtitle: Optional[str] = None
+    subtitle: Optional[str] = None,
+    *,
+    include_orders: bool | None = None,
 ) -> bytes:
     """
     Generate a PDF for the cause list / hearing list.
@@ -21,6 +113,7 @@ def generate_cause_list_pdf(
         - item_no (optional)
         - orders (optional)
         - text (optional - raw text snippet)
+        - case_url (optional - hyperlink for case_no)
     """
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -33,66 +126,118 @@ def generate_cause_list_pdf(
     )
     
     styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        "CauseListTitle",
+        parent=styles["Title"],
+        fontSize=18,
+        leading=22,
+        alignment=1,
+        textColor=HexColor("#0f172a"),
+        spaceAfter=6,
+    )
+    subtitle_style = ParagraphStyle(
+        "CauseListSubtitle",
+        parent=styles["Heading2"],
+        fontSize=11,
+        leading=14,
+        alignment=1,
+        textColor=HexColor("#475569"),
+        spaceAfter=12,
+    )
     elements = []
     
     # Title
-    elements.append(Paragraph(title, styles['Title']))
+    elements.append(Paragraph(title, title_style))
     if subtitle:
-        elements.append(Paragraph(subtitle, styles['Heading2']))
-    elements.append(Spacer(1, 20))
+        elements.append(Paragraph(subtitle, subtitle_style))
+    elements.append(Spacer(1, 14))
     
-    # Table Data
-    # specific columns: S.No, Case No, Court Name, Item No, Orders (if present in any entry)
-    
-    has_orders = any(e.get('orders') for e in entries)
-    
-    headers = ["S.No", "Case No", "Court Name", "Item No"]
-    if has_orders:
-        headers.append("Orders / Remarks")
-        
-    data = [headers]
-    
-    for idx, entry in enumerate(entries, start=1):
-        row = [
-            str(entry.get('sno', idx)),
-            entry.get('case_no', '-'),
-            entry.get('court_name', '-'),
-            entry.get('item_no', '-')
-        ]
-        if has_orders:
-            row.append(entry.get('orders', '-'))
-        data.append(row)
-        
-    # Table Style
-    table_style = TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 12),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
-        ('ALIGN', (1, 1), (-1, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('WORDWRAP', (0, 0), (-1, -1), True),
-    ])
-    
-    # Calculate column widths
-    # Available width approx 842 - 60 = 780 (Landscape A4)
-    # S.No: 40, Case: 150, Court: 150, Item: 60, Orders: Remainder
-    
-    cw = [40, 150, 200, 60]
-    if has_orders:
-        cw.append(330)
-    else:
-        # redistribute extra space
-        cw = [50, 200, 300, 100]
-        
-    t = Table(data, colWidths=cw)
-    t.setStyle(table_style)
+    t = _build_cause_list_table(entries, styles, include_orders=include_orders)
     elements.append(t)
     
+    doc.build(elements)
+    buffer.seek(0)
+    return buffer.read()
+
+
+def generate_grouped_cause_list_pdf(
+    entries: List[Dict[str, Any]],
+    title: str,
+    subtitle: Optional[str] = None,
+    group_keys: tuple[str, str] = ("listing_date", "court_name"),
+    *,
+    include_orders: bool | None = None,
+) -> bytes:
+    """
+    Generate a PDF with one table per (listing_date, court_name) group.
+    """
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=landscape(A4),
+        rightMargin=30,
+        leftMargin=30,
+        topMargin=30,
+        bottomMargin=30,
+    )
+
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        "CauseListTitle",
+        parent=styles["Title"],
+        fontSize=18,
+        leading=22,
+        alignment=1,
+        textColor=HexColor("#0f172a"),
+        spaceAfter=6,
+    )
+    subtitle_style = ParagraphStyle(
+        "CauseListSubtitle",
+        parent=styles["Heading2"],
+        fontSize=11,
+        leading=14,
+        alignment=1,
+        textColor=HexColor("#475569"),
+        spaceAfter=12,
+    )
+    section_style = ParagraphStyle(
+        "CauseListSection",
+        parent=styles["Heading3"],
+        fontSize=12,
+        leading=16,
+        textColor=HexColor("#1e293b"),
+        spaceBefore=6,
+        spaceAfter=6,
+    )
+    elements = []
+
+    elements.append(Paragraph(title, title_style))
+    if subtitle:
+        elements.append(Paragraph(subtitle, subtitle_style))
+    elements.append(Spacer(1, 14))
+
+    # Group entries by (listing_date, court_name)
+    grouped: Dict[str, List[Dict[str, Any]]] = {}
+    for entry in entries:
+        k1 = str(entry.get(group_keys[0], "")).strip()
+        k2 = str(entry.get(group_keys[1], "")).strip()
+        key = f"{k1}__{k2}"
+        grouped.setdefault(key, []).append(entry)
+
+    # Stable order by date then court
+    def sort_key(item):
+        k, _ = item
+        parts = k.split("__", 1)
+        return (parts[0], parts[1] if len(parts) > 1 else "")
+
+    for key, group in sorted(grouped.items(), key=sort_key):
+        date_label, court_label = key.split("__", 1)
+        heading = f"{date_label} — {court_label}" if court_label else date_label
+        elements.append(Paragraph(heading, section_style))
+        elements.append(Spacer(1, 8))
+        elements.append(_build_cause_list_table(group, styles, include_orders=include_orders))
+        elements.append(Spacer(1, 16))
+
     doc.build(elements)
     buffer.seek(0)
     return buffer.read()
