@@ -98,7 +98,7 @@ CAUSE_LIST_BENCH_MAP = {
     "registrar nclt court-i": "116",
 }
 
-CASE_NO_PATTERN = re.compile(r"\b(?:CP|IA|MA|CA|TCP|TP|C\.P\.)(?:\s*\(\s*IB\s*\))?[\s\./-]*\d+.*?\d{4}\b", re.IGNORECASE)
+CASE_NO_PATTERN = re.compile(r"\b(?:CP|IA|MA|CA|TCP|TP|C\.P\.|Appeal)\s*(?:\(\s*IB\s*\))?[\s\./-]*\d+[\s\./-]*(?:\([A-Z]+\))?[\s\./-]*\d{4}\b", re.IGNORECASE)
 
 def _normalize_case_token(case_no: str) -> str:
     return re.sub(r"\s+", "", (case_no or "").upper())
@@ -110,7 +110,7 @@ def _case_tail(case_no: str) -> str:
     if match:
         return f"{match.group(1)}{match.group(2)}"
     # Fallback to removing all non-alphanumeric and some common prefixes
-    token = re.sub(r"^(?:CP|IA|MA|CA|TCP|TP|C\.P\.)(?:\(IB\))?", "", token)
+    token = re.sub(r"^(?:CP|IA|MA|CA|TCP|TP|C\.P\.|APPEAL)(?:\(IB\))?", "", token)
     return re.sub(r"[^A-Z0-9]", "", token)
 
 
@@ -305,13 +305,25 @@ def _parse_single_cause_list_entry(entry: dict) -> dict:
                 seen.add(normalized)
                 case_numbers.append(normalized)
     
+    # Prefer non-IA/MA for the main case_no
+    main_case_no = None
+    if case_numbers:
+        # Try to find a 'main' case type like CP or C.P. or Appeal
+        mains = [cn for cn in case_numbers if re.search(r"^(CP|C\.P\.|APPEAL)", cn, re.I)]
+        if mains:
+            main_case_no = mains[0]
+        else:
+            # Fallback to first non-IA
+            non_ias = [cn for cn in case_numbers if not cn.upper().startswith("IA")]
+            main_case_no = non_ias[0] if non_ias else case_numbers[0]
+
     entry_hash_src = f"{entry.get('item_no')}|{entry.get('page_no')}|{text}"
     entry_hash = hashlib.sha256(entry_hash_src.encode("utf-8")).hexdigest()
 
     return {
         "item_no": entry.get("item_no"),
         "page_no": entry.get("page_no"),
-        "case_no": case_numbers[0] if case_numbers else None,
+        "case_no": main_case_no,
         "case_nos": case_numbers,
         "text": text,
         "entry_hash": entry_hash,
@@ -374,7 +386,6 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
             # Detect row starts (item numbers in column 1 or case numbers in column 2)
             for line in content_lines:
                 item_no_candidate = None
-                case_no_candidate = False
                 
                 first_token_x = line[0]['x']
                 line_text = " ".join(it['text'] for it in line)
@@ -384,16 +395,20 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                     item_no_candidate = line[0]['text']
                 
                 # Column 2 (Case No): 80 <= x < 160
-                # If we don't have an item number, check if this line looks like a new case start
-                if not item_no_candidate:
-                    if 80 <= first_token_x < 160 and CASE_NO_PATTERN.search(line_text):
-                        case_no_candidate = True
+                has_case_no = CASE_NO_PATTERN.search(line_text)
                 
-                if item_no_candidate or case_no_candidate:
+                if item_no_candidate:
                     if open_entry:
                         entries.append(_parse_single_cause_list_entry(open_entry))
                     open_entry = {
-                        "item_no": item_no_candidate or "",
+                        "item_no": item_no_candidate,
+                        "page_no": page_idx + 1,
+                        "raw_lines": [line_text]
+                    }
+                elif has_case_no and not open_entry:
+                    # Potential case start without item number (e.g. top of page)
+                    open_entry = {
+                        "item_no": "",
                         "page_no": page_idx + 1,
                         "raw_lines": [line_text]
                     }

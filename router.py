@@ -112,6 +112,13 @@ async def search_sci_search_by_court(
     )
 
 
+@router.get("/nclat_details/")
+async def nclat_details(filing_no: str, bench: Optional[str] = None):
+    if not filing_no:
+        raise HTTPException(status_code=400, detail="filing_no is required")
+    return nclat_get_details(filing_no, bench)
+
+
 @router.get("/nclt_details/")
 async def nclt_details(bench: str, filing_no: str):
     if not bench or not filing_no:

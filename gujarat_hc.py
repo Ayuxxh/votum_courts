@@ -224,7 +224,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     continue
                 for line in block.get("lines", []):
                     x0, y0, _, _ = line.get("bbox", (0.0, 0.0, 0.0, 0.0))
-                    if y0 < 140 or y0 > 770:
+                    if y0 < 90 or y0 > 800:
                         continue
                     line_text = "".join(span.get("text", "") for span in line.get("spans", []))
                     cleaned = _clean_pdf_line(line_text)
