@@ -111,6 +111,36 @@ def _split_title(case_title: str | None) -> tuple[str | None, str | None]:
     return text, None
 
 
+def _reformat_case_no(case_no: str | None) -> str | None:
+    """
+    Normalizes 'Company Appeal(AT)(Ins) - 69/2026' to 'Company Appeal(AT)(Ins)/69/2026'.
+    Replaces common separators like '-' or 'No.' with '/'.
+    """
+    if not case_no:
+        return None
+    # Normalize spaces
+    text = re.sub(r"\s+", " ", case_no).strip()
+    # Replace ' - ' or ' No. ' or ' No ' with '/'
+    text = re.sub(r"\s*-\s*|\s+No\.?\s+", "/", text, flags=re.IGNORECASE)
+    # Ensure only single slashes
+    text = re.sub(r"/+", "/", text)
+    return text
+
+
+def _extract_type_name(case_no: str | None) -> str | None:
+    """
+    Extracts the type part from 'Company Appeal(AT)(Ins)/69/2026'.
+    """
+    if not case_no:
+        return None
+    # Assuming type is everything before the first numeric component or slash
+    # Better: if reformatted, take everything before the first '/'
+    parts = case_no.split("/")
+    if len(parts) > 1:
+        return parts[0].strip()
+    return None
+
+
 def _new_session() -> requests.Session:
     session = requests.Session()
     session.headers.update(
@@ -202,17 +232,18 @@ def _parse_search_results(html: str, location: str) -> list[dict]:
             continue
 
         pet, res = _split_title(title)
+        fmt_case_no = _reformat_case_no(case_no)
         results.append(
             {
                 "cino": filing_no,
                 "filing_no": filing_no,
-                "case_no": case_no or None,
+                "case_no": fmt_case_no or None,
                 "case_title": title or None,
                 "pet_name": pet,
                 "res_name": res,
                 "date_of_decision": None,
                 "registration_date": _normalize_date(reg_date_raw) or reg_date_raw or None,
-                "type_name": None,
+                "type_name": _extract_type_name(fmt_case_no),
                 "bench": location,
                 "court_name": "NCLAT",
             }
@@ -384,10 +415,12 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                                 }
                             )
 
+    fmt_case_no = _reformat_case_no(case_no)
     return {
         "cin_no": filing_no,
         "filling_no": filing_no,
-        "case_no": case_no,
+        "case_no": fmt_case_no,
+        "type_name": _extract_type_name(fmt_case_no),
         "filing_date": filing_date,
         "registration_date": registration_date,
         "bench_name": location,
