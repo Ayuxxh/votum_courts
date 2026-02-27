@@ -59,8 +59,17 @@ class BombayHCService:
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0',
         }
         self.ocr = ddddocr.DdddOcr(show_ad=False)
-        self.case_types_map = {} # Name -> Code (e.g. "WP" -> "560")
         self.case_types_path = Path(__file__).with_name("bombay_case_types.json")
+        self._load_case_types()
+
+    def _load_case_types(self):
+        self.case_types_map = {} # side -> name -> code
+        if self.case_types_path.exists():
+            try:
+                with open(self.case_types_path, 'r') as f:
+                    self.case_types_map = json.load(f)
+            except Exception as e:
+                logger.error(f"Failed to load case types: {e}")
 
     def _refresh_session(self) -> Dict[str, str]:
         """Visit search page to get session and tokens."""
@@ -69,12 +78,18 @@ class BombayHCService:
             resp = self.session.get(SEARCH_URL, timeout=30)
             resp.raise_for_status()
             soup = BeautifulSoup(resp.content, 'html.parser')
+            
+            # CSRF Token
+            token_meta = soup.find('meta', {'name': 'csrf-token'})
+            token = token_meta['content'] if token_meta else ''
+            
             form = soup.find('form', id='getCaseStatusByCaseNo')
             if not form:
                 # Try causelist page if search page doesn't have it
                 resp = self.session.get(f"{BASE_URL}/causelistFinal", timeout=30)
                 soup = BeautifulSoup(resp.content, 'html.parser')
-                token = soup.find('meta', {'name': 'csrf-token'}).get('content')
+                token_meta = soup.find('meta', {'name': 'csrf-token'})
+                token = token_meta['content'] if token_meta else ''
                 # For causelistFinal, form_secret is in the forms
                 form = soup.find('form', class_='causelist_form')
                 if not form:
@@ -82,7 +97,8 @@ class BombayHCService:
                 secret = form.find('input', {'name': 'form_secret'}).get('value')
                 return {'_token': token, 'form_secret': secret}
 
-            token = form.find('input', {'name': '_token'}).get('value')
+            if not token:
+                token = form.find('input', {'name': '_token'}).get('value')
             secret = form.find('input', {'name': 'form_secret'}).get('value')
             
             return {'_token': token, 'form_secret': secret}
@@ -293,7 +309,7 @@ class BombayHCService:
             "status": None,
             "cnr_no": None,
             "filing_no": None,
-            "registration_no": None, # Same as case no usually
+            "registration_no": None,
             "registration_date": None,
             "filing_date": None,
             "case_type": None,
@@ -302,7 +318,7 @@ class BombayHCService:
             "pet_name": [],
             "res_name": [],
             "advocates": None,
-            "judges": None, # Not always available in main details
+            "judges": None,
             "court_name": "Bombay High Court",
             "bench_name": None,
             "district": None,
@@ -321,112 +337,96 @@ class BombayHCService:
             }
         }
 
-        # 1. Main Details
-        # Filing Number WP/2/2023 ... with CNR No. HCBM020134702023 ... filed on 12-05-2023
-        # Use text-based search for the header div
-        header_div = soup.find(lambda tag: tag.name == 'div' and tag.get('class') and 'border-bottom' in tag.get('class') and "CNR No." in tag.text)
-        
+        # 1. Header Parsing
+        header_div = soup.find('div', class_=lambda c: c and 'border-bottom' in c and 'pb-2' in c)
         if header_div:
             text = header_div.get_text(" ", strip=True)
-            # Extract CNR
+            # Case No. FA/1760/2025
+            case_match = re.search(r"Case No\.\s*([\w/]+)", text, re.IGNORECASE)
+            if case_match:
+                result['registration_no'] = case_match.group(1)
+                parts = result['registration_no'].split('/')
+                if len(parts) >= 3:
+                    result['case_type'] = parts[0]
+                    result['case_no'] = parts[1]
+                    result['case_year'] = parts[2]
+
+            # CNR No. HCBM010149552025
             cnr_match = re.search(r"CNR No[\.:]?\s*([A-Z0-9]+)", text, re.IGNORECASE)
             if cnr_match:
                 result['cnr_no'] = cnr_match.group(1)
             
-            # Extract Filing Date
-            date_match = re.search(r"filed on\s*(\d{2}-\d{2}-\d{4})", text, re.IGNORECASE)
+            # Filing Date
+            date_match = re.search(r"filed on\s*(\d{2}/\d{2}/\d{4})", text, re.IGNORECASE)
             if date_match:
-                result['filing_date'] = self._parse_date(date_match.group(1))
+                result['filing_date'] = datetime.strptime(date_match.group(1), "%d/%m/%Y").strftime("%Y-%m-%d")
 
-        # Structured fields
+        # 2. Structured fields
         result['filing_no'] = self._clean_text(self._extract_label_value(soup, "Filing Number"))
         result['registration_date'] = self._parse_date(self._extract_label_value(soup, "Registration Date"))
         result['status'] = self._clean_text(self._extract_label_value(soup, "Status"))
+        result['next_listing_date'] = self._parse_date(self._extract_label_value(soup, "Next Listing Date"))
         
-        # Petitioner
-        pet_text = self._extract_label_value(soup, "Petitioner")
-        if pet_text:
-            result['pet_name'] = [pet_text]
-            
-        # Respondent
-        res_text = self._extract_label_value(soup, "Respondent")
-        if res_text:
-            result['res_name'] = [res_text]
-            
-        # Advocates (store raw text; no name extraction)
-        pet_adv = self._extract_label_value(soup, "Petitioner's Advocate")
-        res_adv = self._extract_label_value(soup, "Respondent's Advocate")
-        lines = []
-        if pet_adv:
-            lines.append(f"Petitioner: {pet_adv.strip()}")
-            
-        if res_adv:
-            lines.append(f"Respondent: {res_adv.strip()}")
-        result["advocates"] = "\n".join([x for x in lines if x]).strip() or None
+        # 3. Petitioner / Respondent extraction (multiple p tags)
+        def extract_parties(label):
+            label_b = soup.find('b', string=lambda s: s and label.lower() in s.lower())
+            if label_b:
+                label_col = label_b.find_parent('div')
+                if label_col:
+                    value_col = label_col.find_next_sibling('div')
+                    if value_col:
+                        ps = value_col.find_all('p')
+                        if ps:
+                            return [p.get_text(strip=True) for p in ps]
+                        return [value_col.get_text(strip=True)]
+            return []
 
-        # Case No parsing (from Filing No if Reg No is missing?)
-        # "WP - 2 - 2023" or "WP 2 2023"
-        if result['filing_no']:
-            # Replace - with space and split
-            parts = result['filing_no'].replace('-', ' ').split()
-            if len(parts) >= 3:
-                result['case_type'] = parts[0].strip()
-                result['case_no'] = parts[1].strip()
-                result['case_year'] = parts[2].strip()
-                result['registration_no'] = f"{result['case_type']}/{result['case_no']}/{result['case_year']}"
+        result['pet_name'] = extract_parties("Petitioner")
+        result['res_name'] = extract_parties("Respondent")
+            
+        # Advocates
+        pet_advs = extract_parties("Petitioner's Advocate")
+        res_advs = extract_parties("Respondent's Advocate")
+        adv_lines = []
+        if pet_advs:
+            adv_lines.append(f"Petitioner: {', '.join(pet_advs)}")
+        if res_advs:
+            adv_lines.append(f"Respondent: {', '.join(res_advs)}")
+        result["advocates"] = "\n".join(adv_lines) if adv_lines else None
 
-        # Clean text fields
-        result["advocates"] = self._clean_text(result.get("advocates"))
-
+        # 4. Tabs
         # History / Proceedings
         history_tab = soup.find('div', id='CaseNoHistory')
+        if not history_tab:
+             history_tab = soup.find('div', id='CaseNoListing') # They seem to use Listing for history sometimes
+
         if history_tab:
             rows = history_tab.find_all('tr')
             for row in rows[1:]:
                 cols = row.find_all('td')
-                if len(cols) >= 4:
-                    result["history"].append({
-                        "business_date": self._parse_date(cols[1].get_text(strip=True)),
-                        "hearing_date": self._parse_date(cols[1].get_text(strip=True)),
-                        "purpose": cols[2].get_text(strip=True),
-                        "result": cols[3].get_text(strip=True)
-                    })
-
-        # Connected Matters
-        connected_tab = soup.find('div', id='CaseNoConnected')
-        if connected_tab:
-            rows = connected_tab.find_all('tr')
-            for row in rows[1:]:
-                cols = row.find_all('td')
                 if len(cols) >= 3:
-                    result["connected_matters"].append({
-                        "case_no": cols[1].get_text(strip=True),
-                        "status": cols[2].get_text(strip=True)
-                    })
-
-        # Objections
-        obj_tab = soup.find('div', id='CaseNoObjections')
-        if obj_tab:
-            rows = obj_tab.find_all('tr')
-            for row in rows[1:]:
-                cols = row.find_all('td')
-                if len(cols) >= 3:
-                    result["original_json"]["objections"].append({
-                        "objection": cols[1].get_text(strip=True),
-                        "compliance_date": self._parse_date(cols[2].get_text(strip=True))
-                    })
+                    # Date, Coram, Remark
+                    date_text = cols[0].get_text(strip=True)
+                    date_val = self._parse_date(date_text)
+                    if date_val:
+                        result["history"].append({
+                            "business_date": date_val,
+                            "hearing_date": date_val,
+                            "judge": cols[1].get_text(strip=True),
+                            "purpose": cols[2].get_text(strip=True)
+                        })
 
         # Orders
         orders_tab = soup.find('div', id='CaseNoOrders')
         if orders_tab:
             rows = orders_tab.find_all('tr')
-            for row in rows[1:]: # Skip header
+            for row in rows[1:]:
                 cols = row.find_all('td')
                 if len(cols) >= 3:
                     coram = cols[1].get_text(strip=True)
-                    date_val = self._parse_date(cols[2].get_text(strip=True))
+                    date_text = cols[2].get_text(strip=True).split('\n')[0].strip() # Date is before link
+                    date_val = self._parse_date(date_text)
                     
-                    # Check for links (PDFs)
                     doc_url = None
                     link = row.find('a', href=True)
                     if link:
@@ -434,33 +434,26 @@ class BombayHCService:
                         if not doc_url.startswith('http'):
                             doc_url = urljoin(BASE_URL, doc_url)
 
-                    order = {
+                    result['orders'].append({
                         "date": date_val,
                         "description": f"Order by {coram}",
                         "judge": coram,
                         "document_url": doc_url
-                    }
-                    result['orders'].append(order)
+                    })
 
-        # IA Details
-        ia_tab = soup.find('div', id='CaseNoIA')
+        # IA Details / Application Cases
+        ia_tab = soup.find('div', id='CaseNoApplCases')
         if ia_tab:
             rows = ia_tab.find_all('tr')
-            for row in rows[1:]: # Skip header
+            for row in rows[1:]:
                 cols = row.find_all('td')
-                if len(cols) >= 5:
-                    ia_no = cols[1].get_text(strip=True)
-                    party = cols[2].get_text(strip=True)
-                    filing_date = self._parse_date(cols[3].get_text(strip=True))
-                    status = cols[4].get_text(strip=True)
-                    
+                if len(cols) >= 4:
                     ia_entry = {
-                        "ia_no": ia_no,
-                        "ia_number": ia_no,
-                        "party": party,
-                        "filing_date": filing_date,
-                        "status": status,
-                        "description": f"IA No: {ia_no} | {party}"
+                        "ia_no": cols[3].get_text(strip=True),
+                        "ia_number": cols[3].get_text(strip=True),
+                        "cnr_no": cols[1].get_text(strip=True),
+                        "filing_no": cols[2].get_text(strip=True),
+                        "description": f"IA Filing: {cols[2].get_text(strip=True)}"
                     }
                     result['ia_details'].append(ia_entry)
         
@@ -485,9 +478,15 @@ class BombayHCService:
         # 1. Get Tokens
         tokens = self._refresh_session()
         
+        case_code = None
         if case_type_name.isdigit():
             case_code = case_type_name
         else:
+            # Look up in map
+            side_map = self.case_types_map.get(side, self.case_types_map.get("AS", {}))
+            case_code = side_map.get(case_type_name.upper())
+
+        if not case_code:
             logger.error(f"Case type '{case_type_name}' not found for side {side}.")
             return None
 
@@ -495,16 +494,12 @@ class BombayHCService:
         payload = {
             '_token': tokens['_token'],
             'form_secret': tokens['form_secret'],
-            'side': '1',
-            'Stamp': 'R',
+            'side': '1' if side == "AS" else '2', # 1=AS, 2=OS
+            'Stamp': 'R' if stamp == "Register" else 'S', # R=Register, S=Stamp
             'case_type': case_code,
             'case_no': str(case_no),
             'year': str(case_year),
         }
-        print('----')
-        print(payload)
-        print('----')
-        
         resp = self.session.post(SEARCH_API_URL, data=payload, timeout=30)
         resp.raise_for_status()
         
