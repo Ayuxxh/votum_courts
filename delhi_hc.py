@@ -548,21 +548,30 @@ class DelhiHCService:
             
             ias = []
             for item in data.get('data', []):
-                # Expected fields based on standard patterns: ia_no, party, filing_date, next_date, status
-                ia_no = item.get('ia_no') or item.get('ia_number') or item.get('iano')
-                party = item.get('party') or item.get('party_name')
-                filing_date = _normalize_date(item.get('filing_date') or item.get('iadate'))
-                next_date = _normalize_date(item.get('next_date') or item.get('next_hearing_date'))
-                status = item.get('status') or item.get('ia_status')
+                # Extract and normalize IA details with expanded field matching
+                ia_no = (item.get('ia_no') or item.get('ia_number') or item.get('iano') or 
+                         item.get('ia_no_display') or item.get('ia_no_order_link'))
+                if ia_no and '<a' in str(ia_no):
+                    ia_no = BeautifulSoup(str(ia_no), 'html.parser').get_text(strip=True)
+                
+                party = (item.get('party') or item.get('party_name') or item.get('petitioner') or 
+                         item.get('pet') or item.get('pet_res'))
+                if party and '<a' in str(party):
+                    party = BeautifulSoup(str(party), 'html.parser').get_text(strip=True)
+
+                filing_date = _normalize_date(item.get('filing_date') or item.get('iadate') or item.get('filingdate'))
+                next_date = _normalize_date(item.get('next_date') or item.get('next_hearing_date') or 
+                                           item.get('next_dt') or item.get('orddate'))
+                status = (item.get('status') or item.get('ia_status') or item.get('order_judgement_status'))
                 
                 if ia_no or party:
                     ias.append({
-                        "ia_no": ia_no,
-                        "ia_number": ia_no,
-                        "party": party,
+                        "ia_no": (ia_no or "").strip(),
+                        "ia_number": (ia_no or "").strip(),
+                        "party": (party or "").strip(),
                         "filing_date": filing_date,
                         "next_date": next_date,
-                        "status": status
+                        "status": (status or "").strip()
                     })
             
             return ias
@@ -617,7 +626,7 @@ class DelhiHCService:
     def _parse_results(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Parse the raw DataTables rows into a cleaner format.
-        Columns: 'ctype', 'pet', 'orderdate' (which seems to be Listing Date / Court No.)
+        Uses both the raw row data and HTML parsing for completeness.
         """
         parsed_cases = []
         for row in rows:
@@ -625,8 +634,29 @@ class DelhiHCService:
             
             case_info = {
                 "orders": [],
-                "ia_details": []
+                "ia_details": [],
+                "petitioner_advocate": (row.get('pet_adv') or "").strip(),
+                "respondent_advocate": (row.get('res_adv') or "").strip(),
+                "diary_no": row.get('diary_no'),
+                "diary_year": row.get('diary_yr'),
+                "court_no": (row.get('courtno') or "").strip(),
+                "category_code": row.get('catcode'),
+                "respondent": (row.get('res') or "").strip()
             }
+            
+            # Status normalization from row['status']
+            raw_status = (row.get('status') or "").strip()
+            if raw_status == 'P':
+                case_info['status'] = 'PENDING'
+            elif raw_status == 'D':
+                case_info['status'] = 'DISPOSED'
+            else:
+                case_info['status'] = raw_status
+
+            # Next listing date from row data
+            next_dt = row.get('h_d_dt') or row.get('old_h_dt')
+            if next_dt:
+                case_info['next_listing_date'] = next_dt
             
             # Parse 'ctype' column (Diary No. / Case No.[STATUS])
             if 'ctype' in row:
@@ -634,63 +664,64 @@ class DelhiHCService:
                 text = soup.get_text(" ", strip=True)
                 case_info['case_details_raw'] = text
                 
-                # Extract Case No and Status
+                # Extract Case No and Status from text (e.g. "ARB.P. - 376 / 2026 [PENDING]")
                 match = re.search(r'(.*?)\[(.*?)\]', text)
                 if match:
                     case_info['case_no'] = match.group(1).strip()
-                    case_info['status'] = match.group(2).strip()
+                    if not case_info.get('status'):
+                        case_info['status'] = match.group(2).strip()
                 else:
                     case_info['case_no'] = text
 
-                # Extract Orders URL
-                orders_link = soup.find('a', string=re.compile(r"Click here for Orders", re.IGNORECASE))
-                if orders_link and orders_link.get('href'):
-                    orders_url = orders_link['href'].strip()
-                    # Fetch orders if URL is found
-                    case_info['orders'] = self.fetch_orders(orders_url)
-
-                # Extract IA URL
-                ia_link = soup.find('a', string=re.compile(r"Click here for.*", re.IGNORECASE))
-                while ia_link:
-                    link_text = ia_link.get_text(strip=True)
-                    if "orders" in link_text.lower():
-                        pass # already handled
-                    elif "judgments" in link_text.lower():
-                        pass # not needed for now
-                    elif ia_link.get('href'):
-                        ia_url = ia_link['href'].strip()
-                        # This could be IA, CM, or something else
-                        case_info['ia_details'].extend(self.fetch_ia_details(ia_url))
-                    
-                    ia_link = ia_link.find_next('a', string=re.compile(r"Click here for.*", re.IGNORECASE))
+                # Extract Links robustly
+                for a_tag in soup.find_all('a', href=True):
+                    link_text = a_tag.get_text(" ", strip=True).lower()
+                    href = a_tag['href'].strip()
+                    if 'order' in link_text:
+                        case_info['orders'] = self.fetch_orders(href)
+                    elif 'ia' in link_text or 'cm' in link_text or 'interlocutory' in link_text:
+                        case_info['ia_details'].extend(self.fetch_ia_details(href))
+                    elif 'judgment' in link_text:
+                        # Judgments can be added here if needed
+                        pass
                     
             # Parse 'pet' column (Petitioner Vs. Respondent)
             if 'pet' in row:
                 soup = BeautifulSoup(row['pet'], 'html.parser')
-                case_info['parties'] = soup.get_text(" ", strip=True)
+                parties_text = soup.get_text(" ", strip=True)
+                case_info['parties'] = parties_text
                 # Split Pet vs Res
-                parts = re.split(r'\s+VS\.?\s+', case_info['parties'], flags=re.IGNORECASE)
+                parts = re.split(r'\s+VS\.?\s+', parties_text, flags=re.IGNORECASE)
                 if len(parts) >= 2:
                     case_info['petitioner'] = parts[0].strip()
-                    case_info['respondent'] = parts[1].strip()
+                    if not case_info.get('respondent'):
+                        case_info['respondent'] = parts[1].strip()
                 else:
-                    case_info['petitioner'] = case_info['parties']
+                    case_info['petitioner'] = parties_text
                 
-            # Parse 'orderdate' column (Listing Date / Court No.)
+            # Parse 'orderdate' column (Listing Date / Court No.) as fallback
             if 'orderdate' in row:
                 soup = BeautifulSoup(row['orderdate'], 'html.parser')
                 text = soup.get_text(" ", strip=True)
                 case_info['listing_details'] = text
                 
-                # Extract Date (dd/mm/yyyy)
-                date_match = re.search(r'(\d{2}/\d{2}/\d{4})', text)
-                if date_match:
-                    case_info['next_listing_date'] = date_match.group(1)
+                # Extract Date if not already found
+                if not case_info.get('next_listing_date'):
+                    # Look for date following "NEXT DATE:"
+                    next_date_match = re.search(r'NEXT DATE\s*:\s*(\d{2}/\d{2}/\d{4})', text, re.IGNORECASE)
+                    if next_date_match:
+                        case_info['next_listing_date'] = next_date_match.group(1)
+                    else:
+                        # Fallback to any date in this field
+                        date_match = re.search(r'(\d{2}/\d{2}/\d{4})', text)
+                        if date_match:
+                            case_info['next_listing_date'] = date_match.group(1)
                 
-                # Extract Court No
-                court_match = re.search(r'COURT NO\s*:\s*(\d+)', text, re.IGNORECASE)
-                if court_match:
-                    case_info['court_no'] = court_match.group(1)
+                # Extract Court No if not already found
+                if not case_info.get('court_no') or case_info['court_no'] == 'NA' or not case_info['court_no'].strip():
+                    court_match = re.search(r'COURT NO\s*:\s*(\d+)', text, re.IGNORECASE)
+                    if court_match:
+                        case_info['court_no'] = court_match.group(1)
 
             parsed_cases.append(case_info)
             
