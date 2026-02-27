@@ -583,11 +583,11 @@ async def persist_orders_to_storage(
 def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Parse NCLAT cause-list PDF using coordinates and section headers.
+    Handles multi-line entries by grouping text by Y-coordinate proximity.
     """
     doc = fitz.open(stream=pdf_content, filetype="pdf")
     entries = []
     
-    current_entry = None
     current_stage = None
     header_found = False
     stop_parsing = False
@@ -608,39 +608,50 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
         
         lines.sort(key=lambda x: (x["y0"], x["x0"]))
         
-        for line in lines:
-            txt = line["text"]
-            y0 = line["y0"]
+        if not lines:
+            continue
             
-            if "INSTRUCTIONS FOR" in txt.upper():
+        rows_data = []
+        current_row_lines = [lines[0]]
+        for i in range(1, len(lines)):
+            if abs(lines[i]["y0"] - current_row_lines[-1]["y0"]) < 5:
+                current_row_lines.append(lines[i])
+            else:
+                rows_data.append(current_row_lines)
+                current_row_lines = [lines[i]]
+        rows_data.append(current_row_lines)
+
+        for row in rows_data:
+            row_text = " ".join(l["text"] for l in row)
+            
+            if "INSTRUCTIONS FOR" in row_text.upper():
                 stop_parsing = True
                 break
 
-            # Detect section headers like "For Admission", "For Hearing", "Part Heard"
-            if line["x0"] > 100 and line["x1"] < 500 and ("For " in txt or "After " in txt or "Admission" in txt or "Hearing" in txt or "Part Heard" in txt):
-                current_stage = txt
-                continue
-
             if not header_found:
-                if "Case No." in txt or "Name of the parties" in txt:
+                if "Case No" in row_text or "parties" in row_text.lower():
                     header_found = True
                 continue
+
+            first_line = row[0]
+            if first_line["x0"] > 100 and first_line["x1"] < 500 and any(kw in row_text for kw in ["For ", "After ", "Admission", "Hearing", "Part Heard"]):
+                current_stage = row_text
+                continue
             
-            # Detect S. No. start (e.g. "1.", "2.", "10.")
-            is_sno = False
-            if line["x0"] < 70:
-                m = re.match(r"^(\d+)\.?\s*$", txt)
+            # Refined S.No detection
+            sno_val = None
+            sno_line = None
+            
+            for l in row:
+                m = re.match(r"^(\d{1,3})\.\s*$", l["text"])
                 if m:
-                    # Avoid page numbers (top/bottom)
-                    if 100 < y0 < 800:
-                        if "." in txt or len(txt) <= 2:
-                            is_sno = True
-                            sno_val = m.group(1)
+                    if l["x0"] < 80 or l["x0"] > 350:
+                        sno_val = m.group(1)
+                        sno_line = l
+                        break
             
-            if is_sno:
-                if current_entry:
-                    entries.append(current_entry)
-                current_entry = {
+            if sno_val:
+                entries.append({
                     "item_no": sno_val,
                     "case_no": "",
                     "parties": "",
@@ -648,28 +659,26 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
                     "counsel_res": "",
                     "stage": current_stage,
                     "court": court_name
-                }
-            elif current_entry:
-                # Skip repeated headers on new pages
-                if "S. No." in txt or "Case No." in txt or "Name of the parties" in txt:
-                    continue
-                if "Counsel for" in txt or "Appellants" in txt or "Respondents" in txt:
-                    continue
+                })
+            
+            if entries:
+                for l in row:
+                    if l is sno_line:
+                        continue
                     
-                # Assign to columns based on x0 coordinates
-                if line["x0"] < 150: # Case No column
-                    current_entry["case_no"] += " " + txt
-                elif line["x0"] < 350: # Parties column
-                    current_entry["parties"] += " " + txt
-                elif line["x0"] < 460: # Counsel App column
-                    current_entry["counsel_app"] += " " + txt
-                else: # Counsel Res column
-                    current_entry["counsel_res"] += " " + txt
+                    txt = l["text"]
+                    if txt.lower() in ["s. no.", "s.no.", "case no.", "case no", "name of the parties", "counsel for", "appellants", "respondents"]:
+                        continue
                     
-    if current_entry:
-        entries.append(current_entry)
-        
-    # Clean up whitespace
+                    if l["x0"] < 165: # Case No column
+                        entries[-1]["case_no"] += " " + txt
+                    elif l["x0"] < 355: # Parties column
+                        entries[-1]["parties"] += " " + txt
+                    elif l["x0"] < 465: # Counsel App column
+                        entries[-1]["counsel_app"] += " " + txt
+                    else: # Counsel Res column
+                        entries[-1]["counsel_res"] += " " + txt
+                        
     for e in entries:
         for k in ["case_no", "parties", "counsel_app", "counsel_res"]:
             e[k] = re.sub(r"\s+", " ", e[k]).strip()
@@ -746,10 +755,30 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     if not entries:
         return []
         
-    target = re.sub(r"[^A-Z0-9]+", "", case_no.upper())
+    # More robust matching:
+    # 1. Full normalized match
+    target_full = re.sub(r"[^A-Z0-9]+", "", case_no.upper())
+    
+    # 2. Match by numeric parts (e.g., "69/2026")
+    nums = re.findall(r"\d+", case_no)
+    target_pattern = None
+    if len(nums) >= 2:
+        # Match "69" and "2026" with anything in between
+        target_pattern = re.compile(rf"{nums[-2]}.*{nums[-1]}")
+
     matched = []
     for e in entries:
-        curr = re.sub(r"[^A-Z0-9]+", "", e["case_no"].upper())
-        if target in curr or curr in target:
+        curr_text = e["case_no"].upper()
+        curr_norm = re.sub(r"[^A-Z0-9]+", "", curr_text)
+        
+        # Check full normalized substring
+        if target_full in curr_norm or curr_norm in target_full:
             matched.append(e)
+            continue
+            
+        # Check numeric pattern match
+        if target_pattern and target_pattern.search(curr_text):
+            matched.append(e)
+            continue
+            
     return matched
