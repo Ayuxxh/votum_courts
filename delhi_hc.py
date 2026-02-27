@@ -26,7 +26,6 @@ BASE_URL = "https://delhihighcourt.nic.in"
 SEARCH_URL = f"{BASE_URL}/app/get-case-type-status"
 VALIDATE_CAPTCHA_URL = f"{BASE_URL}/app/validateCaptcha"
 CAUSE_LIST_URL = f"{BASE_URL}/web/cause-lists/cause-list"
-CAUSE_LIST_ARCHIVE_URL = f"{BASE_URL}/web/cause-lists/cause-list-archive"
 
 CAUSE_LIST_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
@@ -263,8 +262,7 @@ def _extract_pdf_links_from_table(page_html: str, page_url: str) -> List[Dict[st
 
 def fetch_cause_list_pdfs(
     listing_date: datetime,
-    include_archive: bool = True,
-    max_pages: int = 3,
+    max_pages: int = 10,
     title_contains: Optional[str] = "Cause List of Sitting of Benches",
 ) -> List[Dict[str, Any]]:
     """
@@ -276,8 +274,6 @@ def fetch_cause_list_pdfs(
     for page_idx in range(max_pages):
         suffix = f"?page={page_idx}" if page_idx else ""
         all_page_urls.append(f"{CAUSE_LIST_URL}{suffix}")
-        if include_archive:
-            all_page_urls.append(f"{CAUSE_LIST_ARCHIVE_URL}{suffix}")
 
     found: List[Dict[str, Any]] = []
     seen_urls = set()
@@ -305,8 +301,7 @@ def fetch_cause_list_pdfs(
 
 def fetch_cause_list_pdf_bytes(
     listing_date: datetime,
-    include_archive: bool = True,
-    max_pages: int = 3,
+    max_pages: int = 10,
     title_contains: Optional[str] = "Cause List of Sitting of Benches",
 ) -> bytes:
     """
@@ -314,14 +309,12 @@ def fetch_cause_list_pdf_bytes(
     """
     pdfs = fetch_cause_list_pdfs(
         listing_date=listing_date,
-        include_archive=include_archive,
         max_pages=max_pages,
         title_contains=title_contains,
     )
     if not pdfs and title_contains:
         pdfs = fetch_cause_list_pdfs(
             listing_date=listing_date,
-            include_archive=include_archive,
             max_pages=max_pages,
             title_contains=None,
         )
@@ -340,8 +333,7 @@ def fetch_cause_list_pdf_bytes(
 def fetch_cause_list_entries(
     listing_date: Optional[str] = None,
     case_no: Optional[str] = None,
-    include_archive: bool = True,
-    max_pages: int = 3,
+    max_pages: int = 10,
 ) -> Dict[str, Any]:
     """
     Fetch Delhi HC cause-list PDFs for date and parse case-number entries.
@@ -351,7 +343,6 @@ def fetch_cause_list_entries(
     date_token = target_date.strftime("%d-%m-%Y")
     pdfs = fetch_cause_list_pdfs(
         listing_date=target_date,
-        include_archive=include_archive,
         max_pages=max_pages,
     )
 
