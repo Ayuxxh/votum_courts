@@ -124,12 +124,23 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
 
     case_numbers: List[str] = []
     seen = set()
+    
+    # Try case_lines first
     for line in case_lines:
         for token in CASE_NO_PATTERN.findall(line):
             normalized = _normalize_case_token(token)
             if normalized and normalized not in seen:
                 seen.add(normalized)
                 case_numbers.append(normalized)
+    
+    # Fallback to raw_lines if nothing found (handles shifted columns)
+    if not case_numbers:
+        for line in raw_lines:
+             for token in CASE_NO_PATTERN.findall(line):
+                normalized = _normalize_case_token(token)
+                if normalized and normalized not in seen:
+                    seen.add(normalized)
+                    case_numbers.append(normalized)
 
     petitioner: Optional[str] = None
     respondent: Optional[str] = None
@@ -199,16 +210,7 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
 
 def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
     """
-    Parse Gujarat HC cause-list PDF and extract structured entries.
-
-    Returns list of entries with:
-    - item_no
-    - case_no (first detected case number in CASE DETAILS column)
-    - case_nos (all detected case numbers in CASE DETAILS column)
-    - petitioner / respondent / party_names
-    - page_no
-    - text (raw merged entry text)
-    - entry_hash
+    Parse Gujarat HC cause-list PDF using PyMuPDF (fast) with widened column logic.
     """
     entries: List[Dict[str, Any]] = []
 
@@ -224,7 +226,8 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     continue
                 for line in block.get("lines", []):
                     x0, y0, _, _ = line.get("bbox", (0.0, 0.0, 0.0, 0.0))
-                    if y0 < 90 or y0 > 800:
+                    # Ignore headers and footers (y-range 80 to 815)
+                    if y0 < 80 or y0 > 815:
                         continue
                     line_text = "".join(span.get("text", "") for span in line.get("spans", []))
                     cleaned = _clean_pdf_line(line_text)
@@ -240,45 +243,38 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                 and "NAME OF PARTIES" in page_tokens
             )
 
-            if not has_table_header and not open_entry:
-                continue
-
             starts = [
-                line for line in lines if line["x"] < 70 and re.fullmatch(r"\d{1,4}", line["text"])
+                line for line in lines if line["x"] < 75 and re.fullmatch(r"\d{1,4}", line["text"])
             ]
             starts.sort(key=lambda item: item["y"])
 
-            if not starts:
-                if open_entry:
-                    for line in lines:
-                        x = line["x"]
-                        txt = line["text"]
-                        open_entry["raw_lines"].append(txt)
-                        if 70 <= x < 200:
-                            open_entry["case_lines"].append(txt)
-                        elif 200 <= x < 345:
-                            open_entry["party_lines"].append(txt)
-                        elif 345 <= x < 470:
-                            open_entry["advocate_lines"].append(txt)
+            # If no header, no starts, and no entry open, skip page (e.g. cover page)
+            if not has_table_header and not open_entry and not starts:
                 continue
 
-            first_start_y = starts[0]["y"]
+            # Process lines before the first start of this page (if any) as continuation
+            first_start_y = starts[0]["y"] if starts else float("inf")
             if open_entry:
                 for line in lines:
                     if line["y"] >= first_start_y:
-                        continue
+                        break
                     x = line["x"]
                     txt = line["text"]
                     open_entry["raw_lines"].append(txt)
-                    if 70 <= x < 200:
+                    # Use widened x-boundaries for case details
+                    if 35 <= x < 210:
                         open_entry["case_lines"].append(txt)
-                    elif 200 <= x < 345:
+                    elif 210 <= x < 355:
                         open_entry["party_lines"].append(txt)
-                    elif 345 <= x < 470:
+                    elif 355 <= x < 480:
                         open_entry["advocate_lines"].append(txt)
-                entries.append(_parse_single_cause_list_entry(open_entry))
-                open_entry = None
+                
+                # If we hit a start or the end of page text, close current open entry
+                if starts or not lines:
+                    entries.append(_parse_single_cause_list_entry(open_entry))
+                    open_entry = None
 
+            # Process each new entry starting on this page
             for idx, start in enumerate(starts):
                 y_start = start["y"]
                 y_end = starts[idx + 1]["y"] if idx + 1 < len(starts) else float("inf")
@@ -296,11 +292,12 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     x = line["x"]
                     txt = line["text"]
                     segment["raw_lines"].append(txt)
-                    if 70 <= x < 200:
+                    # Widened x-boundaries
+                    if 35 <= x < 210:
                         segment["case_lines"].append(txt)
-                    elif 200 <= x < 345:
+                    elif 210 <= x < 355:
                         segment["party_lines"].append(txt)
-                    elif 345 <= x < 470:
+                    elif 355 <= x < 480:
                         segment["advocate_lines"].append(txt)
 
                 if idx + 1 < len(starts):

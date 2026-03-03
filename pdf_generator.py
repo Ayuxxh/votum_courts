@@ -1,11 +1,13 @@
 import io
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 from xml.sax.saxutils import escape
+
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import (Paragraph, SimpleDocTemplate, Spacer, Table,
+                                TableStyle)
 
 
 def _build_cause_list_table(
@@ -19,7 +21,7 @@ def _build_cause_list_table(
     """
     has_orders = any(e.get("orders") for e in entries) if include_orders is None else include_orders
 
-    headers = ["S.No", "Case No", "Court Name", "Item No"]
+    headers = ["S.No", "Case No", "Court Name", "Party Name", "Item No"]
     if has_orders:
         headers.append("Orders / Remarks")
 
@@ -59,10 +61,11 @@ def _build_cause_list_table(
             Paragraph(str(entry.get("sno", idx)), body_style),
             case_cell,
             Paragraph(escape(str(entry.get("court_name", "-"))), body_style),
+            Paragraph(escape(str(entry.get("party_name", "-"))), body_style),
             Paragraph(escape(str(entry.get("item_no", "-"))), body_style),
         ]
         if has_orders:
-            row.append(Paragraph(escape(str(entry.get("orders", "-"))), small_style))
+            row.append(Paragraph(str(entry.get("orders", "-")), small_style))
         data.append(row)
 
     table_style = TableStyle(
@@ -86,11 +89,11 @@ def _build_cause_list_table(
     )
 
     # Available width ~780 (Landscape A4).
-    col_widths = [40, 150, 200, 60]
+    col_widths = [35, 120, 150, 200, 50]
     if has_orders:
-        col_widths.append(330)
+        col_widths.append(225)
     else:
-        col_widths = [50, 220, 360, 150]
+        col_widths = [40, 150, 180, 330, 80]
 
     t = Table(data, colWidths=col_widths, repeatRows=1)
     t.setStyle(table_style)
@@ -243,75 +246,6 @@ def generate_grouped_cause_list_pdf(
     return buffer.read()
 
 
-def generate_daily_matters_pdf_1(
-    matters: List[Dict[str, Any]],
-    title: str,
-    subtitle: Optional[str] = None,
-) -> bytes:
-    """
-    PDF-1 (daily): matters listed tomorrow across courts.
-    Columns:
-      1) Serial No
-      2) Registration No
-      3) Court Name
-    """
-    buffer = io.BytesIO()
-    doc = SimpleDocTemplate(
-        buffer,
-        pagesize=landscape(A4),
-        rightMargin=30,
-        leftMargin=30,
-        topMargin=30,
-        bottomMargin=30,
-    )
-
-    styles = getSampleStyleSheet()
-    elements: list = []
-
-    elements.append(Paragraph(title, styles["Title"]))
-    if subtitle:
-        elements.append(Paragraph(subtitle, styles["Heading2"]))
-    elements.append(Spacer(1, 20))
-
-    headers = ["S.No", "Registration No", "Court Name"]
-    data = [headers]
-
-    for idx, m in enumerate(matters, start=1):
-        data.append(
-            [
-                str(m.get("sno", idx)),
-                m.get("registration_no", "-"),
-                m.get("court_name", "-"),
-            ]
-        )
-
-    table_style = TableStyle(
-        [
-            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, 0), 12),
-            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
-            ("GRID", (0, 0), (-1, -1), 1, colors.black),
-            ("ALIGN", (1, 1), (-1, -1), "LEFT"),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("WORDWRAP", (0, 0), (-1, -1), True),
-        ]
-    )
-
-    # Landscape A4 usable width ~780. Keep "Court Name" wide.
-    col_widths = [60, 220, 500]
-    t = Table(data, colWidths=col_widths)
-    t.setStyle(table_style)
-    elements.append(t)
-
-    doc.build(elements)
-    buffer.seek(0)
-    return buffer.read()
-
-
 def generate_daily_matters_pdf_2(
     matters: List[Dict[str, Any]],
     title: str,
@@ -343,7 +277,7 @@ def generate_daily_matters_pdf_2(
         elements.append(Paragraph(subtitle, styles["Heading2"]))
     elements.append(Spacer(1, 20))
 
-    headers = ["S.No", "Registration No", "Next Listing Date", "Orders"]
+    headers = ["S.No", "Registration No", "Party Name", "Next Listing Date", "Orders"]
     data: list = [headers]
 
     link_style = styles["BodyText"]
@@ -374,6 +308,7 @@ def generate_daily_matters_pdf_2(
             [
                 str(m.get("sno", idx)),
                 m.get("registration_no", "-"),
+                m.get("party_name", "-"),
                 m.get("next_listing_date", "-"),
                 Paragraph(orders_html, link_style),
             ]
@@ -395,7 +330,7 @@ def generate_daily_matters_pdf_2(
         ]
     )
 
-    col_widths = [60, 210, 120, 390]
+    col_widths = [40, 150, 200, 100, 290]
     t = Table(data, colWidths=col_widths)
     t.setStyle(table_style)
     elements.append(t)
