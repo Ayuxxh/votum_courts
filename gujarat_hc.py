@@ -192,6 +192,8 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     # - parties: extracted into an array (petitioner parts + respondent parts when available)
     # - advocates: store the raw advocates text (no name extraction)
     parties = [x for x in (petitioner_parts + respondent_parts) if x]
+    
+    court_name = entry.get("court_name")
 
     return {
         "item_no": entry.get("item_no"),
@@ -203,6 +205,7 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
         "respondent": respondent,
         "party_names": party_names,
         "advocates": advocates,
+        "court_name": court_name,
         "text": text,
         "entry_hash": entry_hash,
     }
@@ -216,9 +219,58 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
 
     with fitz.open(pdf_path) as doc:
         open_entry: Optional[Dict[str, Any]] = None
+        current_court_name: Optional[str] = None
 
         for page_idx in range(doc.page_count):
             page = doc[page_idx]
+            
+            # --- Extract Coram / Court Name ---
+            raw_page_lines = []
+            for block in page.get_text("dict").get("blocks", []):
+                if block.get("type") != 0:
+                    continue
+                for line in block.get("lines", []):
+                    x0, y0, _, _ = line.get("bbox", (0.0, 0.0, 0.0, 0.0))
+                    line_text = "".join(span.get("text", "") for span in line.get("spans", [])).strip()
+                    if line_text:
+                        raw_page_lines.append({"x": float(x0), "y": float(y0), "text": line_text})
+            
+            raw_page_lines.sort(key=lambda item: (item["y"], item["x"]))
+
+            first_start_y_coram = float("inf")
+            for l in raw_page_lines:
+                if l["x"] < 75 and l["y"] > 80 and re.fullmatch(r"\d{1,4}", l["text"]):
+                    first_start_y_coram = min(first_start_y_coram, l["y"])
+            
+            page_honourables = []
+            page_coram_short = None
+            page_court_no = None
+
+            for l in raw_page_lines:
+                if l["y"] >= first_start_y_coram:
+                    break
+                txt = l["text"]
+                txt_upper = txt.upper()
+                if "HONOURABLE" in txt_upper:
+                    page_honourables.append(txt)
+                elif txt_upper.startswith("CORAM:"):
+                    page_coram_short = txt
+                elif "COURT NO :" in txt_upper or "COURT NO:" in txt_upper or txt_upper.startswith("COURT:"):
+                    page_court_no = txt
+            
+            page_court_name_parts = []
+            if page_honourables:
+                page_court_name_parts.append(" ".join(page_honourables))
+            elif page_coram_short:
+                page_court_name_parts.append(page_coram_short)
+            
+            if page_court_no:
+                page_court_name_parts.append(page_court_no)
+            
+            if page_court_name_parts:
+                current_court_name = " | ".join(page_court_name_parts)
+            # ----------------------------------
+
             lines: List[Dict[str, Any]] = []
 
             for block in page.get_text("dict").get("blocks", []):
@@ -285,6 +337,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     "case_lines": [],
                     "party_lines": [],
                     "advocate_lines": [],
+                    "court_name": current_court_name,
                 }
                 for line in lines:
                     if not (y_start <= line["y"] < y_end):

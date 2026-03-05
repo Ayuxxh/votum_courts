@@ -292,7 +292,7 @@ def _clean_pdf_line(text: str) -> str:
         return ""
     return cleaned
 
-def _parse_single_cause_list_entry(entry: dict) -> dict:
+def _parse_single_cause_list_entry(entry: dict, court_name: str = "") -> dict:
     raw_lines = entry.get("raw_lines") or []
     text = "\n".join(raw_lines).strip()
     
@@ -327,6 +327,7 @@ def _parse_single_cause_list_entry(entry: dict) -> dict:
         "case_nos": case_numbers,
         "text": text,
         "entry_hash": entry_hash,
+        "court_name": court_name,
     }
 
 def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
@@ -334,6 +335,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
     Parse NCLT cause-list PDF and extract structured entries.
     """
     entries: list[dict] = []
+    current_coram = ""
     
     with fitz.open(pdf_path) as doc:
         open_entry = None
@@ -366,12 +368,31 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
             # Look for table header on this page or previous
             has_header = False
             header_y = -1
+            coram_lines_above = []
             for line in lines:
-                line_text = " ".join(it['text'] for it in line).upper()
-                if "CP/CA/IA/MA" in line_text or "SECTION/RULE" in line_text:
+                line_text = _clean_pdf_line(" ".join(it['text'] for it in line))
+                if not line_text:
+                    continue
+                line_text_upper = line_text.upper()
+                
+                # Header detection: looking for common column names
+                if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA"]):
                     has_header = True
                     header_y = line[0]['y']
-                    break
+                    # Don't break yet, might be multiple header lines
+                    continue
+                
+                # Collect potential coram info above the first header
+                if not has_header:
+                    if any(k in line_text_upper for k in ["CORAM", "COURT", "HON'BLE", "MEMBER"]):
+                        if not any(noise in line_text_upper for noise in ["DATE:", "TIME:", "VIDEO CONFERENCING"]):
+                            coram_lines_above.append(line_text)
+
+            if coram_lines_above:
+                # If we found new coram info, use it. Some PDFs have it on every page.
+                new_coram = " | ".join(coram_lines_above)
+                if new_coram != current_coram:
+                    current_coram = new_coram
             
             if not has_header and not open_entry:
                 continue
@@ -383,23 +404,61 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
             else:
                 content_lines = lines
 
-            # Detect row starts (item numbers in column 1 or case numbers in column 2)
+            # Detect row starts
             for line in content_lines:
                 item_no_candidate = None
                 
-                first_token_x = line[0]['x']
-                line_text = " ".join(it['text'] for it in line)
+                line_text = _clean_pdf_line(" ".join(it['text'] for it in line))
+                if not line_text:
+                    continue
+                line_text_upper = line_text.upper()
                 
-                # Column 1 (Sr. No): x < 80
-                if first_token_x < 80 and re.fullmatch(r'\d{1,4}', line[0]['text']):
-                    item_no_candidate = line[0]['text']
+                # Check for table header (second table on same page or repeated header)
+                if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA"]):
+                    if open_entry:
+                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                        open_entry = None
+                    continue
+
+                # Check for Coram line (might appear between tables)
+                is_coram_line = any(k in line_text_upper for k in ["CORAM", "COURT", "HON'BLE", "MEMBER"]) and \
+                               not any(noise in line_text_upper for noise in ["DATE:", "TIME:", "VIDEO CONFERENCING"])
                 
-                # Column 2 (Case No): 80 <= x < 160
+                if is_coram_line:
+                    if open_entry:
+                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                        open_entry = None
+                    
+                    # Update current coram
+                    if any(k in line_text_upper for k in ["CORAM", "COURT"]):
+                         current_coram = line_text
+                    else:
+                         current_coram = (current_coram + " | " + line_text) if current_coram else line_text
+                    continue
+
+                # Detection of item number (Sr. No.)
+                # In Mumbai PDFs, it's often at the end of the line or in a specific x-range
+                # In others, it's at the start.
+                
+                first_token = line[0]['text'].strip().rstrip('.')
+                last_token = line[-1]['text'].strip().rstrip('.')
+                
+                # Case 1: Item number at the start (x < 100)
+                if line[0]['x'] < 100 and re.fullmatch(r'\d{1,4}', first_token):
+                    item_no_candidate = first_token
+                # Case 2: Item number at the end (x > 500)
+                elif line[-1]['x'] > 500 and re.fullmatch(r'\d{1,4}', last_token):
+                    item_no_candidate = last_token
+                
+                # Check for case number pattern in the line
                 has_case_no = CASE_NO_PATTERN.search(line_text)
                 
                 if item_no_candidate:
                     if open_entry:
-                        entries.append(_parse_single_cause_list_entry(open_entry))
+                        # If the current line has a case number, it might be a new entry even if item_no is at the end
+                        # But usually item_no signifies the start.
+                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                    
                     open_entry = {
                         "item_no": item_no_candidate,
                         "page_no": page_idx + 1,
@@ -414,11 +473,10 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                     }
                 else:
                     if open_entry:
-                        if line_text:
-                            open_entry["raw_lines"].append(line_text)
+                        open_entry["raw_lines"].append(line_text)
 
         if open_entry:
-            entries.append(_parse_single_cause_list_entry(open_entry))
+            entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
             
     return [e for e in entries if e.get("case_nos")]
 

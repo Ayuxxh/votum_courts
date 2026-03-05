@@ -622,6 +622,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
     entries = []
     
     current_stage = None
+    current_coram = None
     header_found = False
     stop_parsing = False
     
@@ -644,6 +645,28 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
         if not lines:
             continue
             
+        # Extract Coram for the current page
+        page_coram_parts = []
+        for l in lines:
+            if l["y0"] > 250:
+                break
+            txt = l["text"]
+            if txt.startswith("In the Court of"):
+                page_coram_parts.append(txt)
+            elif page_coram_parts and txt in ["(Technical)", "(Judicial)", "(Member)", "Member (Technical)", "Member (Judicial)"]:
+                page_coram_parts.append(txt)
+                
+        if page_coram_parts:
+            current_coram = " ".join(page_coram_parts)
+
+        # Merge coram with court_name if both exist
+        full_court_name = court_name
+        if current_coram:
+            if court_name and current_coram not in court_name:
+                full_court_name = f"{court_name} | {current_coram}"
+            else:
+                full_court_name = current_coram
+
         rows_data = []
         current_row_lines = [lines[0]]
         for i in range(1, len(lines)):
@@ -691,7 +714,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
                     "counsel_app": "",
                     "counsel_res": "",
                     "stage": current_stage,
-                    "court": court_name
+                    "court": full_court_name
                 })
             
             if entries:
