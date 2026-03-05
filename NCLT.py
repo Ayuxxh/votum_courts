@@ -98,7 +98,13 @@ CAUSE_LIST_BENCH_MAP = {
     "registrar nclt court-i": "116",
 }
 
-CASE_NO_PATTERN = re.compile(r"\b(?:CP|IA|MA|CA|TCP|TP|C\.P\.|Appeal)\s*(?:\(\s*IB\s*\))?[\s\./-]*\d+[\s\./-]*(?:\([A-Z]+\))?[\s\./-]*\d{4}\b", re.IGNORECASE)
+CASE_NO_PATTERN = re.compile(
+    r"\b(?:CP|IA|MA|CA|TCP|TP|C\.P\.|Appeal)\s*"
+    r"(?:\(\s*IB\s*\))?[\s\./-]*\d+"
+    r"(?:[\s\./-]*(?:\([A-Z]+\)|[A-Z]{2,8}))?"
+    r"[\s\./-]*\d{4}\b",
+    re.IGNORECASE,
+)
 
 def _normalize_case_token(case_no: str) -> str:
     return re.sub(r"\s+", "", (case_no or "").upper())

@@ -19,11 +19,12 @@ def _build_cause_list_table(
     """
     Build a cause list table with wrapped text cells.
     """
-    has_orders = any(e.get("orders") for e in entries) if include_orders is None else include_orders
+    has_orders = any(e.get("orders") and e.get("orders") != "-" for e in entries) if include_orders is None else include_orders
 
-    headers = ["S.No", "Case No", "Court Name", "Party Name", "Item No"]
     if has_orders:
-        headers.append("Orders / Remarks")
+        headers = ["S.No", "Case No", "Coram", "Party Name", "Orders / Remarks"]
+    else:
+        headers = ["S.No", "Case No", "Coram", "Party Name", "Item No"]
 
     data = [headers]
 
@@ -62,10 +63,11 @@ def _build_cause_list_table(
             case_cell,
             Paragraph(escape(str(entry.get("court_name", "-"))), body_style),
             Paragraph(escape(str(entry.get("party_name", "-"))), body_style),
-            Paragraph(escape(str(entry.get("item_no", "-"))), body_style),
         ]
         if has_orders:
             row.append(Paragraph(str(entry.get("orders", "-")), small_style))
+        else:
+            row.append(Paragraph(escape(str(entry.get("item_no", "-"))), body_style))
         data.append(row)
 
     table_style = TableStyle(
@@ -89,9 +91,8 @@ def _build_cause_list_table(
     )
 
     # Available width ~780 (Landscape A4).
-    col_widths = [35, 120, 150, 200, 50]
     if has_orders:
-        col_widths.append(225)
+        col_widths = [40, 130, 160, 200, 250]
     else:
         col_widths = [40, 150, 180, 330, 80]
 
