@@ -655,8 +655,8 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
                         a = a.strip()
                         if a: pet_advs.append(a)
             
-            # Check for Respondent (R, R1, Respondent)
-            elif ptype.startswith('R') or 'RESPONDENT' in ptype:
+            # Check for Respondent (R, R1, Respondent, D, D1, Defendant)
+            elif ptype.startswith('R') or ptype.startswith('D') or 'RESPONDENT' in ptype or 'DEFENDANT' in ptype:
                 if name: res_names.append(name)
                 if adv and adv.upper() != 'NA':
                     for a in adv.split(','):

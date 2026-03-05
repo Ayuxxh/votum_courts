@@ -14,16 +14,36 @@ from supabase import Client, create_client
 logger = logging.getLogger(__name__)
 
 ORDER_STORAGE_BUCKET = os.getenv("ORDER_STORAGE_BUCKET", "documents")
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
+
+
+def _resolve_supabase_url() -> Optional[str]:
+    value = os.getenv("SUPABASE_URL")
+    cleaned = value.strip() if isinstance(value, str) else ""
+    return cleaned or None
+
+
+def _resolve_supabase_key() -> Optional[str]:
+    value = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
+    cleaned = value.strip() if isinstance(value, str) else ""
+    return cleaned or None
 
 
 def get_supabase_client() -> Optional[Client]:
     try:
-        return create_client(SUPABASE_URL, SUPABASE_KEY)
+        from supabase_client import get_supabase_client as _shared_get_supabase_client
+
+        return _shared_get_supabase_client()
     except Exception as exc:  # pragma: no cover - defensive logging only
-        logger.warning("Failed to initialize Supabase client: %s", exc)
-        return None
+        url = _resolve_supabase_url()
+        key = _resolve_supabase_key()
+        if not (url and key):
+            logger.warning("Failed to initialize Supabase client: SUPABASE_URL/KEY not configured")
+            return None
+        try:
+            return create_client(url, key)
+        except Exception as fallback_exc:
+            logger.warning("Failed to initialize Supabase client: %s", fallback_exc)
+            return None
 
 
 def _default_fetch(order_url: str, referer: Optional[str] = None) -> requests.Response:
@@ -93,7 +113,8 @@ def _upload_order_document(
     if not order_url or not supabase_client:
         return None
 
-    if SUPABASE_URL and order_url.startswith(SUPABASE_URL):
+    supabase_url = _resolve_supabase_url()
+    if supabase_url and order_url.startswith(supabase_url):
         return {
             "public_url": order_url,
             "storage_bucket": ORDER_STORAGE_BUCKET,
@@ -141,6 +162,20 @@ def _upload_order_document(
             "source_url": order_url,
         }
     except Exception as exc:
+        err_text = str(exc).lower()
+        if "duplicate" in err_text or "already exists" in err_text or "409" in err_text:
+            try:
+                public_url = supabase_client.storage.from_(ORDER_STORAGE_BUCKET).get_public_url(
+                    storage_path
+                )
+                return {
+                    "public_url": public_url,
+                    "storage_bucket": ORDER_STORAGE_BUCKET,
+                    "storage_path": storage_path,
+                    "source_url": order_url,
+                }
+            except Exception:
+                pass
         logger.warning("Failed to upload order to storage (%s): %s", storage_path, exc)
     return None
 

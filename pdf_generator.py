@@ -61,7 +61,7 @@ def _build_cause_list_table(
         row = [
             Paragraph(str(entry.get("sno", idx)), body_style),
             case_cell,
-            Paragraph(escape(str(entry.get("court_name", "-"))), body_style),
+            Paragraph(escape(str(entry.get("coram_name") or entry.get("court_name", "-"))), body_style),
             Paragraph(escape(str(entry.get("party_name", "-"))), body_style),
         ]
         if has_orders:
