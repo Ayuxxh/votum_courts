@@ -53,7 +53,7 @@ CAUSE_LIST_HEADERS = {
 CAUSE_LIST_HOME_URL = "https://gujarathc-casestatus.nic.in/gujarathc/"
 CAUSE_LIST_PRINT_URL = "https://gujarathc-casestatus.nic.in/gujarathc/printBoardNew"
 
-CASE_NO_PATTERN = re.compile(r"\b(?:[A-Z]{1,4}/)?[A-Z]{1,10}/\d{1,7}/\d{4}\b")
+CASE_NO_PATTERN = re.compile(r"\b(?:[A-Z0-9.]{1,10}/){1,3}\d{1,7}/\d{4}\b")
 
 
 def _normalize_case_token(case_no: str) -> str:
@@ -239,7 +239,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
 
             first_start_y_coram = float("inf")
             for l in raw_page_lines:
-                if l["x"] < 75 and l["y"] > 80 and re.fullmatch(r"\d{1,4}", l["text"]):
+                if l["x"] < 75 and l["y"] > 80 and re.fullmatch(r"\d{1,4}\.?", l["text"]):
                     first_start_y_coram = min(first_start_y_coram, l["y"])
             
             page_honourables = []
@@ -267,8 +267,12 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
             if page_court_no:
                 page_court_name_parts.append(page_court_no)
             
-            if page_court_name_parts:
-                current_court_name = " | ".join(page_court_name_parts)
+            # Only update current_court_name if we found new judge info.
+            # If we only found court_no, we assume it's a continuation of the same judge(s).
+            if page_honourables or page_coram_short:
+                 current_court_name = " | ".join(page_court_name_parts)
+            elif page_court_no and not current_court_name:
+                 current_court_name = " | ".join(page_court_name_parts)
             # ----------------------------------
 
             lines: List[Dict[str, Any]] = []
@@ -296,7 +300,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
             )
 
             starts = [
-                line for line in lines if line["x"] < 75 and re.fullmatch(r"\d{1,4}", line["text"])
+                line for line in lines if line["x"] < 75 and re.fullmatch(r"\d{1,4}\.?", line["text"])
             ]
             starts.sort(key=lambda item: item["y"])
 

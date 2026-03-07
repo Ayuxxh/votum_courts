@@ -102,7 +102,7 @@ CASE_NO_PATTERN = re.compile(
     r"\b(?:CP|IA|MA|CA|TCP|TP|C\.P\.|Appeal)\s*"
     r"(?:\(\s*IB\s*\))?[\s\./-]*\d+"
     r"(?:[\s\./-]*(?:\([A-Z]+\)|[A-Z]{2,8}))?"
-    r"[\s\./-]*\d{4}\b",
+    r"[\s\./\-]*(?:of\s+)?\d{4}\b",
     re.IGNORECASE,
 )
 
@@ -358,7 +358,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
             
             for w in words:
                 x0, y0, x1, y1, text = w[:5]
-                if abs(y0 - current_y) > 3:
+                if abs(y0 - current_y) > 5:
                     if current_line:
                         # Sort by x
                         current_line.sort(key=lambda it: it['x'])
@@ -382,7 +382,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 line_text_upper = line_text.upper()
                 
                 # Header detection: looking for common column names
-                if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA"]):
+                if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA", "SR. NO", "S.NO"]):
                     has_header = True
                     header_y = line[0]['y']
                     # Don't break yet, might be multiple header lines
@@ -449,8 +449,8 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 first_token = line[0]['text'].strip().rstrip('.')
                 last_token = line[-1]['text'].strip().rstrip('.')
                 
-                # Case 1: Item number at the start (x < 100)
-                if line[0]['x'] < 100 and re.fullmatch(r'\d{1,4}', first_token):
+                # Case 1: Item number at the start (x < 110) - expanded range
+                if line[0]['x'] < 110 and re.fullmatch(r'\d{1,4}', first_token):
                     item_no_candidate = first_token
                 # Case 2: Item number at the end (x > 500)
                 elif line[-1]['x'] > 500 and re.fullmatch(r'\d{1,4}', last_token):
@@ -460,23 +460,35 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 has_case_no = CASE_NO_PATTERN.search(line_text)
                 
                 if item_no_candidate:
-                    if open_entry:
-                        # If the current line has a case number, it might be a new entry even if item_no is at the end
-                        # But usually item_no signifies the start.
-                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
-                    
-                    open_entry = {
-                        "item_no": item_no_candidate,
-                        "page_no": page_idx + 1,
-                        "raw_lines": [line_text]
-                    }
-                elif has_case_no and not open_entry:
-                    # Potential case start without item number (e.g. top of page)
-                    open_entry = {
-                        "item_no": "",
-                        "page_no": page_idx + 1,
-                        "raw_lines": [line_text]
-                    }
+                    # Logic: item number signifies a row start.
+                    # 'Grouping is top bottom': if we already have an open entry that was 
+                    # started by a case number but has no item number, this item number 
+                    # belongs to THAT entry (case number was above item number).
+                    if open_entry and open_entry.get("item_no") == "":
+                        open_entry["item_no"] = item_no_candidate
+                        open_entry["raw_lines"].append(line_text)
+                    else:
+                        # Otherwise, this item number starts a brand new entry.
+                        if open_entry:
+                            entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                        
+                        open_entry = {
+                            "item_no": item_no_candidate,
+                            "page_no": page_idx + 1,
+                            "raw_lines": [line_text]
+                        }
+                elif has_case_no:
+                    # If we find a case number but no item number on this line:
+                    if not open_entry:
+                        # Start an entry with empty item_no, hoping to find it in the following lines.
+                        open_entry = {
+                            "item_no": "",
+                            "page_no": page_idx + 1,
+                            "raw_lines": [line_text]
+                        }
+                    else:
+                        # Continuation or look-ahead case number
+                        open_entry["raw_lines"].append(line_text)
                 else:
                     if open_entry:
                         open_entry["raw_lines"].append(line_text)
