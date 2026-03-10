@@ -456,6 +456,41 @@ class EcourtsWebScraper:
         _scan(payload)
         return links
 
+    def _solve_captcha_text(self, max_retries: int = 4) -> Optional[str]:
+        for _ in range(max_retries):
+            captcha_img = self.get_captcha_image()
+            if not captcha_img:
+                continue
+            try:
+                raw = (self.ocr.classification(captcha_img) or "").strip()
+            except Exception:
+                logger.debug("Cause-list captcha OCR failed", exc_info=True)
+                continue
+            cleaned = re.sub(r"[^A-Za-z0-9]", "", raw)
+            if cleaned:
+                return cleaned
+        return None
+
+    def _extract_cause_list_courts(self, cause_list_html: str) -> List[Dict[str, str]]:
+        courts: List[Dict[str, str]] = []
+        soup = BeautifulSoup(cause_list_html or "", "html.parser")
+        for opt in soup.find_all("option"):
+            if opt.has_attr("disabled"):
+                continue
+            value = (opt.get("value") or "").strip()
+            text = opt.get_text(" ", strip=True)
+            if not value or value.lower().startswith("select"):
+                continue
+            courts.append({"value": value, "text": text})
+        return courts
+
+    def _selprevdays_for_date(self, formatted_date: str) -> str:
+        try:
+            target = datetime.strptime((formatted_date or "").strip(), "%d-%m-%Y").date()
+            return "1" if target < datetime.today().date() else "0"
+        except Exception:
+            return "0"
+
     def _download_pdf_bytes(self, pdf_url: str) -> bytes:
         response = self.session.get(pdf_url, verify=False, timeout=30)
         response.raise_for_status()
@@ -482,73 +517,102 @@ class EcourtsWebScraper:
         complex_code = parts[0] if parts else ""
         formatted_date = self._format_causelist_date(listing_date)
 
-        # Prime causelist page cookies/context.
+        # Prime cause-list page cookies/context.
         try:
-            self.session.get(f"{self.base_url}/?p=clsearch/index", verify=False, timeout=30)
+            self.session.get(f"{self.base_url}/?p=cause_list/index", verify=False, timeout=30)
         except Exception:
-            logger.debug("Unable to pre-load clsearch index", exc_info=True)
-
-        payload_candidates = [
-            {
-                "state_code": state_code,
-                "dist_code": dist_code,
-                "court_complex_code": complex_code,
-                "est_code": est_code,
-                "listing_date": formatted_date,
-            },
-            {
-                "state_code": state_code,
-                "dist_code": dist_code,
-                "court_complex_code": complex_code,
-                "est_code": est_code,
-                "cause_list_date": formatted_date,
-            },
-            {
-                "state_code": state_code,
-                "dist_code": dist_code,
-                "court_complex_code": complex_code,
-                "est_code": est_code,
-                "date_from": formatted_date,
-                "date_to": formatted_date,
-            },
-        ]
-        endpoint_candidates = [
-            "clsearch/submit",
-            "clsearch/submitDate",
-            "clsearch/getCauselist",
-            "clsearch/showlist",
-            "clsearch/display",
-        ]
+            logger.debug("Unable to pre-load cause_list index", exc_info=True)
 
         response_payloads: List[Any] = []
         pdf_links: List[str] = []
 
-        for endpoint in endpoint_candidates:
-            if pdf_links:
-                break
-            for payload in payload_candidates:
-                try:
-                    resp = self._post(endpoint, payload.copy())
-                    response_payloads.append(resp)
-                    links = self._extract_pdf_links_from_payload(resp)
-                    if links:
-                        pdf_links.extend(links)
-                        break
-                except Exception:
-                    logger.debug("Cause-list request failed for endpoint %s", endpoint, exc_info=True)
+        # Browser-observed flow:
+        # casestatus/set_data -> cause_list/fillCauseList -> cause_list/submitCauseList
+        selected_est_code = est_code if est_code else "null"
+        try:
+            set_data_resp = self._post(
+                "casestatus/set_data",
+                {
+                    "complex_code": court_complex_code_full,
+                    "selected_state_code": state_code,
+                    "selected_dist_code": dist_code,
+                    "selected_est_code": selected_est_code,
+                },
+            )
+            response_payloads.append(set_data_resp)
+        except Exception:
+            logger.debug("Cause-list set_data failed", exc_info=True)
 
-        # Fallback: scan clsearch page itself for direct PDF links.
-        if not pdf_links:
-            try:
-                index_resp = self.session.get(
-                    f"{self.base_url}/?p=clsearch/index",
-                    verify=False,
-                    timeout=30,
-                )
-                response_payloads.append(index_resp.text)
-                pdf_links.extend(self._extract_pdf_links_from_payload(index_resp.text))
-            except Exception:
-                logger.debug("Failed to scan clsearch index for PDF links", exc_info=True)
+        try:
+            fill_resp = self._post(
+                "cause_list/fillCauseList",
+                {
+                    "state_code": state_code,
+                    "dist_code": dist_code,
+                    "court_complex_code": complex_code,
+                    "est_code": parts[1] if len(parts) > 1 else selected_est_code,
+                    "search_act": "undefined",
+                },
+            )
+            response_payloads.append(fill_resp)
+        except Exception as exc:
+            return {
+                "status": "error",
+                "msg": f"Cause-list court list fetch failed: {exc}",
+                "listing_date": formatted_date,
+                "responses_checked": len(response_payloads),
+                "pdfs": [],
+                "entries": [],
+                "matched_entries": [],
+            }
+
+        court_options = self._extract_cause_list_courts(
+            str(fill_resp.get("cause_list") if isinstance(fill_resp, dict) else "")
+        )
+
+        selprevdays = self._selprevdays_for_date(formatted_date)
+        for court in court_options:
+            for cicri in ("civ", "cri"):
+                for _ in range(4):
+                    captcha_text = self._solve_captcha_text()
+                    if not captcha_text:
+                        continue
+                    try:
+                        submit_resp = self._post(
+                            "cause_list/submitCauseList",
+                            {
+                                "CL_court_no": court["value"],
+                                "causelist_date": formatted_date,
+                                "cause_list_captcha_code": captcha_text,
+                                "court_name_txt": court["text"],
+                                "state_code": state_code,
+                                "dist_code": dist_code,
+                                "court_complex_code": complex_code,
+                                "est_code": selected_est_code,
+                                "cicri": cicri,
+                                "selprevdays": selprevdays,
+                            },
+                        )
+                    except Exception:
+                        logger.debug(
+                            "Cause-list submit failed for court=%s cicri=%s",
+                            court.get("value"),
+                            cicri,
+                            exc_info=True,
+                        )
+                        continue
+                    response_payloads.append(submit_resp)
+
+                    if not isinstance(submit_resp, dict):
+                        break
+                    if int(submit_resp.get("status") or 0) == 1:
+                        pdf_links.extend(self._extract_pdf_links_from_payload(submit_resp.get("case_data")))
+                        break
+
+                    err = str(submit_resp.get("errormsg") or submit_resp.get("msg") or "").lower()
+                    if "captcha" in err:
+                        continue
+                    break
 
         # Deduplicate while preserving order.
         deduped_links: List[str] = []

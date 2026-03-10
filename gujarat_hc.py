@@ -116,6 +116,29 @@ def _is_party_noise_line(text: str) -> bool:
     return False
 
 
+def _pick_vc_link_from_page(page: fitz.Page) -> Optional[str]:
+    """
+    Extract best-effort VC URL from page hyperlinks.
+    Prefer known VC providers when multiple links exist.
+    """
+    candidates: List[str] = []
+    preferred: List[str] = []
+    for link in page.get_links() or []:
+        uri = str(link.get("uri") or "").strip()
+        if not uri or not uri.lower().startswith(("http://", "https://")):
+            continue
+        lowered = uri.lower()
+        if any(token in lowered for token in ("zoom.us", "webex", "teams.microsoft", "meet.google")):
+            preferred.append(uri)
+        else:
+            candidates.append(uri)
+    if preferred:
+        return preferred[0]
+    if candidates:
+        return candidates[0]
+    return None
+
+
 def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     case_lines = entry.get("case_lines") or []
     party_lines = entry.get("party_lines") or []
@@ -194,6 +217,7 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     parties = [x for x in (petitioner_parts + respondent_parts) if x]
     
     court_name = entry.get("court_name")
+    vc_link = entry.get("vc_link")
 
     return {
         "item_no": entry.get("item_no"),
@@ -206,6 +230,7 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
         "party_names": party_names,
         "advocates": advocates,
         "court_name": court_name,
+        "vc_link": vc_link,
         "text": text,
         "entry_hash": entry_hash,
     }
@@ -220,9 +245,13 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
     with fitz.open(pdf_path) as doc:
         open_entry: Optional[Dict[str, Any]] = None
         current_court_name: Optional[str] = None
+        current_vc_link: Optional[str] = None
 
         for page_idx in range(doc.page_count):
             page = doc[page_idx]
+            page_vc_link = _pick_vc_link_from_page(page)
+            if page_vc_link:
+                current_vc_link = page_vc_link
             
             # --- Extract Coram / Court Name ---
             raw_page_lines = []
@@ -342,6 +371,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     "party_lines": [],
                     "advocate_lines": [],
                     "court_name": current_court_name,
+                    "vc_link": current_vc_link,
                 }
                 for line in lines:
                     if not (y_start <= line["y"] < y_end):

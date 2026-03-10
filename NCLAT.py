@@ -300,6 +300,85 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
 
     orders: list[dict] = []
     hearings: list[dict] = []
+    ia_details: list[dict[str, Any]] = []
+
+    def _header_indexes(headers: list[str]) -> dict[str, int]:
+        idx: dict[str, int] = {}
+        for i, header in enumerate(headers):
+            if "ia" in header or "interlocutory" in header or "application no" in header:
+                idx.setdefault("ia_number", i)
+            if any(k in header for k in ["party", "applicant", "respondent", "petitioner", "filed by"]):
+                idx.setdefault("party", i)
+            if "filing date" in header or "date of filing" in header:
+                idx.setdefault("filing_date", i)
+            if any(k in header for k in ["next date", "next hearing", "next listing", "hearing date"]):
+                idx.setdefault("next_date", i)
+            if "status" in header or "stage" in header:
+                idx.setdefault("status", i)
+            if "purpose" in header:
+                idx.setdefault("purpose", i)
+            if "disposal date" in header or "disposed on" in header:
+                idx.setdefault("disposal_date", i)
+        return idx
+
+    def _extract_ia_rows(table) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        if not table or table.find("table"):
+            return rows
+
+        ths = [th for th in table.find_all("th") if th.find_parent("table") == table]
+        headers = [_norm_key(_clean(th.get_text(" ", strip=True))) for th in ths]
+        indexes = _header_indexes(headers)
+        has_ia_signal = bool(
+            indexes.get("ia_number") is not None
+            or any("interlocutory" in h or h == "ia" or h.startswith("ia ") for h in headers)
+        )
+
+        trs = [tr for tr in table.find_all("tr") if tr.find_parent("table") == table]
+        for tr in trs:
+            if tr.find("th"):
+                continue
+            tds = tr.find_all("td", recursive=False) or tr.find_all("td")
+            if len(tds) < 2:
+                continue
+
+            cells = [_clean(td.get_text(" ", strip=True)) for td in tds]
+            if not any(cells):
+                continue
+
+            ia_idx = indexes.get("ia_number")
+            ia_number = cells[ia_idx] if ia_idx is not None and ia_idx < len(cells) else cells[0]
+            if not ia_number:
+                continue
+
+            # If headers are weak/absent, still accept IA-looking rows from IA sections.
+            if not has_ia_signal and not re.search(r"\b(?:I\.?A\.?|IA|INTERLOCUTORY)\b", ia_number, re.IGNORECASE):
+                continue
+
+            party_idx = indexes.get("party")
+            filing_idx = indexes.get("filing_date")
+            next_idx = indexes.get("next_date")
+            status_idx = indexes.get("status")
+            purpose_idx = indexes.get("purpose")
+            disposal_idx = indexes.get("disposal_date")
+
+            filing_raw = cells[filing_idx] if filing_idx is not None and filing_idx < len(cells) else None
+            next_raw = cells[next_idx] if next_idx is not None and next_idx < len(cells) else None
+            disposal_raw = cells[disposal_idx] if disposal_idx is not None and disposal_idx < len(cells) else None
+
+            rows.append(
+                {
+                    "ia_number": ia_number,
+                    "party": (cells[party_idx] if party_idx is not None and party_idx < len(cells) else None) or None,
+                    "filing_date": _normalize_date(filing_raw) or filing_raw or None,
+                    "next_date": _normalize_date(next_raw) or next_raw or None,
+                    "status": (cells[status_idx] if status_idx is not None and status_idx < len(cells) else None) or None,
+                    "purpose": (cells[purpose_idx] if purpose_idx is not None and purpose_idx < len(cells) else None) or None,
+                    "disposal_date": _normalize_date(disposal_raw) or disposal_raw or None,
+                    "raw_row": cells,
+                }
+            )
+        return rows
 
     # Iterate through each "card" in the accordion structure
     for card in soup.select(".card"):
@@ -414,8 +493,36 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                                     "order_type": order_type or None,
                                 }
                             )
+        elif any(
+            k in h_text
+            for k in (
+                "interlocutory",
+                "ia details",
+                "i.a.",
+                "ia/ma",
+                "application details",
+            )
+        ):
+            for table in body.find_all("table"):
+                ia_details.extend(_extract_ia_rows(table))
 
     fmt_case_no = _reformat_case_no(case_no)
+    # Deduplicate IA rows while preserving order.
+    seen_ias: set[tuple[Any, ...]] = set()
+    deduped_ias: list[dict[str, Any]] = []
+    for row in ia_details:
+        key = (
+            (row.get("ia_number") or "").strip().lower(),
+            (row.get("party") or "").strip().lower(),
+            (row.get("filing_date") or "").strip().lower(),
+            (row.get("next_date") or "").strip().lower(),
+            (row.get("status") or "").strip().lower(),
+        )
+        if key in seen_ias:
+            continue
+        seen_ias.add(key)
+        deduped_ias.append(row)
+
     return {
         "cin_no": filing_no,
         "filling_no": filing_no,
@@ -432,6 +539,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         "next_listing_date": next_listing_date,
         "orders": orders,
         "history": [],
+        "ia_details": deduped_ias,
         "additional_info": {
             "status": status,
             "case_title": title_text,
@@ -714,7 +822,9 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
                     "counsel_app": "",
                     "counsel_res": "",
                     "stage": current_stage,
-                    "court": full_court_name
+                    "court": full_court_name,
+                    "court_name": full_court_name,
+                    "coram_name": current_coram,
                 })
             
             if entries:
@@ -811,30 +921,34 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     if not entries:
         return []
         
-    # More robust matching:
-    # 1. Full normalized match
+    # Strict matching:
+    # 1. Full normalized case string containment.
     target_full = re.sub(r"[^A-Z0-9]+", "", case_no.upper())
-    
-    # 2. Match by numeric parts (e.g., "69/2026")
+
+    # 2. Exact numeric case token (e.g., "69/2026" or "No. 69 of 2026").
     nums = re.findall(r"\d+", case_no)
-    target_pattern = None
+    target_no_year_pattern = None
     if len(nums) >= 2:
-        # Match "69" and "2026" with anything in between
-        target_pattern = re.compile(rf"{nums[-2]}.*{nums[-1]}")
+        no = re.escape(nums[-2].lstrip("0") or nums[-2])
+        year = re.escape(nums[-1])
+        target_no_year_pattern = re.compile(
+            rf"(?:NO\.?\s*)?(?<!\d){no}(?!\d)\s*(?:/|OF|-)\s*{year}(?!\d)",
+            re.IGNORECASE,
+        )
 
     matched = []
     for e in entries:
         curr_text = e["case_no"].upper()
         curr_norm = re.sub(r"[^A-Z0-9]+", "", curr_text)
-        
-        # Check full normalized substring
-        if target_full in curr_norm or curr_norm in target_full:
+
+        # Check full normalized substring in candidate text.
+        if target_full and target_full in curr_norm:
             matched.append(e)
             continue
-            
-        # Check numeric pattern match
-        if target_pattern and target_pattern.search(curr_text):
+
+        # Check exact no/year token match.
+        if target_no_year_pattern and target_no_year_pattern.search(curr_text):
             matched.append(e)
             continue
-            
+
     return matched

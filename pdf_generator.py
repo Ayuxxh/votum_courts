@@ -22,9 +22,9 @@ def _build_cause_list_table(
     has_orders = any(e.get("orders") and e.get("orders") != "-" for e in entries) if include_orders is None else include_orders
 
     if has_orders:
-        headers = ["S.No", "Case No", "Coram", "Party Name", "Orders / Remarks"]
+        headers = ["S.No", "Case No", "Coram", "Party Name", "Collaborators", "Next Listing Date", "Today's Order"]
     else:
-        headers = ["S.No", "Case No", "Coram", "Party Name", "Item No"]
+        headers = ["S.No", "Case No", "Coram", "Party Name", "Collaborators", "VC Link", "Item No", "Last Order"]
 
     data = [headers]
 
@@ -63,11 +63,15 @@ def _build_cause_list_table(
             case_cell,
             Paragraph(escape(str(entry.get("coram_name") or entry.get("court_name", "-"))), body_style),
             Paragraph(escape(str(entry.get("party_name", "-"))), body_style),
+            Paragraph(escape(str(entry.get("collaborators", "-"))), body_style),
         ]
         if has_orders:
+            row.append(Paragraph(escape(str(entry.get("next_listing_date", "-"))), body_style))
             row.append(Paragraph(str(entry.get("orders", "-")), small_style))
         else:
+            row.append(Paragraph(str(entry.get("vc_link", "-")), small_style))
             row.append(Paragraph(escape(str(entry.get("item_no", "-"))), body_style))
+            row.append(Paragraph(str(entry.get("last_order", "-")), small_style))
         data.append(row)
 
     table_style = TableStyle(
@@ -92,9 +96,9 @@ def _build_cause_list_table(
 
     # Available width ~780 (Landscape A4).
     if has_orders:
-        col_widths = [40, 130, 160, 200, 250]
+        col_widths = [34, 90, 130, 146, 114, 72, 194]
     else:
-        col_widths = [40, 150, 180, 330, 80]
+        col_widths = [34, 86, 124, 130, 112, 74, 56, 164]
 
     t = Table(data, colWidths=col_widths, repeatRows=1)
     t.setStyle(table_style)
