@@ -298,7 +298,7 @@ def _clean_pdf_line(text: str) -> str:
         return ""
     return cleaned
 
-def _parse_single_cause_list_entry(entry: dict, court_name: str = "") -> dict:
+def _parse_single_cause_list_entry(entry: dict, court_name: str = "", vc_link: str = "") -> dict:
     raw_lines = entry.get("raw_lines") or []
     text = "\n".join(raw_lines).strip()
     
@@ -334,6 +334,7 @@ def _parse_single_cause_list_entry(entry: dict, court_name: str = "") -> dict:
         "text": text,
         "entry_hash": entry_hash,
         "court_name": court_name,
+        "vc_link": vc_link,
     }
 
 def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
@@ -342,6 +343,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
     """
     entries: list[dict] = []
     current_coram = ""
+    current_vc_link = ""
     
     with fitz.open(pdf_path) as doc:
         open_entry = None
@@ -379,6 +381,12 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 line_text = _clean_pdf_line(" ".join(it['text'] for it in line))
                 if not line_text:
                     continue
+                
+                # Detect VC Link
+                url_match = re.search(r"https?://\S+", line_text)
+                if url_match:
+                    current_vc_link = url_match.group(0)
+
                 line_text_upper = line_text.upper()
                 
                 # Header detection: looking for common column names
@@ -417,12 +425,18 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 line_text = _clean_pdf_line(" ".join(it['text'] for it in line))
                 if not line_text:
                     continue
+
+                # Detect VC Link in content lines as well (rare, but just in case)
+                url_match = re.search(r"https?://\S+", line_text)
+                if url_match:
+                    current_vc_link = url_match.group(0)
+
                 line_text_upper = line_text.upper()
                 
                 # Check for table header (second table on same page or repeated header)
                 if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA"]):
                     if open_entry:
-                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
                         open_entry = None
                     continue
 
@@ -432,7 +446,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                 
                 if is_coram_line:
                     if open_entry:
-                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
                         open_entry = None
                     
                     # Update current coram
@@ -470,7 +484,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                     else:
                         # Otherwise, this item number starts a brand new entry.
                         if open_entry:
-                            entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+                            entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
                         
                         open_entry = {
                             "item_no": item_no_candidate,
@@ -494,7 +508,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                         open_entry["raw_lines"].append(line_text)
 
         if open_entry:
-            entries.append(_parse_single_cause_list_entry(open_entry, current_coram))
+            entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
             
     return [e for e in entries if e.get("case_nos")]
 
