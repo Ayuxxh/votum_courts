@@ -278,6 +278,39 @@ async def web_search_by_case_number(
     return {"error": "Failed to initialize session"}
 
 
+@router.get("/dc/search_by_party_name/", summary="Search case by party name from eCourts web")
+async def web_search_by_party_name(
+    state_code: str,
+    dist_code: str,
+    complex_code: str,
+    party_name: str,
+    year: str,
+    status: str = "Both",
+):
+    scraper = EcourtsWebScraper()
+    if scraper.initialize_session():
+        return scraper.search_by_party_name(
+            state_code, dist_code, complex_code, party_name, year, status
+        )
+    return {"error": "Failed to initialize session"}
+
+
+@router.get("/dc/search_by_advocate_name/", summary="Search case by advocate name from eCourts web")
+async def web_search_by_advocate_name(
+    state_code: str,
+    dist_code: str,
+    complex_code: str,
+    advocate_name: str,
+    status: str = "Both",
+):
+    scraper = EcourtsWebScraper()
+    if scraper.initialize_session():
+        return scraper.search_by_advocate_name(
+            state_code, dist_code, complex_code, advocate_name, status
+        )
+    return {"error": "Failed to initialize session"}
+
+
 @router.post("/dc/case_details/", summary="Get case details from eCourts web")
 async def web_case_details(params: WebCaseDetailsRequest):
     scraper = EcourtsWebScraper()

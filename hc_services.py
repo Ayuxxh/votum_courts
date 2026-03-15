@@ -277,7 +277,7 @@ def parse_json_response(json_response):
     parsed_con_data = []
     for item in con_data:
         if isinstance(item, str):
-            # URL decode if it's a string (like the example in logs)
+            # URL decode if it's a string
             import urllib.parse
             decoded_item = urllib.parse.unquote(item)
             # Parse as JSON
@@ -316,9 +316,6 @@ def parse_json_response(json_response):
                 'party_name1': item.get('party_name1', ''),
                 'party_name2': item.get('party_name2', ''),
             })
-        else:
-            # Handle case where item is not a dict
-            continue
     
     return result
 
@@ -374,7 +371,8 @@ def hc_search_by_case_number(state_code, court_code, case_type, case_no, year):
                 continue
                 
             # Check if CAPTCHA was incorrect
-            if "CAPTCHA" in response.text or "Invalid CAPTCHA" in response.text:
+            lowered_text = response.text.lower()
+            if "captcha" in lowered_text and ("invalid" in lowered_text or "please enter" in lowered_text):
                 logger.warning("Invalid CAPTCHA, retrying...")
                 retries += 1
                 continue
@@ -382,15 +380,17 @@ def hc_search_by_case_number(state_code, court_code, case_type, case_no, year):
             # Parse the response
             try:
                 # Try to parse as JSON first
-                json_response = response.json()
-                print('json_response', json_response)
+                response_text = response.text
+                if response_text.startswith('\ufeff'):
+                    response_text = response_text[1:]
+                
+                json_response = json.loads(response_text)
                 result = parse_json_response(json_response)
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
                 # If JSON parsing fails, try parsing as HTML table
                 soup = BeautifulSoup(response.text, 'html.parser')
                 result = table_to_list(soup)
             
-            print(result)
             if not result and retries < max_retries:
                 logger.warning("No results found, retrying...")
                 retries += 1
@@ -417,10 +417,86 @@ def hc_search_by_case_number(state_code, court_code, case_type, case_no, year):
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10)
 )
-def hc_search_by_party_name(state_code, court_code, pet_name=None, res_name=None):
+def hc_search_by_party_name(state_code, court_code, pet_name=None, res_name=None, year=""):
     """
     Search for cases by party name in High Court Services
     """
+    max_retries = 5
+    retries = 0
+
+    name_to_search = pet_name or res_name or ""
+
+    while retries < max_retries:
+        try:
+            captcha_result = solve_captcha()
+            
+            # Prepare data for the POST request
+            data = f"court_code={court_code}&state_code={state_code}&court_complex_code={court_code}&caseStatusSearchType=CSpartyName&captcha={captcha_result}&petres_name={name_to_search}&f=Both&rgyear={year}&action_code=showRecords&appFlag=web"
+            
+            headers = {
+                'accept': '*/*',
+                'accept-language': 'en-GB,en;q=0.9',
+                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'x-requested-with': 'XMLHttpRequest',
+                'Origin': 'https://hcservices.ecourts.gov.in',
+                'Referer': 'https://hcservices.ecourts.gov.in/hcservices/main.php'
+            }
+            
+            response = _request_with_session_refresh("POST", DATA_URL, data=data, headers=headers)
+            
+            if response.status_code != 200:
+                logger.warning(f"HTTP {response.status_code} received, retrying...")
+                retries += 1
+                continue
+                
+            # Check if CAPTCHA was incorrect
+            lowered_text = response.text.lower()
+            if "captcha" in lowered_text and ("invalid" in lowered_text or "please enter" in lowered_text):
+                logger.warning("Invalid CAPTCHA, retrying...")
+                retries += 1
+                continue
+
+            # Parse the response
+            try:
+                # Try to parse as JSON first
+                response_text = response.text
+                if response_text.startswith('\ufeff'):
+                    response_text = response_text[1:]
+
+                json_response = json.loads(response_text)
+                result = parse_json_response(json_response)
+            except json.JSONDecodeError as e:
+                # If JSON parsing fails, try parsing as HTML table
+                soup = BeautifulSoup(response.text, 'html.parser')
+                result = table_to_list(soup)            
+            # If we got a valid response (JSON or HTML) but it's empty, it means no results.
+            # We should return [] instead of retrying.
+            return result or []
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Request failed: {e}")
+            retries += 1
+            if retries >= max_retries:
+                raise
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
+            retries += 1
+            if retries >= max_retries:
+                raise
+    
+    raise Exception("Max retries reached. Could not fetch case data.")
+
+
+@retry(
+    retry=retry_if_exception_type((requests.exceptions.RequestException, ValueError)),
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=1, min=2, max=10)
+)
+def hc_search_by_advocate_name(state_code, court_code, advocate_name):
+    """
+    Search for cases by advocate name in High Court Services
+    """
+    logger.info(f"Searching for advocate: {advocate_name} in state: {state_code}, court: {court_code}")
     max_retries = 5
     retries = 0
 
@@ -429,18 +505,18 @@ def hc_search_by_party_name(state_code, court_code, pet_name=None, res_name=None
             captcha_result = solve_captcha()
             
             # Prepare data for the POST request
-            data = {
-                'court_code': court_code,
-                'state_code': state_code,
-                'court_complex_code': court_code,
-                'caseStatusSearchType': 'CSpartyName',
-                'captcha': captcha_result,
-                'pet_name': pet_name or '',
-                'res_name': res_name or '',
-                'displayOldCaseNo': 'NO'
+            data = f"court_code={court_code}&state_code={state_code}&court_complex_code={court_code}&caseStatusSearchType=CSAdvName&captcha={captcha_result}&advocate_name={advocate_name}&adv_bar_state=&search_type=1&f=Both&action_code=showRecords&appFlag=web"
+            
+            headers = {
+                'accept': '*/*',
+                'accept-language': 'en-GB,en;q=0.9',
+                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'x-requested-with': 'XMLHttpRequest',
+                'Origin': 'https://hcservices.ecourts.gov.in',
+                'Referer': 'https://hcservices.ecourts.gov.in/hcservices/main.php'
             }
             
-            response = _request_with_session_refresh("POST", DATA_URL, data=data)
+            response = _request_with_session_refresh("POST", DATA_URL, data=data, headers=headers)
             
             if response.status_code != 200:
                 logger.warning(f"HTTP {response.status_code} received, retrying...")
@@ -448,27 +524,26 @@ def hc_search_by_party_name(state_code, court_code, pet_name=None, res_name=None
                 continue
                 
             # Check if CAPTCHA was incorrect
-            if "CAPTCHA" in response.text or "Invalid CAPTCHA" in response.text:
+            lowered_text = response.text.lower()
+            if "captcha" in lowered_text and ("invalid" in lowered_text or "please enter" in lowered_text):
                 logger.warning("Invalid CAPTCHA, retrying...")
                 retries += 1
                 continue
-                
+
             # Parse the response
             try:
                 # Try to parse as JSON first
-                json_response = response.json()
+                response_text = response.text
+                if response_text.startswith('\ufeff'):
+                    response_text = response_text[1:]
+
+                json_response = json.loads(response_text)
                 result = parse_json_response(json_response)
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
                 # If JSON parsing fails, try parsing as HTML table
                 soup = BeautifulSoup(response.text, 'html.parser')
-                result = table_to_list(soup)
-            
-            if not result and retries < max_retries:
-                logger.warning("No results found, retrying...")
-                retries += 1
-                continue
-            
-            return result
+                result = table_to_list(soup)            
+            return result or []
             
         except requests.exceptions.RequestException as e:
             logger.error(f"Request failed: {e}")
@@ -1125,6 +1200,10 @@ def _parse_pipe_delimited_response(response_text: str, value_key: str, name_key:
     Returns:
         list[dict]: List of dictionaries with value_key and name_key
     """
+    # Strip Byte Order Mark (BOM) if present
+    if response_text.startswith('\ufeff'):
+        response_text = response_text[1:]
+    
     results = []
     if "~" in response_text and "#" in response_text:
         parts = response_text.split("#")

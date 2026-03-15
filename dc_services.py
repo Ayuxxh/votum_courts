@@ -258,6 +258,7 @@ class EcourtsWebScraper:
                 self.app_token = json_resp['app_token']
             return json_resp
         except:
+            logger.debug(f"Non-JSON response from {url_suffix}: {response.text[:200]}")
             return {'status': False, 'msg': 'Invalid JSON response', 'raw': response.text}
 
     def get_states(self):
@@ -930,7 +931,7 @@ class EcourtsWebScraper:
         complex_code = parts[0]
         
         # Retry logic for CAPTCHA
-        max_retries = 3
+        max_retries = 5
         for attempt in range(max_retries):
             captcha_img = self.get_captcha_image()
             if not captcha_img:
@@ -972,6 +973,96 @@ class EcourtsWebScraper:
                     return {'status': 'error', 'msg': resp.get('msg', 'Unknown error'), 'raw': resp}
             else:
                  # Should not happen with _post returning dict or text
+                 logger.error(f"Unexpected response type: {type(resp)}")
+                 continue
+                 
+        return {'status': 'error', 'msg': 'Max retries exceeded or captcha failed'}
+
+    def search_by_party_name(self, state_code, dist_code, court_complex_code_full, party_name, year, status='Both'):
+        parts = court_complex_code_full.split('@')
+        complex_code = parts[0]
+        
+        # Retry logic for CAPTCHA
+        max_retries = 5
+        for attempt in range(max_retries):
+            captcha_img = self.get_captcha_image()
+            if not captcha_img:
+                logger.error("Failed to get captcha image")
+                continue
+            
+            try:
+                captcha_text = self.ocr.classification(captcha_img)
+            except Exception as e:
+                logger.error(f"OCR failed: {e}")
+                continue
+
+            data = {
+                'petres_name': party_name,
+                'rgyearP': year,
+                'f': status, # Pending, Disposed, Both
+                'case_captcha_code': captcha_text,
+                'state_code': state_code,
+                'dist_code': dist_code,
+                'court_complex_code': complex_code,
+                'submit_btn': 'Go'
+            }
+            
+            resp = self._post('casestatus/submitPartyName', data)
+            
+            if isinstance(resp, dict):
+                if resp.get('status') == 1:
+                    return self._parse_results(resp.get('case_data', ''))
+                elif 'captcha' in str(resp.get('msg', '')).lower() or 'captcha' in str(resp.get('div_captcha', '')).lower():
+                    logger.info("Captcha failed, retrying...")
+                    continue
+                else:
+                    return {'status': 'error', 'msg': resp.get('msg', 'Unknown error'), 'raw': resp}
+            else:
+                 logger.error(f"Unexpected response type: {type(resp)}")
+                 continue
+                 
+        return {'status': 'error', 'msg': 'Max retries exceeded or captcha failed'}
+
+    def search_by_advocate_name(self, state_code, dist_code, court_complex_code_full, advocate_name, status='Both'):
+        parts = court_complex_code_full.split('@')
+        complex_code = parts[0]
+        
+        # Retry logic for CAPTCHA
+        max_retries = 5
+        for attempt in range(max_retries):
+            captcha_img = self.get_captcha_image()
+            if not captcha_img:
+                logger.error("Failed to get captcha image")
+                continue
+            
+            try:
+                captcha_text = self.ocr.classification(captcha_img)
+            except Exception as e:
+                logger.error(f"OCR failed: {e}")
+                continue
+
+            data = {
+                'radAdvt': '1', # 1 for name
+                'advocate_name': advocate_name,
+                'f': status, # Pending, Disposed, Both
+                'case_captcha_code': captcha_text,
+                'state_code': state_code,
+                'dist_code': dist_code,
+                'court_complex_code': complex_code,
+                'submit_btn': 'Go'
+            }
+            
+            resp = self._post('casestatus/submitAdvName', data)
+            
+            if isinstance(resp, dict):
+                if resp.get('status') == 1:
+                    return self._parse_results(resp.get('case_data', ''))
+                elif 'captcha' in str(resp.get('msg', '')).lower() or 'captcha' in str(resp.get('div_captcha', '')).lower():
+                    logger.info("Captcha failed, retrying...")
+                    continue
+                else:
+                    return {'status': 'error', 'msg': resp.get('msg', 'Unknown error'), 'raw': resp}
+            else:
                  logger.error(f"Unexpected response type: {type(resp)}")
                  continue
                  
