@@ -1582,7 +1582,7 @@ def hc_get_case_types(state_code, court_code):
             # Approach 3: Use the existing EcourtsService if available
             # This is a fallback that uses the encrypted API
             try:
-                from .ecourts import EcourtsService
+                from .legacy.ecourts import EcourtsService
                 ecourts_service = EcourtsService("HC", "3f91159bc5ba1090:in.gov.ecourts.eCourtsServices")
                 case_types_result = ecourts_service.get_case_type(
                     court_code=court_code,

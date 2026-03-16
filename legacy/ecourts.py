@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 
-from . import hc_services
+from .. import hc_services
 
 
 def decode_response(result):

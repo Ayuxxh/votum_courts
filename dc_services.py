@@ -380,6 +380,48 @@ class EcourtsWebScraper:
                     logger.error(f"Failed to fetch captcha image: {e}")
         return None
 
+    def _split_complex_code(self, court_complex_code_full: str) -> tuple[str, str]:
+        parts = (court_complex_code_full or "").split("@")
+        complex_code = parts[0] if parts else ""
+        est_code = parts[1] if len(parts) > 1 and parts[1] else ""
+        return complex_code, est_code
+
+    def _prime_case_status_context(
+        self,
+        state_code: str,
+        dist_code: str,
+        court_complex_code_full: str,
+        est_code: str,
+    ) -> None:
+        """
+        eCourts district search endpoints depend on the same session priming the web UI does.
+        Without this, submit endpoints can return an empty 200 response.
+        """
+        selected_est_code = est_code if est_code else "null"
+
+        try:
+            self._post(
+                "casestatus/set_data",
+                {
+                    "complex_code": court_complex_code_full,
+                    "selected_state_code": state_code,
+                    "selected_dist_code": dist_code,
+                    "selected_est_code": selected_est_code,
+                },
+            )
+        except Exception:
+            logger.debug("Case-status set_data failed", exc_info=True)
+
+        try:
+            self.get_case_types(
+                state_code,
+                dist_code,
+                court_complex_code_full,
+                est_code,
+            )
+        except Exception:
+            logger.debug("Case-status fillCaseType priming failed", exc_info=True)
+
     def search_by_case_no(self, state_code, dist_code, court_complex_code, case_type, case_no, year, est_code=''):
         """
         Searches for a case and returns data in standard format.
@@ -745,103 +787,315 @@ class EcourtsWebScraper:
         return None
 
     def _parse_case_details(self, html_content):
-        soup = BeautifulSoup(html_content, 'html.parser')
         details = {
             'cino': None,
+            'cin_no': None,
             'case_no': None,
             'case_type': None,
             'filing_no': None,
+            'filling_no': None,
             'filing_date': None,
             'registration_no': None,
             'registration_date': None,
             'first_hearing_date': None,
-            # Compatibility with the rest of the app: "next listing date" is the next hearing/listing date.
+            'first_listing_date': None,
             'next_listing_date': None,
             'decision_date': None,
             'status': None,
             'nature_of_disposal': None,
+            'disposal_nature': None,
             'court_no_judge': None,
+            'court_no': None,
+            'judges': None,
+            'bench_name': None,
+            'court_name': None,
+            'state': None,
+            'purpose_next': None,
             'pet_name': None,
+            'petitioner': None,
             'res_name': None,
+            'respondent': None,
             'advocates': None,
             'acts': [],
             'history': [],
             'ia_details': [],
-            'orders': []
+            'orders': [],
+            'last_listing_date': None,
+            'additional_info': None,
+            'original_json': None,
         }
+
+        def normalize_key(value: Any) -> str:
+            return re.sub(r'[^a-z0-9]+', '_', str(value or '').strip().lower()).strip('_')
+
+        def looks_like_html(value: str) -> bool:
+            text = (value or '').strip()
+            if not text:
+                return False
+            html_markers = ('<table', '<tr', '<td', '<th', '<div', '<span', '<ul', '<li', '<a ')
+            return any(marker in text.lower() for marker in html_markers)
+
+        html_fragments: List[str] = []
+        scalar_values: Dict[str, Any] = {}
+
+        def collect_payload(value: Any, path: Optional[List[str]] = None) -> None:
+            current_path = path or []
+
+            if isinstance(value, str):
+                stripped = value.strip()
+                if not stripped:
+                    return
+                if looks_like_html(stripped):
+                    html_fragments.append(html.unescape(stripped))
+                    return
+                if stripped.startswith('{') or stripped.startswith('['):
+                    try:
+                        collect_payload(json.loads(stripped), current_path)
+                        return
+                    except Exception:
+                        pass
+                if current_path:
+                    scalar_values[normalize_key(current_path[-1])] = stripped
+                return
+
+            if isinstance(value, dict):
+                for key, nested in value.items():
+                    collect_payload(nested, current_path + [str(key)])
+                return
+
+            if isinstance(value, list):
+                for item in value:
+                    collect_payload(item, current_path)
+                return
+
+            if value is not None and current_path:
+                scalar_values[normalize_key(current_path[-1])] = value
+
+        collect_payload(html_content)
+
+        if not html_fragments and isinstance(html_content, str):
+            html_fragments.append(html.unescape(html_content))
+
+        soup = BeautifulSoup("\n".join(html_fragments), 'html.parser')
+
+        def first_scalar(*keys: str) -> Optional[str]:
+            for key in keys:
+                value = scalar_values.get(normalize_key(key))
+                if value in (None, ''):
+                    continue
+                if isinstance(value, list):
+                    cleaned = [str(item).strip() for item in value if str(item).strip()]
+                    if cleaned:
+                        return ", ".join(cleaned)
+                    continue
+                return str(value).strip()
+            return None
+
+        def normalize_party_list(value: Any) -> Optional[List[str]]:
+            if value is None:
+                return None
+            if isinstance(value, list):
+                items = [str(item).strip() for item in value if str(item).strip()]
+                return items or None
+            if isinstance(value, str):
+                text = value.strip()
+                if not text:
+                    return None
+                parts = [part.strip() for part in re.split(r'\n+|,\s*(?=[^\s])', text) if part.strip()]
+                return parts or [text]
+            return [str(value).strip()]
+
+        def find_nested_value(payload: Any, *key_names: str) -> Any:
+            target_keys = {normalize_key(key) for key in key_names}
+            if isinstance(payload, dict):
+                for key, value in payload.items():
+                    if normalize_key(key) in target_keys:
+                        return value
+                    nested = find_nested_value(value, *key_names)
+                    if nested is not None:
+                        return nested
+            elif isinstance(payload, list):
+                for item in payload:
+                    nested = find_nested_value(item, *key_names)
+                    if nested is not None:
+                        return nested
+            return None
+
+        details['cino'] = first_scalar('cino', 'cin_no', 'cnr_number', 'cnr_no')
+        details['cin_no'] = details['cino']
+        details['case_no'] = first_scalar('case_no')
+        details['case_type'] = first_scalar('case_type')
+        details['filing_no'] = first_scalar('filing_no', 'filling_no')
+        details['filling_no'] = details['filing_no']
+        filing_date = first_scalar('filing_date')
+        details['filing_date'] = _normalize_order_date(filing_date) or filing_date
+        details['registration_no'] = first_scalar('registration_no', 'registration_number')
+        registration_date = first_scalar('registration_date')
+        details['registration_date'] = _normalize_order_date(registration_date) or registration_date
+        first_hearing_date = first_scalar('first_hearing_date', 'first_listing_date')
+        details['first_hearing_date'] = _normalize_order_date(first_hearing_date) or first_hearing_date
+        details['first_listing_date'] = details['first_hearing_date']
+        next_listing_date = first_scalar('next_listing_date', 'next_hearing_date', 'next_hearing', 'next_date')
+        details['next_listing_date'] = _normalize_order_date(next_listing_date) or next_listing_date
+        decision_date = first_scalar('decision_date')
+        details['decision_date'] = _normalize_order_date(decision_date) or decision_date
+        details['status'] = first_scalar('status', 'case_status')
+        details['nature_of_disposal'] = first_scalar('nature_of_disposal', 'disposal_nature')
+        details['disposal_nature'] = details['nature_of_disposal']
+        details['court_no_judge'] = first_scalar('court_no_judge', 'court_number_and_judge', 'court_no')
+        details['bench_name'] = first_scalar('bench_name', 'bench_type')
+        details['court_name'] = first_scalar('court_name', 'district')
+        details['state'] = first_scalar('state')
+        details['purpose_next'] = first_scalar('purpose_next', 'case_stage')
+        details['additional_info'] = first_scalar('additional_info')
+
+        petitioner_value = find_nested_value(
+            html_content,
+            'pet_name',
+            'petitioner',
+            'petitioner_name',
+            'petitioner_and_advocate',
+        )
+        respondent_value = find_nested_value(
+            html_content,
+            'res_name',
+            'respondent',
+            'respondent_name',
+            'respondent_and_advocate',
+        )
+        details['pet_name'] = normalize_party_list(petitioner_value)
+        details['petitioner'] = details['pet_name']
+        details['res_name'] = normalize_party_list(respondent_value)
+        details['respondent'] = details['res_name']
+
+        advocates_value = find_nested_value(html_content, 'advocates', 'advocate', 'advocate_details')
+        if advocates_value:
+            if type(advocates_value) is list:
+                details['advocates'] = "\n".join(str(item).strip() for item in advocates_value if str(item).strip()) or None
+            else:
+                details['advocates'] = str(advocates_value).strip() or None
         
         # Helper to find value in tables
         def get_table_value(table, label_text):
-            if not table: return None
-            label = table.find('label', string=re.compile(label_text, re.I)) or \
-                    table.find(string=re.compile(label_text, re.I))
-            if label:
-                # Value is usually in the next td or same td
-                # Try finding parent td then next sibling td
-                td = label.find_parent('td')
-                if td:
-                    next_td = td.find_next_sibling('td')
-                    if next_td:
-                        return next_td.get_text(strip=True)
+            if not table:
+                return None
+
+            pattern = re.compile(label_text, re.I)
+            header = table.find(['th', 'td', 'label'], string=pattern)
+            if header:
+                cell = header if getattr(header, "name", None) in {"th", "td"} else header.find_parent(['th', 'td'])
+                if cell:
+                    next_cell = cell.find_next_sibling(['td', 'th'])
+                    if next_cell:
+                        return next_cell.get_text(" ", strip=True)
+
+            text_node = table.find(string=pattern)
+            if text_node:
+                cell = text_node.find_parent(['th', 'td']) if hasattr(text_node, "find_parent") else None
+                if cell:
+                    next_cell = cell.find_next_sibling(['td', 'th'])
+                    if next_cell:
+                        return next_cell.get_text(" ", strip=True)
             return None
 
         # Case Details Table
         cd_table = soup.find('table', class_='case_details_table')
         if cd_table:
-            details['case_type'] = get_table_value(cd_table, 'Case Type')
-            details['filing_no'] = get_table_value(cd_table, 'Filing Number')
+            details['case_type'] = details['case_type'] or get_table_value(cd_table, 'Case Type')
+            details['filing_no'] = details['filing_no'] or get_table_value(cd_table, 'Filing Number')
             filing_date = get_table_value(cd_table, 'Filing Date')
-            details['filing_date'] = _normalize_order_date(filing_date) or filing_date
-            details['registration_no'] = get_table_value(cd_table, 'Registration Number')
+            details['filing_date'] = details['filing_date'] or _normalize_order_date(filing_date) or filing_date
+            details['registration_no'] = details['registration_no'] or get_table_value(cd_table, 'Registration Number')
             registration_date = get_table_value(cd_table, 'Registration Date')
-            details['registration_date'] = _normalize_order_date(registration_date) or registration_date
+            details['registration_date'] = details['registration_date'] or _normalize_order_date(registration_date) or registration_date
             
             # CNR Number is special
             cnr_span = cd_table.find('span', class_='text-danger')
-            if cnr_span:
+            if cnr_span and not details['cino']:
                 details['cino'] = cnr_span.get_text(strip=True)
+                details['cin_no'] = details['cino']
+
+            if not details['case_no'] and details['registration_no']:
+                details['case_no'] = details['registration_no']
+            details['filling_no'] = details['filing_no']
 
         # Case Status Table
         cs_table = soup.find('table', class_='case_status_table')
         if cs_table:
             first_hearing_date = get_table_value(cs_table, 'First Hearing Date')
-            details['first_hearing_date'] = _normalize_order_date(first_hearing_date) or first_hearing_date
+            details['first_hearing_date'] = details['first_hearing_date'] or _normalize_order_date(first_hearing_date) or first_hearing_date
+            details['first_listing_date'] = details['first_hearing_date']
             next_hearing = (
                 get_table_value(cs_table, 'Next Hearing Date')
                 or get_table_value(cs_table, 'Next Hearing')
                 or get_table_value(cs_table, 'Next Date')
             )
             normalized_next = _normalize_order_date(next_hearing) or next_hearing
-            details['next_listing_date'] = normalized_next
+            details['next_listing_date'] = details['next_listing_date'] or normalized_next
             decision_date = get_table_value(cs_table, 'Decision Date')
-            details['decision_date'] = _normalize_order_date(decision_date) or decision_date
-            details['status'] = get_table_value(cs_table, 'Case Status')
-            details['nature_of_disposal'] = get_table_value(cs_table, 'Nature of Disposal')
-            details['court_no_judge'] = get_table_value(cs_table, 'Court Number and Judge')
+            details['decision_date'] = details['decision_date'] or _normalize_order_date(decision_date) or decision_date
+            details['status'] = details['status'] or get_table_value(cs_table, 'Case Status')
+            details['purpose_next'] = details['purpose_next'] or get_table_value(cs_table, 'Case Stage')
+            details['nature_of_disposal'] = details['nature_of_disposal'] or get_table_value(cs_table, 'Nature of Disposal')
+            details['disposal_nature'] = details['nature_of_disposal']
+            details['court_no_judge'] = details['court_no_judge'] or get_table_value(cs_table, 'Court Number and Judge')
+            if details['court_no_judge']:
+                judge_text = details['court_no_judge'].strip()
+                details['judges'] = judge_text
+                court_no_match = re.match(r"^\s*([0-9A-Za-z-]+)\s*-\s*(.*)$", judge_text)
+                if court_no_match:
+                    details['court_no'] = court_no_match.group(1).strip()
+                    details['judges'] = court_no_match.group(2).strip()
+
+            if not details['status']:
+                details['status'] = 'Pending' if details['next_listing_date'] else None
 
         # Petitioner and Respondent
         pet_table = soup.find('table', class_='Petitioner_Advocate_table')
-        if pet_table:
-            details['pet_name'] = [pet_table.get_text(separator=' ', strip=True)]
+        pet_list = soup.find('ul', class_=re.compile(r'Petitioner_Advocate_table', re.I))
+        pet_source = pet_table or pet_list
+        def extract_party_entries(container):
+            if not container:
+                return []
+            entries = []
+            for item in container.find_all('li'):
+                raw = item.get_text("\n", strip=True)
+                parts = [part.strip() for part in raw.split("\n") if part.strip()]
+                if parts:
+                    first = re.sub(r'^\d+\)\s*', '', parts[0]).strip()
+                    if first:
+                        entries.append(first)
+            return entries
+
+        pet_entries = extract_party_entries(pet_source)
+        if pet_entries and not details['pet_name']:
+            details['pet_name'] = pet_entries
+            details['petitioner'] = pet_entries
             
         res_table = soup.find('table', class_='Respondent_Advocate_table')
-        if res_table:
-            details['res_name'] = [res_table.get_text(separator=' ', strip=True)]
+        res_list = soup.find('ul', class_=re.compile(r'Respondent_Advocate_table', re.I))
+        res_source = res_table or res_list
+        res_entries = extract_party_entries(res_source)
+        if res_entries and not details['res_name']:
+            details['res_name'] = res_entries
+            details['respondent'] = res_entries
 
         # Advocates (store raw text from these tables; do not extract/normalize names)
         advocates_lines = []
-        if pet_table:
-            pet_raw = pet_table.get_text(separator='\n', strip=True)
+        if pet_source:
+            pet_raw = pet_source.get_text(separator='\n', strip=True)
             if pet_raw:
                 advocates_lines.append(f"Petitioner:\n{pet_raw}")
-        if res_table:
-            res_raw = res_table.get_text(separator='\n', strip=True)
+        if res_source:
+            res_raw = res_source.get_text(separator='\n', strip=True)
             if res_raw:
                 advocates_lines.append(f"Respondent:\n{res_raw}")
-        details['advocates'] = "\n\n".join(advocates_lines).strip() or None
+        if not details['advocates']:
+            details['advocates'] = "\n\n".join(advocates_lines).strip() or None
 
         # Acts
         act_table = soup.find('table', id='act_table') or soup.find('table', class_='acts_table')
+        acts_data = find_nested_value(html_content, 'acts')
         if act_table:
             rows = act_table.find_all('tr')
             if len(rows) > 1:
@@ -852,9 +1106,20 @@ class EcourtsWebScraper:
                             'act': cols[0].get_text(strip=True),
                             'section': cols[1].get_text(strip=True)
                         })
+        elif type(acts_data) is list:
+            for item in acts_data:
+                if isinstance(item, dict):
+                    act = item.get('act') or item.get('name')
+                    section = item.get('section') or item.get('sections')
+                    if act or section:
+                        details['acts'].append({
+                            'act': str(act or '').strip(),
+                            'section': str(section or '').strip(),
+                        })
 
         # History
         hist_table = soup.find('table', class_='history_table')
+        history_data = find_nested_value(html_content, 'history', 'case_history')
         if hist_table:
             rows = hist_table.find_all('tr')
             # Check header to confirm columns, but assuming standard: Judge, Business Date, Hearing Date, Purpose
@@ -870,9 +1135,25 @@ class EcourtsWebScraper:
                             'hearing_date': _normalize_order_date(hearing_date_raw) or hearing_date_raw,
                             'purpose': cols[3].get_text(strip=True)
                         })
+        elif type(history_data) is list:
+            for item in history_data:
+                if not isinstance(item, dict):
+                    continue
+                business_date_raw = item.get('business_date') or item.get('businessDate') or item.get('business_on_date')
+                hearing_date_raw = item.get('hearing_date') or item.get('hearingDate') or item.get('date')
+                details['history'].append({
+                    'judge': str(item.get('judge') or item.get('coram') or '').strip(),
+                    'business_date': _normalize_order_date(business_date_raw) or business_date_raw,
+                    'hearing_date': _normalize_order_date(hearing_date_raw) or hearing_date_raw,
+                    'purpose': str(item.get('purpose') or item.get('business') or item.get('stage') or '').strip(),
+                })
+        if details['history']:
+            latest_history = details['history'][-1]
+            details['last_listing_date'] = latest_history.get('hearing_date') or latest_history.get('business_date')
 
         # IA Details
         ia_table = soup.find('table', class_='ia_table') or soup.find('table', class_='IAheading')
+        ia_data = find_nested_value(html_content, 'ia_details', 'ia', 'interim_applications')
         if ia_table:
             rows = ia_table.find_all('tr')
             if len(rows) > 1:
@@ -886,6 +1167,22 @@ class EcourtsWebScraper:
                             'next_date': cols[3].get_text(separator=' ', strip=True),
                             'status': cols[4].get_text(strip=True)
                         })
+        elif type(ia_data) is list:
+            for item in ia_data:
+                if not isinstance(item, dict):
+                    continue
+                filing_date_raw = item.get('filing_date') or item.get('filingDate')
+                details['ia_details'].append({
+                    'ia_number': str(item.get('ia_number') or item.get('ia_no') or item.get('number') or '').strip(),
+                    'party': str(item.get('party') or item.get('party_name') or '').strip(),
+                    'filing_date': _normalize_order_date(filing_date_raw) or filing_date_raw,
+                    'next_date': str(item.get('next_date') or item.get('nextDate') or '').strip(),
+                    'status': str(item.get('status') or '').strip(),
+                })
+        if details['ia_details']:
+            if not details['original_json']:
+                details['original_json'] = {}
+            details['original_json']['ia_details'] = details['ia_details']
 
         # Orders
         # There might be multiple order tables (Interim, Final)
@@ -933,12 +1230,44 @@ class EcourtsWebScraper:
                             'document_url': document_url,
                             'pdf_params': pdf_params
                         })
+        orders_data = find_nested_value(html_content, 'orders', 'order_details')
+        if not details['orders'] and type(orders_data) is list:
+            for item in orders_data:
+                if not isinstance(item, dict):
+                    continue
+                order_date_raw = item.get('date') or item.get('order_date')
+                details['orders'].append({
+                    'order_no': str(item.get('order_no') or item.get('sr_no') or item.get('number') or '').strip(),
+                    'date': _normalize_order_date(order_date_raw) or order_date_raw,
+                    'description': str(item.get('description') or item.get('details') or item.get('title') or '').strip(),
+                    'document_url': item.get('document_url') or item.get('url'),
+                    'pdf_params': item.get('pdf_params'),
+                })
+
+        if details['court_no_judge'] and not details['judges']:
+            judge_text = details['court_no_judge'].strip()
+            details['judges'] = judge_text
+            court_no_match = re.match(r"^\s*([0-9A-Za-z-]+)\s*-\s*(.*)$", judge_text)
+            if court_no_match:
+                details['court_no'] = court_no_match.group(1).strip()
+                details['judges'] = court_no_match.group(2).strip()
+
+        if not details['case_no'] and details['registration_no']:
+            details['case_no'] = details['registration_no']
+        details['filling_no'] = details['filing_no']
+        if html_content and not details['original_json'] and type(html_content) is dict:
+            details['original_json'] = html_content
                         
         return details
 
     def search_case(self, state_code, dist_code, court_complex_code_full, case_type, case_no, year):
-        parts = court_complex_code_full.split('@')
-        complex_code = parts[0]
+        complex_code, est_code = self._split_complex_code(court_complex_code_full)
+        self._prime_case_status_context(
+            state_code,
+            dist_code,
+            court_complex_code_full,
+            est_code,
+        )
         
         # Retry logic for CAPTCHA
         max_retries = 5
@@ -972,8 +1301,8 @@ class EcourtsWebScraper:
                 'case_type': case_type,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': court_complex_code_full,
-                'est_code': '',
+                'court_complex_code': complex_code,
+                'est_code': est_code,
                 'submit_btn': 'Go',
                 'appFlag': 'web'
             }
@@ -998,8 +1327,13 @@ class EcourtsWebScraper:
         return {'status': 'error', 'msg': 'Max retries exceeded or captcha failed'}
 
     def search_by_party_name(self, state_code, dist_code, court_complex_code_full, party_name, year, status='Both'):
-        parts = court_complex_code_full.split('@')
-        complex_code = parts[0]
+        complex_code, est_code = self._split_complex_code(court_complex_code_full)
+        self._prime_case_status_context(
+            state_code,
+            dist_code,
+            court_complex_code_full,
+            est_code,
+        )
         
         # Retry logic for CAPTCHA
         max_retries = 5
@@ -1030,7 +1364,8 @@ class EcourtsWebScraper:
                 'fcaptcha_code': captcha_text,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': court_complex_code_full,
+                'court_complex_code': complex_code,
+                'est_code': est_code,
                 'submit_btn': 'Go',
                 'appFlag': 'web'
             }
@@ -1052,8 +1387,13 @@ class EcourtsWebScraper:
         return {'status': 'error', 'msg': 'Max retries exceeded or captcha failed'}
 
     def search_by_advocate_name(self, state_code, dist_code, court_complex_code_full, advocate_name, status='Both'):
-        parts = court_complex_code_full.split('@')
-        complex_code = parts[0]
+        complex_code, est_code = self._split_complex_code(court_complex_code_full)
+        self._prime_case_status_context(
+            state_code,
+            dist_code,
+            court_complex_code_full,
+            est_code,
+        )
         
         # Retry logic for CAPTCHA
         max_retries = 5
@@ -1084,7 +1424,8 @@ class EcourtsWebScraper:
                 'adv_captcha_code': captcha_text,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': court_complex_code_full,
+                'court_complex_code': complex_code,
+                'est_code': est_code,
                 'submit_btn': 'Go',
                 'appFlag': 'web'
             }
