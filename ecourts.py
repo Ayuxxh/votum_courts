@@ -251,6 +251,38 @@ class EcourtsService:
         except Exception:
             return None
 
+    def search_by_party_name(
+        self,
+        dist_code,
+        state_code,
+        party_name,
+        year,
+        pending_disposed="Both",
+        court_code=""
+    ):
+        if self.__type == "HC":
+            return hc_services.hc_search_by_party_name(
+                state_code=state_code,
+                court_code=court_code,
+                pet_name=party_name,
+                res_name=party_name,
+                year=year
+            )
+        elif self.__type == "DC":
+            url = f"https://app.ecourts.gov.in/ecourt_mobile_{self.__type}/partyNameSearch.php"
+            params = {
+                "petresName": party_name,
+                "rgyear": year,
+                "pendingDisposed": pending_disposed,
+                "dist_code": dist_code,
+                "state_code": state_code,
+                "court_code_arr": court_code,
+                "bilingual_flag": "0",
+                "language_flag": "english",
+            }
+            resp = request(url, params, self.__jwt_token)
+            return resp
+
     def search_by_advocate_name(
         self,
         dist_code,

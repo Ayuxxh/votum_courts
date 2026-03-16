@@ -250,15 +250,25 @@ class EcourtsWebScraper:
         data['app_token'] = self.app_token
         data['ajax_req'] = 'true'
         
-        response = self.session.post(url, data=data, verify=False, timeout=30)
+        headers = {
+            'Referer': f"{self.base_url}/?p=casestatus/index",
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+        
+        response = self.session.post(url, data=data, headers=headers, verify=False, timeout=30)
+        logger.info(f"DEBUG: POST {url_suffix} status={response.status_code}")
         
         try:
             json_resp = response.json()
             if 'app_token' in json_resp:
+                old_token = self.app_token
                 self.app_token = json_resp['app_token']
+                logger.info(f"DEBUG: Updated app_token from {old_token[:8]}... to {self.app_token[:8]}...")
+            if json_resp.get('status') == 0:
+                logger.info(f"DEBUG: {url_suffix} returned status 0. Msg: {json_resp.get('msg')}")
             return json_resp
         except:
-            logger.debug(f"Non-JSON response from {url_suffix}: {response.text[:200]}")
+            logger.info(f"DEBUG: Non-JSON response from {url_suffix} (len={len(response.text)}): {response.text[:2000]}")
             return {'status': False, 'msg': 'Invalid JSON response', 'raw': response.text}
 
     def get_states(self):
@@ -940,6 +950,14 @@ class EcourtsWebScraper:
             
             try:
                 captcha_text = self.ocr.classification(captcha_img)
+                # DEBUG: Save captcha to folder
+                import os
+                if not os.path.exists("debug_captcha"): os.makedirs("debug_captcha")
+                import uuid
+                debug_id = str(uuid.uuid4())[:8]
+                with open(f"debug_captcha/captcha_{debug_id}_{captcha_text}.png", "wb") as f:
+                    f.write(captcha_img)
+                logger.info(f"DEBUG: Saved captcha_{debug_id}_{captcha_text}.png")
             except Exception as e:
                 logger.error(f"OCR failed: {e}")
                 continue
@@ -954,9 +972,10 @@ class EcourtsWebScraper:
                 'case_type': case_type,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': complex_code,
+                'court_complex_code': court_complex_code_full,
                 'est_code': '',
-                'submit_btn': 'Go'
+                'submit_btn': 'Go',
+                'appFlag': 'web'
             }
             
             resp = self._post('casestatus/submitCaseNo', data)
@@ -992,6 +1011,14 @@ class EcourtsWebScraper:
             
             try:
                 captcha_text = self.ocr.classification(captcha_img)
+                # DEBUG: Save captcha to folder
+                import os
+                if not os.path.exists("debug_captcha"): os.makedirs("debug_captcha")
+                import uuid
+                debug_id = str(uuid.uuid4())[:8]
+                with open(f"debug_captcha/captcha_{debug_id}_{captcha_text}.png", "wb") as f:
+                    f.write(captcha_img)
+                logger.info(f"DEBUG: Saved captcha_{debug_id}_{captcha_text}.png")
             except Exception as e:
                 logger.error(f"OCR failed: {e}")
                 continue
@@ -999,19 +1026,20 @@ class EcourtsWebScraper:
             data = {
                 'petres_name': party_name,
                 'rgyearP': year,
-                'f': status, # Pending, Disposed, Both
-                'case_captcha_code': captcha_text,
+                'case_status': status, # Changed from f to case_status
+                'fcaptcha_code': captcha_text,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': complex_code,
-                'submit_btn': 'Go'
+                'court_complex_code': court_complex_code_full,
+                'submit_btn': 'Go',
+                'appFlag': 'web'
             }
             
             resp = self._post('casestatus/submitPartyName', data)
             
             if isinstance(resp, dict):
                 if resp.get('status') == 1:
-                    return self._parse_results(resp.get('case_data', ''))
+                    return self._parse_results(resp.get('party_data', ''))
                 elif 'captcha' in str(resp.get('msg', '')).lower() or 'captcha' in str(resp.get('div_captcha', '')).lower():
                     logger.info("Captcha failed, retrying...")
                     continue
@@ -1037,6 +1065,14 @@ class EcourtsWebScraper:
             
             try:
                 captcha_text = self.ocr.classification(captcha_img)
+                # DEBUG: Save captcha to folder
+                import os
+                if not os.path.exists("debug_captcha"): os.makedirs("debug_captcha")
+                import uuid
+                debug_id = str(uuid.uuid4())[:8]
+                with open(f"debug_captcha/captcha_{debug_id}_{captcha_text}.png", "wb") as f:
+                    f.write(captcha_img)
+                logger.info(f"DEBUG: Saved captcha_{debug_id}_{captcha_text}.png")
             except Exception as e:
                 logger.error(f"OCR failed: {e}")
                 continue
@@ -1044,19 +1080,20 @@ class EcourtsWebScraper:
             data = {
                 'radAdvt': '1', # 1 for name
                 'advocate_name': advocate_name,
-                'f': status, # Pending, Disposed, Both
-                'case_captcha_code': captcha_text,
+                'case_status': status, # Changed from f to case_status
+                'adv_captcha_code': captcha_text,
                 'state_code': state_code,
                 'dist_code': dist_code,
-                'court_complex_code': complex_code,
-                'submit_btn': 'Go'
+                'court_complex_code': court_complex_code_full,
+                'submit_btn': 'Go',
+                'appFlag': 'web'
             }
             
             resp = self._post('casestatus/submitAdvName', data)
             
             if isinstance(resp, dict):
                 if resp.get('status') == 1:
-                    return self._parse_results(resp.get('case_data', ''))
+                    return self._parse_results(resp.get('adv_data', ''))
                 elif 'captcha' in str(resp.get('msg', '')).lower() or 'captcha' in str(resp.get('div_captcha', '')).lower():
                     logger.info("Captcha failed, retrying...")
                     continue

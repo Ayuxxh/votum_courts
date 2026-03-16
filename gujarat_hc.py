@@ -13,6 +13,7 @@ import ddddocr
 import fitz
 import httpx
 import requests
+from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
@@ -434,7 +435,7 @@ def fetch_cause_list_pdf_bytes(listing_date: datetime) -> bytes:
     }
 
     with httpx.Client(
-        headers=CAUSE_LIST_HEADERS, follow_redirects=True, timeout=60.0, verify=False
+        headers=CAUSE_LIST_HEADERS, follow_redirects=True, timeout=120.0, verify=False
     ) as client:
         home_response = client.get(CAUSE_LIST_HOME_URL)
         home_response.raise_for_status()
@@ -454,7 +455,11 @@ class GujaratHCService:
         self.session = requests.Session()
         self.session.verify = False
         self.session.headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0'
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Language": "en-GB,en;q=0.5",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+            "Connection": "keep-alive",
+            "Referer": f"{BASE_URL}/"
         }
         self.ocr = ddddocr.DdddOcr(show_ad=False)
         self.case_types_map = {}
@@ -462,8 +467,13 @@ class GujaratHCService:
 
     def _refresh_session(self):
         """Visit main page to establish session/cookies."""
+        if self.session.cookies:
+            return
+
         try:
-            self.session.get(f"{BASE_URL}/", timeout=30)
+            resp = self.session.get(f"{BASE_URL}/", timeout=30)
+            resp.raise_for_status()
+            logger.info("Successfully refreshed session/cookies.")
         except Exception as e:
             logger.warning(f"Failed to refresh session: {e}")
 
@@ -834,6 +844,195 @@ class GujaratHCService:
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=1, min=2, max=10)
     )
+    def _parse_search_results(self, html_content: str) -> List[Dict[str, Any]]:
+        """Parse the HTML table from SearchLitigant or SearchAdvocate."""
+        if not html_content or "NO DATA" in html_content.upper():
+            return []
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+        table = soup.find('table', {'id': 'master'})
+        if not table:
+            return []
+
+        results = []
+        rows = table.find_all('tr')[1:]  # Skip header
+        for row in rows:
+            cells = row.find_all('td')
+            if len(cells) < 2:
+                continue
+
+            onclick = row.get('onclick', '')
+            # Extract CCIN from onclick='javascript:GoButtonConfirmation("GJHC240125422024");'
+            ccin_match = re.search(r'GoButtonConfirmation\("([^"]+)"\)', onclick)
+            ccin = ccin_match.group(1) if ccin_match else None
+
+            case_info = {
+                "ccin": ccin,
+                "case_no_display": cells[0].text.strip(),
+                "status": cells[1].text.strip(),
+                "party_name": cells[2].text.strip(),
+                "hearing_date": self._parse_date(cells[3].text.strip()),
+                "litigant_type": cells[4].text.strip() if len(cells) > 4 else None,
+                "district": cells[5].text.strip() if len(cells) > 5 else None,
+            }
+            results.append(case_info)
+        return results
+
+    @retry(
+        retry=retry_if_exception_type((requests.RequestException, ValueError)),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
+    def search_by_party_name(
+        self,
+        party_name: str,
+        litigant_type: str = "0",  # 0=All, 1=Petitioner, 2=Respondent
+        from_year: str = "",
+        to_year: str = "",
+        case_type: str = "select",
+        district: str = "select",
+        status: str = "select",
+        beginning_with: str = "any",  # any, begin, end, exact
+        counter: int = 1
+    ) -> List[Dict[str, Any]]:
+        """Search cases by party name."""
+        self._refresh_session()
+        time.sleep(1) # Be gentle
+        
+        if not from_year:
+            from_year = str(datetime.now().year - 5)
+        if not to_year:
+            to_year = str(datetime.now().year)
+
+        url = f"{BASE_URL}/SearchLitigant"
+        data = {
+            "litigantcode": litigant_type,
+            "beginningwith": beginning_with,
+            "searchString": party_name,
+            "fromyear": from_year,
+            "toyear": to_year,
+            "counter": str(counter),
+            "casetypelt": case_type,
+            "district": district,
+            "statustype": status
+        }
+        
+        resp = self.session.post(url, data=data, timeout=60)
+        resp.raise_for_status()
+        
+        # Format is HTML###TotalRecords###TotalPages
+        parts = resp.text.split("###")
+        html_content = parts[0]
+        return self._parse_search_results(html_content)
+
+    @retry(
+        retry=retry_if_exception_type((requests.RequestException, ValueError)),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
+    def get_advocate_codes(self, advocate_name: str, beginning_with: str = "begin") -> List[Dict[str, Any]]:
+        """Get list of advocates matching the name."""
+        self._refresh_session()
+        time.sleep(1) # Be gentle
+        url = f"{BASE_URL}/GetAdvocateList"
+        data = {
+            "beginningwith": beginning_with,
+            "searchString": advocate_name.upper(),
+            "status": "A",
+            "counter": "1"
+        }
+        resp = self.session.post(url, data=data, timeout=60)
+        resp.raise_for_status()
+        
+        parts = resp.text.split("###")
+        html_content = parts[0]
+        if not html_content or "<tbody>" not in html_content:
+            logger.warning(f"No advocate data found in response: {resp.text[:200]}")
+            return []
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+        rows = table.find_all('tr') if (table := soup.find('table', {'id': 'master'})) else []
+        if not rows:
+             logger.warning(f"No rows found in advocate table: {html_content[:200]}")
+        advocates = []
+        for row in rows:
+            onclick = row.get('onclick', '')
+            if not onclick:
+                continue
+            # confirmAdvocateWiseCaseList("1138","MR AK TRIVEDI")
+            match = re.search(r'confirmAdvocateWiseCaseList\("(\d+)",\s*"([^"]+)"\)', onclick)
+            if match:
+                advocates.append({
+                    "code": match.group(1),
+                    "name": match.group(2)
+                })
+            else:
+                logger.debug(f"Failed to match onclick: {onclick}")
+        
+        if advocates:
+             logger.info(f"Found {len(advocates)} advocates matching '{advocate_name}'")
+        else:
+             logger.warning(f"No advocates matched from {len(rows)} rows for '{advocate_name}'")
+        return advocates
+
+    @retry(
+        retry=retry_if_exception_type((requests.RequestException, ValueError)),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
+    def search_by_advocate(
+        self,
+        advocate_name: str,
+        litigant_type: str = "select",
+        from_year: str = "",
+        to_year: str = "",
+        case_type: str = "select",
+        district: str = "select",
+        status: str = "A",
+        beginning_with: str = "select",
+        search_string: str = "",
+        counter: int = 1
+    ) -> List[Dict[str, Any]]:
+        """Search cases by advocate name."""
+        advocates = self.get_advocate_codes(advocate_name)
+        if not advocates:
+            # Try with 'any' if 'begin' fails
+            advocates = self.get_advocate_codes(advocate_name, beginning_with="any")
+            if not advocates:
+                return []
+
+        # For simplicity, we search for the first matching advocate
+        # In a real UI, we might want to let the user choose
+        adv_code = advocates[0]["code"]
+        
+        if not from_year:
+            from_year = ""
+        if not to_year:
+            to_year = ""
+
+        time.sleep(1) # Be gentle
+        url = f"{BASE_URL}/SearchAdvocate"
+        data = {
+            "litigantcode": litigant_type,
+            "beginningwith": beginning_with,
+            "searchString": search_string,
+            "fromyear": from_year,
+            "toyear": to_year,
+            "casetypelt": case_type,
+            "district": district,
+            "status": status,
+            "pfromdate": "",
+            "ptodate": "",
+            "advcode": adv_code,
+            "counter": str(counter)
+        }
+        
+        resp = self.session.post(url, data=data, timeout=60)
+        resp.raise_for_status()
+        
+        parts = resp.text.split("###")
+        return self._parse_search_results(parts[0])
+
     def fetch_case_details(self, case_type_name: str, case_no: str, case_year: str) -> Optional[Dict[str, Any]]:
         """
         Fetch case details by Case Type (Name), Number, and Year.
@@ -943,6 +1142,12 @@ def get_gujarat_case_details_by_filing_no(case_type: str, filing_no: str, filing
 
 def get_gujarat_case_details_by_cnr_no(cnr_no: str):
     return _service.fetch_case_by_cnr_no(cnr_no)
+
+def gujarat_search_by_party_name(party_name: str, **kwargs):
+    return _service.search_by_party_name(party_name, **kwargs)
+
+def gujarat_search_by_advocate_name(advocate_name: str, **kwargs):
+    return _service.search_by_advocate(advocate_name, **kwargs)
 
 def _fetch_order_document(url: str, referer: str | None = None) -> requests.Response:
     """

@@ -18,7 +18,9 @@ from .delhi_hc import \
     persist_orders_to_storage as delhi_persist_orders_to_storage
 from .gujarat_hc import (get_gujarat_case_details,
                          get_gujarat_case_details_by_cnr_no,
-                         get_gujarat_case_details_by_filing_no)
+                         get_gujarat_case_details_by_filing_no,
+                         gujarat_search_by_advocate_name,
+                         gujarat_search_by_party_name)
 from .gujarat_hc import \
     persist_orders_to_storage as gujarat_persist_orders_to_storage
 from .hc_services import hc_get_benches, hc_get_case_types, hc_get_states
@@ -183,11 +185,41 @@ async def hc_search_by_party_name(
     pet_name: str | None = None,
     res_name: str | None = None,
 ):
+    if state_code == '17':
+        name = pet_name or res_name
+        try:
+            res = gujarat_search_by_party_name(name)
+            if res:
+                return res
+        except Exception as e:
+            logger.warning(f"Direct Gujarat HC party search failed: {e}")
+
     return hc_services.hc_search_by_party_name(
         state_code=state_code,
         court_code=court_code,
         pet_name=pet_name,
         res_name=res_name,
+    )
+
+
+@router.get("/hc/search_by_advocate_name/", summary="Search High Court cases by advocate name")
+async def hc_search_by_advocate_name(
+    state_code: str,
+    court_code: str,
+    advocate_name: str,
+):
+    if state_code == '17':
+        try:
+            res = gujarat_search_by_advocate_name(advocate_name)
+            if res:
+                return res
+        except Exception as e:
+            logger.warning(f"Direct Gujarat HC advocate search failed: {e}")
+
+    return hc_services.hc_search_by_advocate_name(
+        state_code=state_code,
+        court_code=court_code,
+        advocate_name=advocate_name,
     )
 
 
