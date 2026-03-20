@@ -209,13 +209,14 @@ def _standardize_result(item):
     """
     Standardize the result from the search list to match the expected output format.
     """
+    print(item)
     return {
-        'cino': item.get('filling_no'), # Using Case No as CINO for now, as usually CINO is unique but here Case No is prominent
+        'cino': item.get('filing_no'), # Using Case No as CINO for now, as usually CINO is unique but here Case No is prominent
         'date_of_decision': item.get('date_of_filing'),
         'pet_name': item.get('case_title1'),
         'res_name': item.get('case_title2'),
         'type_name': item.get('status'),
-        'filing_no': item.get('filling_no'), # Important for fetching details
+        'filing_no': item.get('filing_no'), # Important for fetching details
         'case_no': item.get('case_no'),
         'bench': item.get('bench_location_name')
     }
@@ -825,6 +826,8 @@ if __name__ == '__main__':
     # NOTE: You need valid IDs for bench and case types for this to work.
     # Case Type 16 is "Company Petition IB(IBC)"
     
-    print(nclt_search_by_case_number('ahmedabad', '14', '1', '2026')) 
-    print(json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
-    pass
+    print(nclt_search_by_case_number('ahmedabad', '4', '1', '2025')) 
+    # a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
+    # with open('nclt_details.json', 'w') as f:
+        # f.write(a)
+    # pass
