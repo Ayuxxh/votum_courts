@@ -16,6 +16,9 @@ from .dc_services import \
 from .delhi_hc import get_delhi_case_details
 from .delhi_hc import \
     persist_orders_to_storage as delhi_persist_orders_to_storage
+from .DRT import (drt_get_details, drt_search_by_case_number,
+                  drt_search_by_diary_number, drt_search_by_party_name)
+from .DRT import persist_orders_to_storage as drt_persist_orders_to_storage
 from .gujarat_hc import (get_gujarat_case_details,
                          get_gujarat_case_details_by_cnr_no,
                          get_gujarat_case_details_by_filing_no,
@@ -77,6 +80,23 @@ async def search_nclt_search_by_advocate_name(bench: str, advocate_name: str, ye
     return nclt_search_by_advocate_name(bench, advocate_name, year)
 
 
+@router.get("/search_drt_search_by_diary_number/")
+async def search_drt_search_by_diary_number(drt: str, diary_number: str, diary_year: str):
+    return drt_search_by_diary_number(drt, diary_number, diary_year)
+
+
+@router.get("/search_drt_search_by_case_number/")
+async def search_drt_search_by_case_number(
+    drt: str, case_type: str, case_number: str, case_year: str
+):
+    return drt_search_by_case_number(drt, case_type, case_number, case_year)
+
+
+@router.get("/search_drt_search_by_party_name/")
+async def search_drt_search_by_party_name(drt: str, party_name: str):
+    return drt_search_by_party_name(drt, party_name)
+
+
 @router.get("/search_sci_search_by_diary_number/")
 async def search_sci_search_by_diary_number(diary_number: str, diary_year: str):
     return sci_search_by_diary_number(diary_number, diary_year)
@@ -126,6 +146,13 @@ async def nclt_details(bench: str, filing_no: str):
     if not bench or not filing_no:
         return HTTPException(status_code=400, detail="bench and filing_no are required")
     return nclt_get_details(bench, filing_no)
+
+
+@router.get("/drt_details/")
+async def drt_details(drt: str, filing_no: str):
+    if not drt or not filing_no:
+        return HTTPException(status_code=400, detail="drt and filing_no are required")
+    return drt_get_details(drt, filing_no)
 
 
 @router.get("/sci_details/")
@@ -365,6 +392,11 @@ async def store_orders(
         )
     elif court_key == "NCLAT":
         stored_orders = await nclat_persist_orders_to_storage(
+            orders,
+            case_id=case_id,
+        )
+    elif court_key == "DRT":
+        stored_orders = await drt_persist_orders_to_storage(
             orders,
             case_id=case_id,
         )
