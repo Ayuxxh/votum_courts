@@ -1033,6 +1033,11 @@ class GujaratHCService:
         parts = resp.text.split("###")
         return self._parse_search_results(parts[0])
 
+    @retry(
+        retry=retry_if_exception_type((requests.RequestException, ValueError)),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
     def fetch_case_details(self, case_type_name: str, case_no: str, case_year: str) -> Optional[Dict[str, Any]]:
         """
         Fetch case details by Case Type (Name), Number, and Year.
