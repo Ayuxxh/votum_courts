@@ -17,7 +17,8 @@ from .delhi_hc import get_delhi_case_details
 from .delhi_hc import \
     persist_orders_to_storage as delhi_persist_orders_to_storage
 from .DRT import (drt_get_details, drt_search_by_case_number,
-                  drt_search_by_diary_number, drt_search_by_party_name)
+                  drt_search_by_diary_number, drt_search_by_party_name,
+                  get_drt_case_types, get_drt_locations)
 from .DRT import persist_orders_to_storage as drt_persist_orders_to_storage
 from .gujarat_hc import (get_gujarat_case_details,
                          get_gujarat_case_details_by_cnr_no,
@@ -26,6 +27,11 @@ from .gujarat_hc import (get_gujarat_case_details,
                          gujarat_search_by_party_name)
 from .gujarat_hc import \
     persist_orders_to_storage as gujarat_persist_orders_to_storage
+from .jagriti import (get_jagriti_case_history, get_jagriti_case_status,
+                      get_jagriti_case_status_with_history,
+                      get_jagriti_daily_order_judgement_pdf,
+                      jagriti_search_case_details,
+                      persist_orders_to_storage as jagriti_persist_orders_to_storage)
 from .hc_services import hc_get_benches, hc_get_case_types, hc_get_states
 from .NCLAT import (nclat_get_details, nclat_search_by_case_no,
                     nclat_search_by_free_text)
@@ -83,6 +89,16 @@ async def search_nclt_search_by_advocate_name(bench: str, advocate_name: str, ye
 @router.get("/search_drt_search_by_diary_number/")
 async def search_drt_search_by_diary_number(drt: str, diary_number: str, diary_year: str):
     return drt_search_by_diary_number(drt, diary_number, diary_year)
+
+
+@router.get("/drt_locations/")
+async def drt_locations():
+    return get_drt_locations()
+
+
+@router.get("/drt_case_types/")
+async def drt_case_types(drt: str):
+    return get_drt_case_types(drt)
 
 
 @router.get("/search_drt_search_by_case_number/")
@@ -178,6 +194,67 @@ async def gujarat_hc_details_by_filing_no(case_type: str, filing_no: str, filing
 @router.get("/gujarat_hc_details_by_cnr_no/", summary="Fetch Gujarat High Court case details by CNR number")
 async def gujarat_hc_details_by_cnr_no(cnr_no: str):
     return get_gujarat_case_details_by_cnr_no(cnr_no)
+
+
+@router.get("/jagriti_case_status/", summary="Fetch e-Jagriti case status by case number/application number/filing reference")
+async def jagriti_case_status(
+    identifier: str,
+    commission_id: int | None = None,
+    captcha: str | None = None,
+    verify: bool = True,
+):
+    return get_jagriti_case_status(
+        identifier,
+        commission_id=commission_id,
+        captcha=captcha,
+        verify=verify,
+    )
+
+
+@router.get("/jagriti_case_history/", summary="Fetch e-Jagriti case history by case number")
+async def jagriti_case_history(
+    case_number: str,
+    captcha: str | None = None,
+    verify: bool = True,
+):
+    return get_jagriti_case_history(case_number, captcha=captcha, verify=verify)
+
+
+@router.get("/jagriti_case_status_with_history/", summary="Fetch e-Jagriti case status and history")
+async def jagriti_case_status_with_history(
+    identifier: str,
+    commission_id: int | None = None,
+    captcha: str | None = None,
+    verify: bool = True,
+):
+    return get_jagriti_case_status_with_history(
+        identifier,
+        commission_id=commission_id,
+        captcha=captcha,
+        verify=verify,
+    )
+
+
+@router.post("/jagriti_case_search/", summary="Search e-Jagriti cases using the search payload from the web client")
+async def jagriti_case_search(
+    payload: dict = Body(...),
+    captcha: str | None = None,
+    verify: bool = True,
+):
+    return jagriti_search_case_details(payload, captcha=captcha, verify=verify)
+
+
+@router.get("/jagriti_daily_order_judgement_pdf/", summary="Fetch e-Jagriti daily order or judgement document")
+async def jagriti_daily_order_judgement_pdf(
+    filing_reference_number: str,
+    date_of_hearing: str,
+    order_type_id: int = 1,
+):
+    return get_jagriti_daily_order_judgement_pdf(
+        filing_reference_number,
+        date_of_hearing=date_of_hearing,
+        order_type_id=order_type_id,
+    )
 
 
 
@@ -412,6 +489,11 @@ async def store_orders(
         )
     elif court_key in {"DELHI_HC", "DLHC", "DH", "DL"}:
         stored_orders = await delhi_persist_orders_to_storage(
+            orders,
+            case_id=case_id,
+        )
+    elif court_key == "JAGRITI":
+        stored_orders = await jagriti_persist_orders_to_storage(
             orders,
             case_id=case_id,
         )

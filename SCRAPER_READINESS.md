@@ -5,6 +5,14 @@
 
 ## Recent Updates
 
+- **2026-03-20**: Added **e-Jagriti** scraper readiness and public order-document support
+  - Added `backend/ecourts/jagriti.py`
+  - Implemented e-Jagriti case status, case history, and search flows
+  - Live-verified captcha solve/verify, search, status, and history against `https://e-jagriti.gov.in/case-history-case-status`
+  - Implemented public daily order/judgement fetch via `courtmaster/courtRoom/judgement/v1/getDailyOrderJudgementPdf`
+  - Added e-Jagriti order persistence support in `/ecourts/store_orders/` with canonical `court_type="JAGRITI"`
+  - Current e-Jagriti gap: cause list fetch/parse is not implemented yet
+
 - **2026-03-20**: Added **DRT** scraper readiness and live verification
   - Added `backend/ecourts/DRT.py`
   - Implemented DRT search by case number, diary number, and party name
@@ -40,6 +48,7 @@ This document provides a comprehensive feature readiness assessment for all cour
 | Court/Scraper                    | Case Search                                                              | Party Search                     | Details Search                               | IA Extraction                                  | Cause List Fetch                      | Cause List Parse                          | CNR/Unique ID Fetch                    | Notes                                                |
 | -------------------------------- | ------------------------------------------------------------------------ | -------------------------------- | -------------------------------------------- | ---------------------------------------------- | ------------------------------------- | ----------------------------------------- | -------------------------------------- | ---------------------------------------------------- |
 | **DRT**                          | ✅ `drt_search_by_case_number()`<br>✅ `drt_search_by_diary_number()`    | ✅ `drt_search_by_party_name()`  | ✅ `drt_get_details(drt, filing_no)`         | ✅ Extracts from `iaDetails`                   | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Uses `filing_no`                    | Live-verified March 20, 2026; no cause list support |
+| **e-Jagriti**                   | ✅ `jagriti_search_case_details()`                                      | ✅ Free-text / advanced search   | ✅ `get_case_status()` + `get_case_history()` | ❌ Not implemented                             | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Filing reference / case number      | Live-verified; public daily order PDF fetch works   |
 | **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                           | ✅ `nclat_search_by_free_text()` | ✅ `nclat_get_details(filing_no)`            | ✅ **NEW** Extracts from HTML tables           | ✅ **NEW** `nclat_fetch_cause_list()` | ✅ **NEW** `nclat_parse_cause_list_pdf()` | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                       |
 | **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()` | ✅ `nclt_search_by_party_name()` | ✅ `nclt_get_details(bench, filing_no)`      | ✅ **NEW** Maps from `mainFilnowithIaNoList`   | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                         |
 | **SCI** (Supreme Court)          | ✅ `sci_search_by_diary_number()`<br>✅ `sci_search_by_case_number()`    | ✅ `sci_search_by_party_name()`  | ✅ `sci_get_details(diary_no, diary_year)`   | ✅ **NEW** Extracts from listing dates         | ✅ `sci_get_cause_list()`             | ✅ `sci_parse_cause_list_pdf()`           | ✅ Diary No + Year                     | Math captcha via OCR                                 |
@@ -96,6 +105,7 @@ Most scrapers support searching for cases by party name (Petitioner/Respondent).
 
 | Scraper     | Search Method         | Function                                       |
 | ----------- | --------------------- | ---------------------------------------------- |
+| e-Jagriti   | Free text / advanced  | `jagriti_search_case_details()`                |
 | DRT         | Party Name            | `drt_search_by_party_name()`                   |
 | NCLAT       | Free text search      | `nclat_search_by_free_text(search_by='party')` |
 | NCLT        | Party Name            | `nclt_search_by_party_name()`                  |
@@ -115,6 +125,7 @@ All scrapers can fetch comprehensive case details including parties, advocates, 
 
 **Ready for Production:**
 
+- ✅ **e-Jagriti**: Public order/judgement rows can be normalized from `caseHearingDetails` and persisted via `/ecourts/store_orders/`
 - ✅ **DRT**: Extracts from `iaDetails` in the rich detail response and preserves IA document metadata
 - ✅ **NCLAT**: Extracts from HTML tables using `_extract_ia_rows` (Lines 300-380)
 - ✅ **NCLT**: Maps from `mainFilnowithIaNoList` in JSON response (Lines 720-750)
@@ -133,6 +144,7 @@ All scrapers can fetch comprehensive case details including parties, advocates, 
 
 | Scraper     | Implementation                     | Method                    | Notes                    |
 | ----------- | ---------------------------------- | ------------------------- | ------------------------ |
+| e-Jagriti   | ❌ Not implemented                 | N/A                       | No cause-list source yet |
 | DRT         | ❌ Not implemented                 | N/A                       | No fetcher yet           |
 | NCLAT       | **NEW** `nclat_fetch_cause_list()` | GET from daily-cause-list | Scrapes for PDF links    |
 | NCLT        | `fetch_cause_list_pdfs()`          | POST with math captcha    | Returns PDF URLs         |
@@ -148,6 +160,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 | Scraper     | Function                               | Pattern                     |
 | ----------- | -------------------------------------- | --------------------------- |
+| e-Jagriti   | ❌ Not implemented                     | N/A                         |
 | DRT         | ❌ Not implemented                     | N/A                         |
 | NCLAT       | **NEW** `nclat_parse_cause_list_pdf()` | Item/Case No/Party/Advocate |
 | NCLT        | `parse_cause_list_pdf()`               | Columnar SR/Case Details    |
@@ -161,6 +174,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 | Scraper     | Unique ID Format      | Fetch Status                                      |
 | ----------- | --------------------- | ------------------------------------------------- |
+| e-Jagriti   | Filing Ref / Case No  | ✅ Full status/history fetch + public order fetch |
 | DRT         | Filing Number         | ✅ Fetch by filing_no                             |
 | Gujarat HC  | CNR Number            | ✅ Full fetch support                             |
 | HC Services | CIN/CNR               | ✅ Full fetch support                             |
@@ -185,6 +199,18 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 - ✅ **Details Search**: `drt_get_details()` fetches by `filing_no` and falls back to richer diary/case endpoints when the party-wise response is partial.
 - ✅ **IA Extraction**: Extracts `iaDetails` from the rich case-detail response.
 - ✅ **Order Persistence**: `/ecourts/store_orders/` now supports `court_type="DRT"`.
+- ❌ **Cause List**: Not implemented yet.
+
+---
+
+### e-Jagriti (`jagriti.py`)
+
+**New Features:**
+
+- ✅ **Search**: `jagriti_search_case_details()` supports the site payload contract, including free-text (`serchType=8`) and advanced search fields.
+- ✅ **Status & History**: `get_case_status()` and `get_case_history()` are live-verified against production.
+- ✅ **Public Orders**: `get_daily_order_judgement_pdf()` uses the public `courtmaster/courtRoom/judgement/v1` endpoint and returns the document payload.
+- ✅ **Order Persistence**: `/ecourts/store_orders/` now supports canonical `court_type="JAGRITI"` through `persist_orders_to_storage()`.
 - ❌ **Cause List**: Not implemented yet.
 
 ---
@@ -221,13 +247,13 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 | Feature             | Ready | Partial | Missing | Score   |
 | ------------------- | ----- | ------- | ------- | ------- |
-| Case Search         | 10    | 0       | 0       | 100%    |
-| Party Search        | 7     | 0       | 3       | 70%     |
-| Details Search      | 10    | 0       | 0       | 100%    |
-| IA Extraction       | 9     | 0       | 1       | 90%     |
-| Cause List Fetch    | 7     | 0       | 3       | 70%     |
-| Cause List Parse    | 7     | 0       | 3       | 70%     |
-| CNR/Unique ID Fetch | 8     | 1       | 1       | 80%     |
+| Case Search         | 11    | 0       | 0       | 100%    |
+| Party Search        | 8     | 0       | 3       | 73%     |
+| Details Search      | 11    | 0       | 0       | 100%    |
+| IA Extraction       | 10    | 0       | 1       | 91%     |
+| Cause List Fetch    | 7     | 0       | 4       | 64%     |
+| Cause List Parse    | 7     | 0       | 4       | 64%     |
+| CNR/Unique ID Fetch | 9     | 1       | 1       | 82%     |
 | **Automation Flow** | 12    | 0       | 0       | 100%    |
 | **Overall**         | -     | -       | -       | **86%** |
 

@@ -292,6 +292,12 @@ def _ia_to_detail(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def _normalize_detail(data: dict[str, Any], drt_id: str, filing_no: str | None = None) -> dict[str, Any]:
+    resolved_filing_no = (
+        filing_no
+        or _normalize_space(data.get("filingNo"))
+        or _normalize_space(data.get("filingno"))
+        or None
+    )
     petitioner = _clean_party(data.get("petitionerName"))
     respondent = _clean_party(data.get("respondentName"))
     pet_adv = _clean_advocate(data.get("advocatePetName"))
@@ -311,8 +317,8 @@ def _normalize_detail(data: dict[str, Any], drt_id: str, filing_no: str | None =
     ) or None
 
     return {
-        "cin_no": filing_no or None,
-        "filing_no": filing_no or None,
+        "cin_no": resolved_filing_no,
+        "filing_no": resolved_filing_no,
         "registration_no": _make_case_no(data.get("casetype"), data.get("caseno"), data.get("caseyear")),
         "case_no": _make_case_no(data.get("casetype"), data.get("caseno"), data.get("caseyear")),
         "diary_no": (
@@ -415,8 +421,8 @@ def drt_search_by_case_number(drt: str, case_type: str, case_number: str, case_y
     )
     detail = _normalize_detail(data or {}, drt_id)
     detail["search_result"] = {
-        "cino": None,
-        "filing_no": None,
+        "cino": detail.get("filing_no"),
+        "filing_no": detail.get("filing_no"),
         "case_no": detail.get("case_no"),
         "diary_no": detail.get("diary_no"),
         "date_of_decision": detail.get("decision_date"),
