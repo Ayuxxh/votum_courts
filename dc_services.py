@@ -793,7 +793,6 @@ class EcourtsWebScraper:
             'case_no': None,
             'case_type': None,
             'filing_no': None,
-            'filling_no': None,
             'filing_date': None,
             'registration_no': None,
             'registration_date': None,
@@ -926,7 +925,6 @@ class EcourtsWebScraper:
         details['case_no'] = first_scalar('case_no')
         details['case_type'] = first_scalar('case_type')
         details['filing_no'] = first_scalar('filing_no', 'filling_no')
-        details['filling_no'] = details['filing_no']
         filing_date = first_scalar('filing_date')
         details['filing_date'] = _normalize_order_date(filing_date) or filing_date
         details['registration_no'] = first_scalar('registration_no', 'registration_number')
@@ -1017,7 +1015,6 @@ class EcourtsWebScraper:
 
             if not details['case_no'] and details['registration_no']:
                 details['case_no'] = details['registration_no']
-            details['filling_no'] = details['filing_no']
 
         # Case Status Table
         cs_table = soup.find('table', class_='case_status_table')
@@ -1254,7 +1251,6 @@ class EcourtsWebScraper:
 
         if not details['case_no'] and details['registration_no']:
             details['case_no'] = details['registration_no']
-        details['filling_no'] = details['filing_no']
         if html_content and not details['original_json'] and type(html_content) is dict:
             details['original_json'] = html_content
                         

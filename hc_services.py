@@ -610,7 +610,7 @@ def hc_get_case_details(state_code, court_code, case_id):
             details = {
                 "cin_no": None,
                 "registration_no": None,
-                "filling_no": None,
+                "filing_no": None,
                 "case_no": None,
                 "registration_date": None,
                 "filing_date": None,
@@ -750,7 +750,7 @@ def parse_case_history(html_content):
     result = {
         'cin_no': None,
         'registration_no': None,
-        'filling_no': None,
+        'filing_no': None,
         'case_no': None,
         'registration_date': None,
         'filing_date': None,
@@ -872,7 +872,7 @@ def parse_case_history(html_content):
                 
                 # Map labels to standardized keys
                 if 'Filing Number' in label1:
-                    result['filling_no'] = value1
+                    result['filing_no'] = value1
                 if 'Filing Date' in label1:
                     result['filing_date'] = parse_iso_date(value1)
                 if 'Registration Number' in label1 or 'Registration No.' in label1:
@@ -881,7 +881,7 @@ def parse_case_history(html_content):
                     result['registration_date'] = parse_iso_date(value1)
                 
                 if 'Filing Number' in label2:
-                    result['filling_no'] = value2
+                    result['filing_no'] = value2
                 if 'Filing Date' in label2:
                     result['filing_date'] = parse_iso_date(value2)
                 if 'Registration Number' in label2 or 'Registration No.' in label2:

@@ -756,7 +756,7 @@ def sci_get_details(diary_no, diary_year):
         return {
             "cin_no": cin_no,
             "registration_no": registration_no,
-            "filling_no": diary_number,
+            "filing_no": diary_number,
             "case_no": case_number,
             "registration_date": registration_date,
             "filing_date": filing_date,

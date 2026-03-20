@@ -21,13 +21,15 @@ def _build_cause_list_table(
     """
     has_orders = any(e.get("orders") and e.get("orders") != "-" for e in entries) if include_orders is None else include_orders
 
-    if has_orders:
-        headers = ["S.No", "Case No", "Coram", "Party Name", "Collaborators", "Next Listing Date", "Today's Order"]
-    else:
-        headers = ["S.No", "Case No", "Coram", "Party Name", "Collaborators", "VC Link", "Item No", "Last Order"]
-
-    data = [headers]
-
+    header_style = ParagraphStyle(
+        "CauseListHeader",
+        parent=styles["BodyText"],
+        fontName="Helvetica-Bold",
+        fontSize=10,
+        leading=12,
+        textColor=colors.whitesmoke,
+        alignment=1,
+    )
     body_style = ParagraphStyle(
         "CauseListBody",
         parent=styles["BodyText"],
@@ -46,6 +48,30 @@ def _build_cause_list_table(
         fontSize=8,
         leading=10,
     )
+
+    if has_orders:
+        headers = [
+            Paragraph("S.No", header_style),
+            Paragraph("Case No", header_style),
+            Paragraph("Coram", header_style),
+            Paragraph("Party Name", header_style),
+            Paragraph("Collaborators", header_style),
+            Paragraph("Next Listing Date", header_style),
+            Paragraph("Today's Order", header_style),
+        ]
+    else:
+        headers = [
+            Paragraph("S.No", header_style),
+            Paragraph("Case No", header_style),
+            Paragraph("Coram", header_style),
+            Paragraph("Party Name", header_style),
+            Paragraph("Collaborators", header_style),
+            Paragraph("VC Link", header_style),
+            Paragraph("Item No", header_style),
+            Paragraph("Last Order", header_style),
+        ]
+
+    data = [headers]
 
     for idx, entry in enumerate(entries, start=1):
         case_no = str(entry.get("case_no", "-"))
@@ -80,7 +106,7 @@ def _build_cause_list_table(
             ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
             ("ALIGN", (0, 0), (-1, 0), "CENTER"),
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, 0), 11),
+            ("FONTSIZE", (0, 0), (-1, 0), 10),
             ("BOTTOMPADDING", (0, 0), (-1, 0), 8),
             ("TOPPADDING", (0, 0), (-1, 0), 8),
             ("ROWBACKGROUNDS", (0, 1), (-1, -1), [HexColor("#f8fafc"), HexColor("#eef2f7")]),
@@ -96,7 +122,7 @@ def _build_cause_list_table(
 
     # Available width ~780 (Landscape A4).
     if has_orders:
-        col_widths = [34, 90, 130, 146, 114, 72, 194]
+        col_widths = [44, 86, 126, 142, 110, 92, 180]
     else:
         col_widths = [34, 86, 124, 130, 112, 74, 56, 164]
 
@@ -282,10 +308,35 @@ def generate_daily_matters_pdf_2(
         elements.append(Paragraph(subtitle, styles["Heading2"]))
     elements.append(Spacer(1, 20))
 
-    headers = ["S.No", "Registration No", "Party Name", "Next Listing Date", "Orders"]
-    data: list = [headers]
+    header_style = ParagraphStyle(
+        "DailyMattersHeader",
+        parent=styles["BodyText"],
+        fontName="Helvetica-Bold",
+        fontSize=10,
+        leading=12,
+        textColor=colors.whitesmoke,
+        alignment=1,
+    )
+    body_style = ParagraphStyle(
+        "DailyMattersBody",
+        parent=styles["BodyText"],
+        fontSize=9,
+        leading=11,
+    )
+    link_style = ParagraphStyle(
+        "DailyMattersLink",
+        parent=body_style,
+        textColor=HexColor("#2563eb"),
+    )
 
-    link_style = styles["BodyText"]
+    headers = [
+        Paragraph("S.No", header_style),
+        Paragraph("Registration No", header_style),
+        Paragraph("Party Name", header_style),
+        Paragraph("Next Listing Date", header_style),
+        Paragraph("Orders", header_style),
+    ]
+    data: list = [headers]
 
     for idx, m in enumerate(matters, start=1):
         orders = m.get("orders") or []
@@ -311,10 +362,10 @@ def generate_daily_matters_pdf_2(
 
         data.append(
             [
-                str(m.get("sno", idx)),
-                m.get("registration_no", "-"),
-                m.get("party_name", "-"),
-                m.get("next_listing_date", "-"),
+                Paragraph(escape(str(m.get("sno", idx))), body_style),
+                Paragraph(escape(str(m.get("registration_no", "-"))), body_style),
+                Paragraph(escape(str(m.get("party_name", "-"))), body_style),
+                Paragraph(escape(str(m.get("next_listing_date", "-"))), body_style),
                 Paragraph(orders_html, link_style),
             ]
         )
@@ -325,7 +376,8 @@ def generate_daily_matters_pdf_2(
             ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
             ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, 0), 12),
+            ("FONTSIZE", (0, 0), (-1, 0), 10),
+            ("TOPPADDING", (0, 0), (-1, 0), 8),
             ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
             ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
             ("GRID", (0, 0), (-1, -1), 1, colors.black),
@@ -335,8 +387,8 @@ def generate_daily_matters_pdf_2(
         ]
     )
 
-    col_widths = [40, 150, 200, 100, 290]
-    t = Table(data, colWidths=col_widths)
+    col_widths = [40, 150, 190, 120, 280]
+    t = Table(data, colWidths=col_widths, repeatRows=1)
     t.setStyle(table_style)
     elements.append(t)
 

@@ -413,7 +413,7 @@ def convert_response_json(type, response_json):
 
     concise_json["cin_no"] = history["cino"]
     concise_json["registration_no"] = history["reg_no"]
-    concise_json["filling_no"] = history["fil_no"]
+    concise_json["filing_no"] = history["fil_no"]
     concise_json["case_no"] = history["case_no"]
     concise_json["registration_date"] = history["dt_regis"]
     concise_json["filing_date"] = history["date_of_filing"]
@@ -604,7 +604,7 @@ def convert_hc_response_to_json(hc_response):
     result = {
         'cin_no': hc_response.get('cin_no'),
         'registration_no': hc_response.get('registration_no'),
-        'filling_no': hc_response.get('filling_no'),
+        'filing_no': hc_response.get('filing_no') or hc_response.get('filling_no'),
         'case_no': hc_response.get('case_no'),
         'registration_date': hc_response.get('registration_date'),
         'filing_date': hc_response.get('filing_date'),

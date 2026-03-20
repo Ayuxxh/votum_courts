@@ -525,7 +525,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
 
     return {
         "cin_no": filing_no,
-        "filling_no": filing_no,
+        "filing_no": filing_no,
         "case_no": fmt_case_no,
         "type_name": _extract_type_name(fmt_case_no),
         "filing_date": filing_date,
