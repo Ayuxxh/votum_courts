@@ -215,7 +215,7 @@ def _standardize_result(item):
         'pet_name': item.get('case_title1'),
         'res_name': item.get('case_title2'),
         'type_name': item.get('status'),
-        'filing_no': item.get('filing_no'), # Important for fetching details
+        'filing_no': item.get('filling_no'), # Important for fetching details
         'case_no': item.get('case_no'),
         'bench': item.get('bench_location_name')
     }
