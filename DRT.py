@@ -62,6 +62,24 @@ CASE_TYPE_ALIASES = {
     "ibca": "IBC-A",
 }
 
+TRIBUNAL_TYPE_DRT = "DRT"
+TRIBUNAL_TYPE_DRAT = "DRAT"
+
+CASE_NUMBER_ENDPOINTS = {
+    TRIBUNAL_TYPE_DRT: "getCaseDetailCaseNoWise",
+    TRIBUNAL_TYPE_DRAT: "getDratCaseDetailCaseNoWise",
+}
+
+DIARY_NUMBER_ENDPOINTS = {
+    TRIBUNAL_TYPE_DRT: "getCaseDetailDiaryNoWise",
+    TRIBUNAL_TYPE_DRAT: "getDratCaseDetailDiaryNoWise",
+}
+
+PARTY_NAME_ENDPOINTS = {
+    TRIBUNAL_TYPE_DRT: "casedetail_party_name_wise",
+    TRIBUNAL_TYPE_DRAT: "drat_party_name_wise",
+}
+
 def _new_session() -> requests.Session:
     session = requests.Session()
     session.headers.update(DEFAULT_HEADERS)
@@ -156,8 +174,25 @@ def _post(endpoint: str, payload: Optional[dict[str, Any]] = None) -> Any:
     return response.json()
 
 
-@lru_cache(maxsize=1)
-def get_drt_locations() -> list[dict[str, str]]:
+def _classify_tribunal_type(item: dict[str, Any]) -> str | None:
+    scheme_id = str(item.get("schemeNameDrtId") or "").strip()
+    schema_name = _normalize_key(item.get("SchemaName"))
+
+    if "drat" in schema_name:
+        return TRIBUNAL_TYPE_DRAT
+    if "drt" in schema_name:
+        return TRIBUNAL_TYPE_DRT
+    if scheme_id.isdigit():
+        return TRIBUNAL_TYPE_DRAT if int(scheme_id) >= 100 else TRIBUNAL_TYPE_DRT
+    return None
+
+
+@lru_cache(maxsize=2)
+def get_tribunal_locations(tribunal_type: str = TRIBUNAL_TYPE_DRT) -> list[dict[str, str]]:
+    normalized_type = _normalize_key(tribunal_type).upper()
+    if normalized_type not in {TRIBUNAL_TYPE_DRT, TRIBUNAL_TYPE_DRAT}:
+        raise ValueError(f"Unknown tribunal type: {tribunal_type}")
+
     data = _post("getDrtDratScheamName")
     results: list[dict[str, str]] = []
     for item in data or []:
@@ -165,14 +200,22 @@ def get_drt_locations() -> list[dict[str, str]]:
         schema_name = _normalize_space(item.get("SchemaName"))
         if not scheme_id or not schema_name:
             continue
-        if not scheme_id.isdigit() or int(scheme_id) >= 100:
+        if _classify_tribunal_type(item) != normalized_type:
             continue
         results.append({"schemeNameDrtId": scheme_id, "SchemaName": schema_name})
     return results
 
 
+def get_drt_locations() -> list[dict[str, str]]:
+    return get_tribunal_locations(TRIBUNAL_TYPE_DRT)
+
+
+def get_drat_locations() -> list[dict[str, str]]:
+    return get_tribunal_locations(TRIBUNAL_TYPE_DRAT)
+
+
 @lru_cache(maxsize=128)
-def get_drt_case_types(scheme_name_drt_id: str) -> list[dict[str, str]]:
+def get_tribunal_case_types(scheme_name_drt_id: str) -> list[dict[str, str]]:
     data = _post("getDrtDratCaseTyepName", {"schemeNameDrtId": scheme_name_drt_id})
     results: list[dict[str, str]] = []
     for item in data or []:
@@ -183,7 +226,15 @@ def get_drt_case_types(scheme_name_drt_id: str) -> list[dict[str, str]]:
     return results
 
 
-def _resolve_drt_id(drt: str) -> str:
+def get_drt_case_types(scheme_name_drt_id: str) -> list[dict[str, str]]:
+    return get_tribunal_case_types(scheme_name_drt_id)
+
+
+def get_drat_case_types(scheme_name_drt_id: str) -> list[dict[str, str]]:
+    return get_tribunal_case_types(scheme_name_drt_id)
+
+
+def _resolve_drt_id(drt: str, tribunal_type: str = TRIBUNAL_TYPE_DRT) -> str:
     value = _normalize_space(drt)
     if not value:
         raise ValueError("drt is required")
@@ -191,7 +242,7 @@ def _resolve_drt_id(drt: str) -> str:
         return value
 
     normalized = _normalize_key(value)
-    locations = get_drt_locations()
+    locations = get_tribunal_locations(tribunal_type)
 
     for item in locations:
         if _normalize_key(item["SchemaName"]) == normalized:
@@ -214,7 +265,7 @@ def _resolve_case_type_id(drt_id: str, case_type: str) -> str:
     normalized = _normalize_key(value)
     normalized = _normalize_key(CASE_TYPE_ALIASES.get(normalized, value))
 
-    case_types = get_drt_case_types(drt_id)
+    case_types = get_tribunal_case_types(drt_id)
     for item in case_types:
         if _normalize_key(item["caseTypeName"]) == normalized:
             return item["caseType"]
@@ -222,14 +273,18 @@ def _resolve_case_type_id(drt_id: str, case_type: str) -> str:
     raise ValueError(f"Unknown DRT case type: {case_type}")
 
 
-def _get_drt_name(drt_id: str) -> Optional[str]:
-    for item in get_drt_locations():
+def _get_drt_name(drt_id: str, tribunal_type: str = TRIBUNAL_TYPE_DRT) -> Optional[str]:
+    for item in get_tribunal_locations(tribunal_type):
         if item["schemeNameDrtId"] == str(drt_id):
             return item["SchemaName"]
     return None
 
 
-def _standardize_search_result(item: dict[str, Any], drt_id: str) -> dict[str, Any]:
+def _standardize_search_result(
+    item: dict[str, Any],
+    drt_id: str,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> dict[str, Any]:
     case_no = _normalize_space(item.get("caseno"))
     diary_no = _normalize_space(item.get("diaryno"))
     filing_no = _normalize_space(item.get("filingNo"))
@@ -247,8 +302,8 @@ def _standardize_search_result(item: dict[str, Any], drt_id: str) -> dict[str, A
         "pet_name": applicant,
         "res_name": respondent,
         "type_name": case_type or None,
-        "bench": _get_drt_name(drt_id),
-        "court_name": _get_drt_name(drt_id),
+        "bench": _get_drt_name(drt_id, tribunal_type),
+        "court_name": _get_drt_name(drt_id, tribunal_type),
         "advocate_petitioner": _clean_advocate(item.get("applicantadvocate")),
         "advocate_respondent": _clean_advocate(item.get("respondentadvocate")),
     }
@@ -291,7 +346,12 @@ def _ia_to_detail(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _normalize_detail(data: dict[str, Any], drt_id: str, filing_no: str | None = None) -> dict[str, Any]:
+def _normalize_detail(
+    data: dict[str, Any],
+    drt_id: str,
+    filing_no: str | None = None,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> dict[str, Any]:
     resolved_filing_no = (
         filing_no
         or _normalize_space(data.get("filingNo"))
@@ -331,8 +391,8 @@ def _normalize_detail(data: dict[str, Any], drt_id: str, filing_no: str | None =
         "next_listing_date": _normalize_date(data.get("nextlistingdate")),
         "decision_date": _normalize_date(data.get("dateofdisposal")),
         "court_no": _normalize_space(data.get("courtNo")) or None,
-        "court_name": _normalize_space(data.get("courtName")) or _get_drt_name(drt_id),
-        "bench_name": _get_drt_name(drt_id),
+        "court_name": _normalize_space(data.get("courtName")) or _get_drt_name(drt_id, tribunal_type),
+        "bench_name": _get_drt_name(drt_id, tribunal_type),
         "disposal_nature": _normalize_space(data.get("disposalNature")) or None,
         "purpose_next": _normalize_space(data.get("nextListingPurpose")) or None,
         "case_type": _normalize_space(data.get("casetype")) or None,
@@ -364,6 +424,7 @@ def _normalize_detail(data: dict[str, Any], drt_id: str, filing_no: str | None =
 def _fetch_rich_case_detail(
     drt_id: str,
     data: dict[str, Any],
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
 ) -> dict[str, Any]:
     diary_no = _normalize_space(data.get("diaryno"))
     diary_year = _normalize_space(data.get("diaryyear"))
@@ -373,7 +434,7 @@ def _fetch_rich_case_detail(
 
     if diary_no and diary_year:
         rich = _post(
-            "getCaseDetailDiaryNoWise",
+            DIARY_NUMBER_ENDPOINTS[tribunal_type],
             {
                 "schemeNameDrtId": drt_id,
                 "diaryNo": diary_no,
@@ -387,14 +448,18 @@ def _fetch_rich_case_detail(
 
     if case_no and case_year and case_type:
         case_type_id = _resolve_case_type_id(drt_id, case_type)
+        payload = {
+            "schemeNameDrtId": drt_id,
+            "caseNo": case_no,
+            "caseYear": case_year,
+        }
+        if tribunal_type == TRIBUNAL_TYPE_DRAT:
+            payload["casetype"] = case_type_id
+        else:
+            payload["casetypeId"] = case_type_id
         rich = _post(
-            "getCaseDetailCaseNoWise",
-            {
-                "schemeNameDrtId": drt_id,
-                "casetypeId": case_type_id,
-                "caseNo": case_no,
-                "caseYear": case_year,
-            },
+            CASE_NUMBER_ENDPOINTS[tribunal_type],
+            payload,
         )
         if isinstance(rich, dict):
             return rich
@@ -407,19 +472,29 @@ def _fetch_rich_case_detail(
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10),
 )
-def drt_search_by_case_number(drt: str, case_type: str, case_number: str, case_year: str) -> dict[str, Any]:
-    drt_id = _resolve_drt_id(drt)
+def drt_search_by_case_number(
+    drt: str,
+    case_type: str,
+    case_number: str,
+    case_year: str,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> dict[str, Any]:
+    drt_id = _resolve_drt_id(drt, tribunal_type=tribunal_type)
     case_type_id = _resolve_case_type_id(drt_id, case_type)
+    payload = {
+        "schemeNameDrtId": drt_id,
+        "caseNo": case_number,
+        "caseYear": case_year,
+    }
+    if tribunal_type == TRIBUNAL_TYPE_DRAT:
+        payload["casetype"] = case_type_id
+    else:
+        payload["casetypeId"] = case_type_id
     data = _post(
-        "getCaseDetailCaseNoWise",
-        {
-            "schemeNameDrtId": drt_id,
-            "casetypeId": case_type_id,
-            "caseNo": case_number,
-            "caseYear": case_year,
-        },
+        CASE_NUMBER_ENDPOINTS[tribunal_type],
+        payload,
     )
-    detail = _normalize_detail(data or {}, drt_id)
+    detail = _normalize_detail(data or {}, drt_id, tribunal_type=tribunal_type)
     detail["search_result"] = {
         "cino": detail.get("filing_no"),
         "filing_no": detail.get("filing_no"),
@@ -436,22 +511,46 @@ def drt_search_by_case_number(drt: str, case_type: str, case_number: str, case_y
     return detail
 
 
+def drat_search_by_case_number(drat: str, case_type: str, case_number: str, case_year: str) -> dict[str, Any]:
+    return drt_search_by_case_number(
+        drat,
+        case_type,
+        case_number,
+        case_year,
+        tribunal_type=TRIBUNAL_TYPE_DRAT,
+    )
+
+
 @retry(
     retry=retry_if_exception_type(requests.exceptions.RequestException),
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10),
 )
-def drt_search_by_diary_number(drt: str, diary_number: str, diary_year: str) -> dict[str, Any]:
-    drt_id = _resolve_drt_id(drt)
+def drt_search_by_diary_number(
+    drt: str,
+    diary_number: str,
+    diary_year: str,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> dict[str, Any]:
+    drt_id = _resolve_drt_id(drt, tribunal_type=tribunal_type)
     data = _post(
-        "getCaseDetailDiaryNoWise",
+        DIARY_NUMBER_ENDPOINTS[tribunal_type],
         {
             "schemeNameDrtId": drt_id,
             "diaryNo": diary_number,
             "diaryYear": diary_year,
         },
     )
-    return _normalize_detail(data or {}, drt_id)
+    return _normalize_detail(data or {}, drt_id, tribunal_type=tribunal_type)
+
+
+def drat_search_by_diary_number(drat: str, diary_number: str, diary_year: str) -> dict[str, Any]:
+    return drt_search_by_diary_number(
+        drat,
+        diary_number,
+        diary_year,
+        tribunal_type=TRIBUNAL_TYPE_DRAT,
+    )
 
 
 @retry(
@@ -459,16 +558,28 @@ def drt_search_by_diary_number(drt: str, diary_number: str, diary_year: str) -> 
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10),
 )
-def drt_search_by_party_name(drt: str, party_name: str) -> list[dict[str, Any]]:
-    drt_id = _resolve_drt_id(drt)
+def drt_search_by_party_name(
+    drt: str,
+    party_name: str,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> list[dict[str, Any]]:
+    drt_id = _resolve_drt_id(drt, tribunal_type=tribunal_type)
     data = _post(
-        "casedetail_party_name_wise",
+        PARTY_NAME_ENDPOINTS[tribunal_type],
         {
             "schemeNameDratDrtId": drt_id,
             "partyName": party_name,
         },
     )
-    return [_standardize_search_result(item, drt_id) for item in (data or [])]
+    return [_standardize_search_result(item, drt_id, tribunal_type) for item in (data or [])]
+
+
+def drat_search_by_party_name(drat: str, party_name: str) -> list[dict[str, Any]]:
+    return drt_search_by_party_name(
+        drat,
+        party_name,
+        tribunal_type=TRIBUNAL_TYPE_DRAT,
+    )
 
 
 @retry(
@@ -476,8 +587,12 @@ def drt_search_by_party_name(drt: str, party_name: str) -> list[dict[str, Any]]:
     stop=stop_after_attempt(5),
     wait=wait_exponential(multiplier=1, min=2, max=10),
 )
-def drt_get_details(drt: str, filing_no: str) -> dict[str, Any]:
-    drt_id = _resolve_drt_id(drt)
+def drt_get_details(
+    drt: str,
+    filing_no: str,
+    tribunal_type: str = TRIBUNAL_TYPE_DRT,
+) -> dict[str, Any]:
+    drt_id = _resolve_drt_id(drt, tribunal_type=tribunal_type)
     data = _post(
         "getCaseDetailPartyWise",
         {
@@ -486,8 +601,21 @@ def drt_get_details(drt: str, filing_no: str) -> dict[str, Any]:
         },
     )
     if isinstance(data, dict) and not (data.get("caseProceedingDetails") or data.get("iaDetails")):
-        data = _fetch_rich_case_detail(drt_id, data)
-    return _normalize_detail(data or {}, drt_id, filing_no=filing_no)
+        data = _fetch_rich_case_detail(drt_id, data, tribunal_type=tribunal_type)
+    return _normalize_detail(
+        data or {},
+        drt_id,
+        filing_no=filing_no,
+        tribunal_type=tribunal_type,
+    )
+
+
+def drat_get_details(drat: str, filing_no: str) -> dict[str, Any]:
+    return drt_get_details(
+        drat,
+        filing_no,
+        tribunal_type=TRIBUNAL_TYPE_DRAT,
+    )
 
 
 def _fetch_order_document(order_url: str, referer: str | None):

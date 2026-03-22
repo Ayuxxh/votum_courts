@@ -1,9 +1,20 @@
 # Court Scraper Feature Readiness Matrix
 
-> **Last Updated**: 2026-03-20
+> **Last Updated**: 2026-03-22
 > **Analysis Coverage**: All court scrapers in `/backend/ecourts/` directory
 
 ## Recent Updates
+
+- **2026-03-22**: Expanded **DRT.py** readiness to cover **DRAT** and aligned frontend metadata strategy
+  - Browser-inspected `https://drt.gov.in/#/casedetail` to capture the site’s real DRAT endpoint contract
+  - Added DRAT support to `backend/ecourts/DRT.py` using:
+    - `getDratCaseDetailCaseNoWise`
+    - `getDratCaseDetailDiaryNoWise`
+    - `drat_party_name_wise`
+  - Confirmed DRAT case-number search uses `casetype`, not `casetypeId`
+  - Live-verified DRAT case-number scraping against production with successful sample fetches
+  - Frontend add-case now uses static DRT/DRAT benches from `src/app/home/cases/addcase/data/tribunals.json`
+  - Added static DRAT case types in `src/app/home/cases/addcase/data/drat_case_types.json`
 
 - **2026-03-20**: Added **e-Jagriti** scraper readiness and public order-document support
   - Added `backend/ecourts/jagriti.py`
@@ -47,7 +58,7 @@ This document provides a comprehensive feature readiness assessment for all cour
 
 | Court/Scraper                    | Case Search                                                              | Party Search                     | Details Search                               | IA Extraction                                  | Cause List Fetch                      | Cause List Parse                          | CNR/Unique ID Fetch                    | Notes                                                |
 | -------------------------------- | ------------------------------------------------------------------------ | -------------------------------- | -------------------------------------------- | ---------------------------------------------- | ------------------------------------- | ----------------------------------------- | -------------------------------------- | ---------------------------------------------------- |
-| **DRT**                          | ✅ `drt_search_by_case_number()`<br>✅ `drt_search_by_diary_number()`    | ✅ `drt_search_by_party_name()`  | ✅ `drt_get_details(drt, filing_no)`         | ✅ Extracts from `iaDetails`                   | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Uses `filing_no`                    | Live-verified March 20, 2026; no cause list support |
+| **DRT / DRAT**                   | ✅ `drt_search_by_case_number()`<br>✅ `drt_search_by_diary_number()`<br>✅ `drat_search_by_case_number()`<br>✅ `drat_search_by_diary_number()` | ✅ `drt_search_by_party_name()`<br>✅ `drat_search_by_party_name()` | ✅ `drt_get_details(drt, filing_no)`<br>✅ `drat_get_details(drat, filing_no)` | ✅ Extracts from `iaDetails` / proceeding rows | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Uses `filing_no` when available     | DRT live-verified March 20, 2026; DRAT live-verified March 22, 2026 |
 | **e-Jagriti**                   | ✅ `jagriti_search_case_details()`                                      | ✅ Free-text / advanced search   | ✅ `get_case_status()` + `get_case_history()` | ❌ Not implemented                             | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Filing reference / case number      | Live-verified; public daily order PDF fetch works   |
 | **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                           | ✅ `nclat_search_by_free_text()` | ✅ `nclat_get_details(filing_no)`            | ✅ **NEW** Extracts from HTML tables           | ✅ **NEW** `nclat_fetch_cause_list()` | ✅ **NEW** `nclat_parse_cause_list_pdf()` | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                       |
 | **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()` | ✅ `nclt_search_by_party_name()` | ✅ `nclt_get_details(bench, filing_no)`      | ✅ **NEW** Maps from `mainFilnowithIaNoList`   | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                         |
@@ -106,7 +117,7 @@ Most scrapers support searching for cases by party name (Petitioner/Respondent).
 | Scraper     | Search Method         | Function                                       |
 | ----------- | --------------------- | ---------------------------------------------- |
 | e-Jagriti   | Free text / advanced  | `jagriti_search_case_details()`                |
-| DRT         | Party Name            | `drt_search_by_party_name()`                   |
+| DRT / DRAT  | Party Name            | `drt_search_by_party_name()` / `drat_search_by_party_name()` |
 | NCLAT       | Free text search      | `nclat_search_by_free_text(search_by='party')` |
 | NCLT        | Party Name            | `nclt_search_by_party_name()`                  |
 | SCI         | Party Name            | `sci_search_by_party_name()`                   |
@@ -126,7 +137,7 @@ All scrapers can fetch comprehensive case details including parties, advocates, 
 **Ready for Production:**
 
 - ✅ **e-Jagriti**: Public order/judgement rows can be normalized from `caseHearingDetails` and persisted via `/ecourts/store_orders/`
-- ✅ **DRT**: Extracts from `iaDetails` in the rich detail response and preserves IA document metadata
+- ✅ **DRT / DRAT**: Extracts from `iaDetails` and proceeding/order rows in the rich detail response
 - ✅ **NCLAT**: Extracts from HTML tables using `_extract_ia_rows` (Lines 300-380)
 - ✅ **NCLT**: Maps from `mainFilnowithIaNoList` in JSON response (Lines 720-750)
 - ✅ **SCI**: Extracts from listing dates section (Lines 700-730)
@@ -145,7 +156,7 @@ All scrapers can fetch comprehensive case details including parties, advocates, 
 | Scraper     | Implementation                     | Method                    | Notes                    |
 | ----------- | ---------------------------------- | ------------------------- | ------------------------ |
 | e-Jagriti   | ❌ Not implemented                 | N/A                       | No cause-list source yet |
-| DRT         | ❌ Not implemented                 | N/A                       | No fetcher yet           |
+| DRT / DRAT  | ❌ Not implemented                 | N/A                       | No fetcher yet           |
 | NCLAT       | **NEW** `nclat_fetch_cause_list()` | GET from daily-cause-list | Scrapes for PDF links    |
 | NCLT        | `fetch_cause_list_pdfs()`          | POST with math captcha    | Returns PDF URLs         |
 | SCI         | `sci_get_cause_list()`             | POST with math captcha    | Returns HTML + PDF links |
@@ -161,7 +172,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 | Scraper     | Function                               | Pattern                     |
 | ----------- | -------------------------------------- | --------------------------- |
 | e-Jagriti   | ❌ Not implemented                     | N/A                         |
-| DRT         | ❌ Not implemented                     | N/A                         |
+| DRT / DRAT  | ❌ Not implemented                     | N/A                         |
 | NCLAT       | **NEW** `nclat_parse_cause_list_pdf()` | Item/Case No/Party/Advocate |
 | NCLT        | `parse_cause_list_pdf()`               | Columnar SR/Case Details    |
 | SCI         | `sci_parse_cause_list_pdf()`           | Item number + columns       |
@@ -175,7 +186,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 | Scraper     | Unique ID Format      | Fetch Status                                      |
 | ----------- | --------------------- | ------------------------------------------------- |
 | e-Jagriti   | Filing Ref / Case No  | ✅ Full status/history fetch + public order fetch |
-| DRT         | Filing Number         | ✅ Fetch by filing_no                             |
+| DRT / DRAT  | Filing Number         | ✅ Fetch by filing_no when present                |
 | Gujarat HC  | CNR Number            | ✅ Full fetch support                             |
 | HC Services | CIN/CNR               | ✅ Full fetch support                             |
 | DC Services | CIN/CNR               | ✅ Full fetch support                             |
@@ -190,15 +201,16 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 ## Detailed Scraper Profiles
 
-### DRT (`DRT.py`)
+### DRT / DRAT (`DRT.py`)
 
 **New Features:**
 
-- ✅ **Case Search**: `drt_search_by_case_number()` and `drt_search_by_diary_number()` use the live multipart DRT API.
-- ✅ **Party Search**: `drt_search_by_party_name()` returns `filing_no` values for follow-up case retrieval.
-- ✅ **Details Search**: `drt_get_details()` fetches by `filing_no` and falls back to richer diary/case endpoints when the party-wise response is partial.
-- ✅ **IA Extraction**: Extracts `iaDetails` from the rich case-detail response.
-- ✅ **Order Persistence**: `/ecourts/store_orders/` now supports `court_type="DRT"`.
+- ✅ **DRT Case Search**: `drt_search_by_case_number()` and `drt_search_by_diary_number()` use the live multipart DRT API.
+- ✅ **DRAT Case Search**: `drat_search_by_case_number()` and `drat_search_by_diary_number()` use the browser-verified DRAT endpoints `getDratCaseDetailCaseNoWise` and `getDratCaseDetailDiaryNoWise`.
+- ✅ **Party Search**: `drt_search_by_party_name()` and `drat_search_by_party_name()` are supported; DRAT uses the site’s `drat_party_name_wise` endpoint.
+- ✅ **Details Search**: `drt_get_details()` and `drat_get_details()` normalize the response into the shared case schema.
+- ✅ **IA Extraction**: Extracts `iaDetails` where present and preserves proceeding/order metadata.
+- ✅ **Order Persistence**: `/ecourts/store_orders/` supports canonical `court_type="DRT"`; frontend tribunal metadata for DRT/DRAT is now static.
 - ❌ **Cause List**: Not implemented yet.
 
 ---

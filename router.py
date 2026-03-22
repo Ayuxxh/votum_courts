@@ -18,6 +18,9 @@ from .delhi_hc import \
     persist_orders_to_storage as delhi_persist_orders_to_storage
 from .DRT import (drt_get_details, drt_search_by_case_number,
                   drt_search_by_diary_number, drt_search_by_party_name,
+                  drat_get_details, drat_search_by_case_number,
+                  drat_search_by_diary_number, drat_search_by_party_name,
+                  get_drat_case_types, get_drat_locations,
                   get_drt_case_types, get_drt_locations)
 from .DRT import persist_orders_to_storage as drt_persist_orders_to_storage
 from .gujarat_hc import (get_gujarat_case_details,
@@ -97,9 +100,19 @@ async def drt_locations():
     return get_drt_locations()
 
 
+@router.get("/drat_locations/")
+async def drat_locations():
+    return get_drat_locations()
+
+
 @router.get("/drt_case_types/")
 async def drt_case_types(drt: str):
     return get_drt_case_types(drt)
+
+
+@router.get("/drat_case_types/")
+async def drat_case_types(drat: str):
+    return get_drat_case_types(drat)
 
 
 @router.get("/search_drt_search_by_case_number/")
@@ -109,9 +122,26 @@ async def search_drt_search_by_case_number(
     return drt_search_by_case_number(drt, case_type, case_number, case_year)
 
 
+@router.get("/search_drat_search_by_case_number/")
+async def search_drat_search_by_case_number(
+    drat: str, case_type: str, case_number: str, case_year: str
+):
+    return drat_search_by_case_number(drat, case_type, case_number, case_year)
+
+
 @router.get("/search_drt_search_by_party_name/")
 async def search_drt_search_by_party_name(drt: str, party_name: str):
     return drt_search_by_party_name(drt, party_name)
+
+
+@router.get("/search_drat_search_by_party_name/")
+async def search_drat_search_by_party_name(drat: str, party_name: str):
+    return drat_search_by_party_name(drat, party_name)
+
+
+@router.get("/search_drat_search_by_diary_number/")
+async def search_drat_search_by_diary_number(drat: str, diary_number: str, diary_year: str):
+    return drat_search_by_diary_number(drat, diary_number, diary_year)
 
 
 @router.get("/search_sci_search_by_diary_number/")
@@ -170,6 +200,13 @@ async def drt_details(drt: str, filing_no: str):
     if not drt or not filing_no:
         return HTTPException(status_code=400, detail="drt and filing_no are required")
     return drt_get_details(drt, filing_no)
+
+
+@router.get("/drat_details/")
+async def drat_details(drat: str, filing_no: str):
+    if not drat or not filing_no:
+        return HTTPException(status_code=400, detail="drat and filing_no are required")
+    return drat_get_details(drat, filing_no)
 
 
 @router.get("/sci_details/")
