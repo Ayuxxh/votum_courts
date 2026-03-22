@@ -197,6 +197,7 @@ def _ensure_case_folder(
             .select("id")
             .eq("workspace_id", workspace_id)
             .eq("case_id", case_id)
+            .is_("parent_id", "null")
             .limit(1)
             .execute()
         )
