@@ -29,6 +29,7 @@ from .gujarat_hc import \
     persist_orders_to_storage as gujarat_persist_orders_to_storage
 from .jagriti import (get_jagriti_case_history, get_jagriti_case_status,
                       get_jagriti_case_status_with_history,
+                      get_jagriti_commissions, get_jagriti_districts,
                       get_jagriti_daily_order_judgement_pdf,
                       jagriti_search_case_details,
                       persist_orders_to_storage as jagriti_persist_orders_to_storage)
@@ -194,6 +195,16 @@ async def gujarat_hc_details_by_filing_no(case_type: str, filing_no: str, filing
 @router.get("/gujarat_hc_details_by_cnr_no/", summary="Fetch Gujarat High Court case details by CNR number")
 async def gujarat_hc_details_by_cnr_no(cnr_no: str):
     return get_gujarat_case_details_by_cnr_no(cnr_no)
+
+
+@router.get("/jagriti_commissions/", summary="Fetch all e-Jagriti commissions including NCDRC, SCDRCs, and DCDRCs")
+async def jagriti_commissions():
+    return get_jagriti_commissions()
+
+
+@router.get("/jagriti_districts/", summary="Fetch all districts for a given e-Jagriti state")
+async def jagriti_districts(state_id: int):
+    return get_jagriti_districts(state_id=state_id)
 
 
 @router.get("/jagriti_case_status/", summary="Fetch e-Jagriti case status by case number/application number/filing reference")

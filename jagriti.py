@@ -342,6 +342,63 @@ class JagritiService:
         data = _unwrap_data(payload)
         return data if isinstance(data, list) else []
 
+    def get_districts(self, state_id: int) -> list[dict]:
+        response = self.session.get(
+            f"{MASTER_SERVICE_URL}/getAllDistrict",
+            params={"stateId": state_id},
+            timeout=30,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        self._raise_for_application_error(payload)
+        data = _unwrap_data(payload)
+        return data if isinstance(data, list) else []
+
+    def get_commissions_v2(self) -> list[dict]:
+        """
+        Fetch all commissions including NCDRC, SCDRCs, and DCDRCs.
+        Note: DCDRCs are fetched by iterating through states and districts.
+        CommissionId formula: 11000000 + (state_id * 10000) + district_id
+        """
+        all_commissions = self.get_commissions()
+        # NCDRC and SCDRCs are already in all_commissions.
+        # SCDRCs have commissionId in 11XX0000 format where XX is stateId.
+
+        # Extract state codes from SCDRCs
+        # To avoid massive overhead, we only fetch districts for states we find.
+        states = {}
+        for comm in all_commissions:
+            sid = comm.get("stateId")
+            if sid is not None and sid > 0:
+                states[sid] = comm.get("commissionNameEn")
+
+        # NCDRC is usually stateId 0 or missing.
+
+        # For each state, fetch districts and add as DCDRCs
+        for state_id, state_name in states.items():
+            try:
+                districts = self.get_districts(state_id)
+                for dist in districts:
+                    district_id = dist.get("districtId")
+                    district_name = dist.get("districtNameEn")
+                    if district_id:
+                        # Construct commissionId for DCDRC using the formula:
+                        # 11000000 (base) + (state_id * 10000) + district_id
+                        commission_id = 11000000 + (state_id * 10000) + district_id
+                        all_commissions.append({
+                            "commissionId": str(commission_id),
+                            "commissionNameEn": f"{district_name} DCDRC",
+                            "stateId": state_id,
+                            "districtId": district_id,
+                            "is_dcdrc": True
+                        })
+            except Exception as e:
+                # Log error but continue processing other states
+                logger.warning(f"Failed to fetch districts for state {state_id}: {e}")
+                continue
+
+        return all_commissions
+
     @retry(
         retry=retry_if_exception_type((requests.RequestException, ValueError)),
         stop=stop_after_attempt(3),
@@ -464,6 +521,17 @@ class JagritiService:
 
 
 _service = JagritiService()
+
+
+def get_jagriti_commissions():
+    """
+    Fetch all e-Jagriti commissions including NCDRC, SCDRCs, and DCDRCs.
+    """
+    return _service.get_commissions_v2()
+
+
+def get_jagriti_districts(state_id: int):
+    return _service.get_districts(state_id)
 
 
 def get_jagriti_case_status(
