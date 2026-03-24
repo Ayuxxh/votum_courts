@@ -2,17 +2,20 @@ import base64
 import logging
 import re
 import time
-from urllib.parse import urlencode
 from typing import Any, Dict, Optional
+from urllib.parse import urlencode
 
 import ddddocr
 import requests
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
+                      wait_exponential)
 
 try:
-    from .order_storage import persist_orders_to_storage as _persist_orders_to_storage
+    from .order_storage import \
+        persist_orders_to_storage as _persist_orders_to_storage
 except ImportError:
-    from order_storage import persist_orders_to_storage as _persist_orders_to_storage
+    from order_storage import \
+        persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
 
@@ -354,47 +357,78 @@ class JagritiService:
         data = _unwrap_data(payload)
         return data if isinstance(data, list) else []
 
+    def get_district_commissions(self, commission_id: int) -> list[dict]:
+        response = self.session.post(
+            f"{MASTER_SERVICE_URL}/getCommissionByCommissionId",
+            params={"commissionId": commission_id},
+            json={},
+            timeout=30,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        self._raise_for_application_error(payload)
+        data = _unwrap_data(payload)
+        return data if isinstance(data, list) else []
+
     def get_commissions_v2(self) -> list[dict]:
         """
         Fetch all commissions including NCDRC, SCDRCs, and DCDRCs.
-        Note: DCDRCs are fetched by iterating through states and districts.
-        CommissionId formula: 11000000 + (state_id * 10000) + district_id
+        DCDRCs are fetched from the same endpoint used by the public e-Jagriti UI,
+        because getAllDistrict can lag behind the live commission split/name data.
         """
         all_commissions = self.get_commissions()
-        # NCDRC and SCDRCs are already in all_commissions.
-        # SCDRCs have commissionId in 11XX0000 format where XX is stateId.
 
-        # Extract state codes from SCDRCs
-        # To avoid massive overhead, we only fetch districts for states we find.
-        states = {}
+        state_commissions: dict[int, int] = {}
         for comm in all_commissions:
-            sid = comm.get("stateId")
-            if sid is not None and sid > 0:
-                states[sid] = comm.get("commissionNameEn")
-
-        # NCDRC is usually stateId 0 or missing.
-
-        # For each state, fetch districts and add as DCDRCs
-        for state_id, state_name in states.items():
+            state_id = comm.get("stateId")
+            commission_id = comm.get("commissionId")
             try:
-                districts = self.get_districts(state_id)
-                for dist in districts:
-                    district_id = dist.get("districtId")
-                    district_name = dist.get("districtNameEn")
-                    if district_id:
-                        # Construct commissionId for DCDRC using the formula:
-                        # 11000000 (base) + (state_id * 10000) + district_id
-                        commission_id = 11000000 + (state_id * 10000) + district_id
-                        all_commissions.append({
-                            "commissionId": str(commission_id),
-                            "commissionNameEn": f"{district_name} DCDRC",
+                state_id = int(state_id)
+                commission_id = int(commission_id)
+            except (TypeError, ValueError):
+                continue
+
+            if state_id <= 0 or commission_id % 10000 != 0:
+                continue
+
+            # The canonical state commissions use the 11xx0000 pattern.
+            # Regional/circuit benches can also end with 0000, but those do not
+            # own the state-wide district commission listing endpoint.
+            if commission_id < 11000000 or commission_id >= 12000000:
+                continue
+
+            state_commissions[state_id] = commission_id
+
+        for state_id, commission_id in state_commissions.items():
+            try:
+                district_commissions = self.get_district_commissions(commission_id)
+                for district_commission in district_commissions:
+                    raw_commission_id = district_commission.get("commissionId")
+                    district_name = district_commission.get("commissionNameEn")
+                    if not raw_commission_id or not district_name:
+                        continue
+
+                    try:
+                        district_commission_id = int(raw_commission_id)
+                    except (TypeError, ValueError):
+                        continue
+
+                    all_commissions.append(
+                        {
+                            "commissionId": str(district_commission_id),
+                            "commissionNameEn": str(district_name).strip(),
                             "stateId": state_id,
-                            "districtId": district_id,
-                            "is_dcdrc": True
-                        })
+                            "districtId": district_commission_id % 10000,
+                            "is_dcdrc": True,
+                        }
+                    )
             except Exception as e:
-                # Log error but continue processing other states
-                logger.warning(f"Failed to fetch districts for state {state_id}: {e}")
+                logger.warning(
+                    "Failed to fetch district commissions for state %s using commission %s: %s",
+                    state_id,
+                    commission_id,
+                    e,
+                )
                 continue
 
         return all_commissions
