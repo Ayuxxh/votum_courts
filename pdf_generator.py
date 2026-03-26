@@ -88,7 +88,7 @@ def _build_cause_list_table(
             Paragraph(str(entry.get("sno", idx)), body_style),
             case_cell,
             Paragraph(escape(str(entry.get("coram_name") or entry.get("court_name", "-"))), body_style),
-            Paragraph(escape(str(entry.get("party_name", "-"))), body_style),
+            Paragraph(str(entry.get("party_name", "-")), body_style),
             Paragraph(escape(str(entry.get("collaborators", "-"))), body_style),
         ]
         if has_orders:
@@ -364,7 +364,7 @@ def generate_daily_matters_pdf_2(
             [
                 Paragraph(escape(str(m.get("sno", idx))), body_style),
                 Paragraph(escape(str(m.get("registration_no", "-"))), body_style),
-                Paragraph(escape(str(m.get("party_name", "-"))), body_style),
+                Paragraph(str(m.get("party_name", "-")), body_style),
                 Paragraph(escape(str(m.get("next_listing_date", "-"))), body_style),
                 Paragraph(orders_html, link_style),
             ]
