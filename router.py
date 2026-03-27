@@ -6,6 +6,8 @@ from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
+from scrapers.e_jagriti import EJagritiService
+
 from . import bombay_hc, gujarat_hc, hc_services
 from .bombay_hc import get_bombay_case_details
 from .bombay_hc import \
@@ -30,12 +32,6 @@ from .gujarat_hc import (get_gujarat_case_details,
                          gujarat_search_by_party_name)
 from .gujarat_hc import \
     persist_orders_to_storage as gujarat_persist_orders_to_storage
-# from .jagriti import (get_jagriti_case_history, get_jagriti_case_status,
-#                       get_jagriti_case_status_with_history,
-#                       get_jagriti_commissions, get_jagriti_districts,
-#                       get_jagriti_daily_order_judgement_pdf,
-#                       jagriti_search_case_details,
-#                       persist_orders_to_storage as jagriti_persist_orders_to_storage)
 from .hc_services import hc_get_benches, hc_get_case_types, hc_get_states
 from .NCLAT import (nclat_get_details, nclat_search_by_case_no,
                     nclat_search_by_free_text)
@@ -50,7 +46,7 @@ from .SCI import (sci_get_details, sci_search_by_aor_code,
 
 router = APIRouter(prefix="/ecourts", tags=["ecourts"])
 
-
+_jagriti_service = EJagritiService()
 
 @router.get("/search_nclat_search_by_case_no/")
 async def search_nclat_search_by_case_no(location: str, case_type: str, case_no: str, case_year: str):
@@ -236,73 +232,52 @@ async def gujarat_hc_details_by_cnr_no(cnr_no: str):
 
 @router.get("/jagriti_commissions/", summary="Fetch all e-Jagriti commissions including NCDRC, SCDRCs, and DCDRCs")
 async def jagriti_commissions():
-    return get_jagriti_commissions()
+    return _jagriti_service.get_commission_catalog()
 
 
-@router.get("/jagriti_districts/", summary="Fetch all districts for a given e-Jagriti state")
-async def jagriti_districts(state_id: int):
-    return get_jagriti_districts(state_id=state_id)
-
-
-@router.get("/jagriti_case_status/", summary="Fetch e-Jagriti case status by case number/application number/filing reference")
+@router.get("/jagriti_case_status/", summary="Fetch e-Jagriti case status by case number")
 async def jagriti_case_status(
-    identifier: str,
-    commission_id: int | None = None,
-    captcha: str | None = None,
-    verify: bool = True,
+    case_no: str,
+    commission_id: Optional[int] = None,
+    commission_type: Optional[str] = "1",
+    state_name: Optional[str] = None,
+    district_name: Optional[str] = None
 ):
-    return get_jagriti_case_status(
-        identifier,
-        commission_id=commission_id,
-        captcha=captcha,
-        verify=verify,
-    )
+    try:
+        res = _jagriti_service.search_by_case_no(
+            case_no=case_no,
+            commission_id=str(commission_id) if commission_id is not None else None,
+            commission_type=commission_type,
+            state_name=state_name,
+            district_name=district_name,
+        )
+        if not res:
+            raise HTTPException(status_code=404, detail="Case not found")
+        return res
+    except Exception as e:
+        logger.error(f"Jagriti search error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/jagriti_case_history/", summary="Fetch e-Jagriti case history by case number")
-async def jagriti_case_history(
-    case_number: str,
-    captcha: str | None = None,
-    verify: bool = True,
-):
-    return get_jagriti_case_history(case_number, captcha=captcha, verify=verify)
-
-
-@router.get("/jagriti_case_status_with_history/", summary="Fetch e-Jagriti case status and history")
+@router.get(
+    "/jagriti_case_status_with_history/",
+    summary="Fetch e-Jagriti case status and hearing history by identifier",
+)
 async def jagriti_case_status_with_history(
     identifier: str,
-    commission_id: int | None = None,
-    captcha: str | None = None,
-    verify: bool = True,
+    commission_id: Optional[int] = None,
 ):
-    return get_jagriti_case_status_with_history(
-        identifier,
-        commission_id=commission_id,
-        captcha=captcha,
-        verify=verify,
-    )
-
-
-@router.post("/jagriti_case_search/", summary="Search e-Jagriti cases using the search payload from the web client")
-async def jagriti_case_search(
-    payload: dict = Body(...),
-    captcha: str | None = None,
-    verify: bool = True,
-):
-    return jagriti_search_case_details(payload, captcha=captcha, verify=verify)
-
-
-@router.get("/jagriti_daily_order_judgement_pdf/", summary="Fetch e-Jagriti daily order or judgement document")
-async def jagriti_daily_order_judgement_pdf(
-    filing_reference_number: str,
-    date_of_hearing: str,
-    order_type_id: int = 1,
-):
-    return get_jagriti_daily_order_judgement_pdf(
-        filing_reference_number,
-        date_of_hearing=date_of_hearing,
-        order_type_id=order_type_id,
-    )
+    try:
+        res = _jagriti_service.search_by_case_no(
+            case_no=identifier,
+            commission_id=str(commission_id) if commission_id is not None else None,
+        )
+        if not res:
+            raise HTTPException(status_code=404, detail="Case not found")
+        return res
+    except Exception as e:
+        logger.error(f"Jagriti search with history error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 

@@ -16,14 +16,6 @@
   - Frontend add-case now uses static DRT/DRAT benches from `src/app/home/cases/addcase/data/tribunals.json`
   - Added static DRAT case types in `src/app/home/cases/addcase/data/drat_case_types.json`
 
-- **2026-03-20**: Added **e-Jagriti** scraper readiness and public order-document support
-  - Added `backend/ecourts/jagriti.py`
-  - Implemented e-Jagriti case status, case history, and search flows
-  - Live-verified captcha solve/verify, search, status, and history against `https://e-jagriti.gov.in/case-history-case-status`
-  - Implemented public daily order/judgement fetch via `courtmaster/courtRoom/judgement/v1/getDailyOrderJudgementPdf`
-  - Added e-Jagriti order persistence support in `/ecourts/store_orders/` with canonical `court_type="JAGRITI"`
-  - Current e-Jagriti gap: cause list fetch/parse is not implemented yet
-
 - **2026-03-20**: Added **DRT** scraper readiness and live verification
   - Added `backend/ecourts/DRT.py`
   - Implemented DRT search by case number, diary number, and party name
@@ -56,19 +48,19 @@ This document provides a comprehensive feature readiness assessment for all cour
 
 ## Feature Summary Table
 
-| Court/Scraper                    | Case Search                                                              | Party Search                     | Details Search                               | IA Extraction                                  | Cause List Fetch                      | Cause List Parse                          | CNR/Unique ID Fetch                    | Notes                                                |
-| -------------------------------- | ------------------------------------------------------------------------ | -------------------------------- | -------------------------------------------- | ---------------------------------------------- | ------------------------------------- | ----------------------------------------- | -------------------------------------- | ---------------------------------------------------- |
+| Court/Scraper                    | Case Search                                                                                                                                      | Party Search                                                        | Details Search                                                                 | IA Extraction                                  | Cause List Fetch                      | Cause List Parse                          | CNR/Unique ID Fetch                    | Notes                                                               |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------- | ----------------------------------------- | -------------------------------------- | ------------------------------------------------------------------- |
 | **DRT / DRAT**                   | ✅ `drt_search_by_case_number()`<br>✅ `drt_search_by_diary_number()`<br>✅ `drat_search_by_case_number()`<br>✅ `drat_search_by_diary_number()` | ✅ `drt_search_by_party_name()`<br>✅ `drat_search_by_party_name()` | ✅ `drt_get_details(drt, filing_no)`<br>✅ `drat_get_details(drat, filing_no)` | ✅ Extracts from `iaDetails` / proceeding rows | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Uses `filing_no` when available     | DRT live-verified March 20, 2026; DRAT live-verified March 22, 2026 |
-| **e-Jagriti**                   | ✅ `jagriti_search_case_details()`                                      | ✅ Free-text / advanced search   | ✅ `get_case_status()` + `get_case_history()` | ❌ Not implemented                             | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Filing reference / case number      | Live-verified; public daily order PDF fetch works   |
-| **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                           | ✅ `nclat_search_by_free_text()` | ✅ `nclat_get_details(filing_no)`            | ✅ **NEW** Extracts from HTML tables           | ✅ **NEW** `nclat_fetch_cause_list()` | ✅ **NEW** `nclat_parse_cause_list_pdf()` | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                       |
-| **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()` | ✅ `nclt_search_by_party_name()` | ✅ `nclt_get_details(bench, filing_no)`      | ✅ **NEW** Maps from `mainFilnowithIaNoList`   | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                         |
-| **SCI** (Supreme Court)          | ✅ `sci_search_by_diary_number()`<br>✅ `sci_search_by_case_number()`    | ✅ `sci_search_by_party_name()`  | ✅ `sci_get_details(diary_no, diary_year)`   | ✅ **NEW** Extracts from listing dates         | ✅ `sci_get_cause_list()`             | ✅ `sci_parse_cause_list_pdf()`           | ✅ Diary No + Year                     | Math captcha via OCR                                 |
-| **Bombay HC**                    | ✅ `fetch_case_details(case_type, no, year)`                             | ❌ Not implemented               | ✅ HTML parsing via `_parse_html_response()` | ✅ **NEW** Extracts from `CaseNoApplCases` tab | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ⚠️ **NEW** Extracts `cnr_no` from text | Can extract CNR but no fetch by CNR                  |
-| **Delhi HC**                     | ✅ `fetch_case_details(case_type, no, year)`                             | ❌ Not implemented               | ✅ DataTables parsing + orders               | ✅ `fetch_ia_details()`                        | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ❌ No CNR fetch                        | Visual captcha validation                            |
-| **Gujarat HC**                   | ✅ `fetch_case_details()`                                                | ✅ `search_by_party_name()`      | ✅ Comprehensive JSON parsing                | ✅ IA details from `applicationmatters`        | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ✅ **Has CNR fetch**                   | Most feature-complete HC scraper                     |
-| **HC Services** (Generic HC)     | ✅ `hc_search_by_case_number()`                                          | ✅ `hc_search_by_party_name()`   | ✅ `hc_get_case_history()`                   | ✅ IA table parsing (`ia_table`)               | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `hc_search_by_cnr()`                | Uses hcservices.ecourts.gov.in                       |
-| **DC Services** (District Court) | ✅ `search_by_case_no()`<br>✅ `search_by_advocate_name()`               | ✅ `search_by_party_name()`      | ✅ `get_case_details()`                      | ✅ IA table parsing                            | ✅ `fetch_cause_list()`               | ✅ `parse_dc_cause_list_pdf()`            | ✅ Uses CIN/CNR                        | OCR captcha solving                                  |
-| **eCourts** (Mobile API)         | ✅ `search_by_case_number()`                                             | ❌ Not implemented               | ✅ `get_by_cnr()`                            | ❌ Not in API response                         | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `get_by_cnr()`                      | Encrypted API (AES-256)                              |
+| **e-Jagriti**                    | ✅ `jagriti_search_case_details()`                                                                                                               | ✅ Free-text / advanced search                                      | ✅ `get_case_status()` + `get_case_history()`                                  | ❌ Not implemented                             | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Filing reference / case number      | Live-verified; public daily order PDF fetch works                   |
+| **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                                                                                                   | ✅ `nclat_search_by_free_text()`                                    | ✅ `nclat_get_details(filing_no)`                                              | ✅ **NEW** Extracts from HTML tables           | ✅ **NEW** `nclat_fetch_cause_list()` | ✅ **NEW** `nclat_parse_cause_list_pdf()` | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                                      |
+| **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()`                                                                         | ✅ `nclt_search_by_party_name()`                                    | ✅ `nclt_get_details(bench, filing_no)`                                        | ✅ **NEW** Maps from `mainFilnowithIaNoList`   | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                                        |
+| **SCI** (Supreme Court)          | ✅ `sci_search_by_diary_number()`<br>✅ `sci_search_by_case_number()`                                                                            | ✅ `sci_search_by_party_name()`                                     | ✅ `sci_get_details(diary_no, diary_year)`                                     | ✅ **NEW** Extracts from listing dates         | ✅ `sci_get_cause_list()`             | ✅ `sci_parse_cause_list_pdf()`           | ✅ Diary No + Year                     | Math captcha via OCR                                                |
+| **Bombay HC**                    | ✅ `fetch_case_details(case_type, no, year)`                                                                                                     | ❌ Not implemented                                                  | ✅ HTML parsing via `_parse_html_response()`                                   | ✅ **NEW** Extracts from `CaseNoApplCases` tab | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ⚠️ **NEW** Extracts `cnr_no` from text | Can extract CNR but no fetch by CNR                                 |
+| **Delhi HC**                     | ✅ `fetch_case_details(case_type, no, year)`                                                                                                     | ❌ Not implemented                                                  | ✅ DataTables parsing + orders                                                 | ✅ `fetch_ia_details()`                        | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ❌ No CNR fetch                        | Visual captcha validation                                           |
+| **Gujarat HC**                   | ✅ `fetch_case_details()`                                                                                                                        | ✅ `search_by_party_name()`                                         | ✅ Comprehensive JSON parsing                                                  | ✅ IA details from `applicationmatters`        | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ✅ **Has CNR fetch**                   | Most feature-complete HC scraper                                    |
+| **HC Services** (Generic HC)     | ✅ `hc_search_by_case_number()`                                                                                                                  | ✅ `hc_search_by_party_name()`                                      | ✅ `hc_get_case_history()`                                                     | ✅ IA table parsing (`ia_table`)               | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `hc_search_by_cnr()`                | Uses hcservices.ecourts.gov.in                                      |
+| **DC Services** (District Court) | ✅ `search_by_case_no()`<br>✅ `search_by_advocate_name()`                                                                                       | ✅ `search_by_party_name()`                                         | ✅ `get_case_details()`                                                        | ✅ IA table parsing                            | ✅ `fetch_cause_list()`               | ✅ `parse_dc_cause_list_pdf()`            | ✅ Uses CIN/CNR                        | OCR captcha solving                                                 |
+| **eCourts** (Mobile API)         | ✅ `search_by_case_number()`                                                                                                                     | ❌ Not implemented                                                  | ✅ `get_by_cnr()`                                                              | ❌ Not in API response                         | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `get_by_cnr()`                      | Encrypted API (AES-256)                                             |
 
 ---
 
@@ -114,19 +106,19 @@ All scrapers implement case search with multiple modes including case number, pa
 
 Most scrapers support searching for cases by party name (Petitioner/Respondent).
 
-| Scraper     | Search Method         | Function                                       |
-| ----------- | --------------------- | ---------------------------------------------- |
-| e-Jagriti   | Free text / advanced  | `jagriti_search_case_details()`                |
+| Scraper     | Search Method         | Function                                                     |
+| ----------- | --------------------- | ------------------------------------------------------------ |
+| e-Jagriti   | Free text / advanced  | `jagriti_search_case_details()`                              |
 | DRT / DRAT  | Party Name            | `drt_search_by_party_name()` / `drat_search_by_party_name()` |
-| NCLAT       | Free text search      | `nclat_search_by_free_text(search_by='party')` |
-| NCLT        | Party Name            | `nclt_search_by_party_name()`                  |
-| SCI         | Party Name            | `sci_search_by_party_name()`                   |
-| Gujarat HC  | Party Name            | `search_by_party_name()`                       |
-| HC Services | Petitioner/Respondent | `hc_search_by_party_name()`                    |
-| DC Services | Party Name            | `search_by_party_name()`                       |
-| Bombay HC   | ❌                    | N/A                                            |
-| Delhi HC    | ❌                    | N/A                                            |
-| eCourts     | ❌                    | N/A                                            |
+| NCLAT       | Free text search      | `nclat_search_by_free_text(search_by='party')`               |
+| NCLT        | Party Name            | `nclt_search_by_party_name()`                                |
+| SCI         | Party Name            | `sci_search_by_party_name()`                                 |
+| Gujarat HC  | Party Name            | `search_by_party_name()`                                     |
+| HC Services | Petitioner/Respondent | `hc_search_by_party_name()`                                  |
+| DC Services | Party Name            | `search_by_party_name()`                                     |
+| Bombay HC   | ❌                    | N/A                                                          |
+| Delhi HC    | ❌                    | N/A                                                          |
+| eCourts     | ❌                    | N/A                                                          |
 
 ### 3. Details Search Function (10/10 ✅)
 
@@ -215,7 +207,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 ---
 
-### e-Jagriti (`jagriti.py`)
+### e-Jagriti
 
 **New Features:**
 
