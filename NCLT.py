@@ -746,7 +746,7 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
         # Construct result
         res = {
             "cin_no": filing_no, # Using filing_no as cin_no for now
-            "registration_no": reg_info.get('registration_no'), # or case_no?
+            "registration_no": case_no, # or case_no?
             "filing_no": filing_no,
             "case_no": case_no,
             "registration_date": reg_date,

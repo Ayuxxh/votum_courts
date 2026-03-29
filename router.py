@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 from scrapers.e_jagriti import EJagritiService
 
-from . import bombay_hc, gujarat_hc, hc_services
+from . import hc_services
 from .bombay_hc import get_bombay_case_details
 from .bombay_hc import \
     persist_orders_to_storage as bombay_persist_orders_to_storage
@@ -254,6 +254,8 @@ async def jagriti_case_status(
         if not res:
             raise HTTPException(status_code=404, detail="Case not found")
         return res
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Jagriti search error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -275,6 +277,8 @@ async def jagriti_case_status_with_history(
         if not res:
             raise HTTPException(status_code=404, detail="Case not found")
         return res
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Jagriti search with history error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
