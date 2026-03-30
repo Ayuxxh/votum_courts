@@ -4,7 +4,7 @@ import logging
 import re
 import time
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import parse_qs, urlparse
@@ -54,7 +54,7 @@ CAUSE_LIST_HEADERS = {
 CAUSE_LIST_HOME_URL = "https://gujarathc-casestatus.nic.in/gujarathc/"
 CAUSE_LIST_PRINT_URL = "https://gujarathc-casestatus.nic.in/gujarathc/printBoardNew"
 
-CASE_NO_PATTERN = re.compile(r"\b(?:[A-Z0-9.]{1,10}/){1,3}\d{1,7}/\d{4}\b")
+CASE_NO_PATTERN = re.compile(r"\b(?!\d{1,2}/\d{1,2}/\d{4})(?:[A-Z0-9.]{1,10}/){1,3}\d{1,7}/\d{4}\b")
 
 
 def _normalize_case_token(case_no: str) -> str:
@@ -328,15 +328,25 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                 and "CASE DETAILS" in page_tokens
                 and "NAME OF PARTIES" in page_tokens
             )
+            
+            # Find the header y-coordinate if present
+            header_y = 0
+            if has_table_header:
+                for line in lines:
+                    if line["text"].upper() in ["SNO", "CASE DETAILS", "NAME OF PARTIES"]:
+                         header_y = max(header_y, line["y"])
+
+            # If no header and no entry open, skip page (e.g. cover page, TOC)
+            if not has_table_header and not open_entry:
+                continue
 
             starts = [
-                line for line in lines if line["x"] < 75 and re.fullmatch(r"\d{1,4}\.?", line["text"])
+                line for line in lines 
+                if line["x"] < 75 
+                and re.fullmatch(r"\d{1,4}\.?", line["text"])
+                and (not has_table_header or line["y"] > header_y)
             ]
             starts.sort(key=lambda item: item["y"])
-
-            # If no header, no starts, and no entry open, skip page (e.g. cover page)
-            if not has_table_header and not open_entry and not starts:
-                continue
 
             # Process lines before the first start of this page (if any) as continuation
             first_start_y = starts[0]["y"] if starts else float("inf")
@@ -1187,8 +1197,11 @@ async def persist_orders_to_storage(
 
 if __name__ == "__main__":
     # Test
-    logging.basicConfig(level=logging.INFO)
-    print(json.dumps(get_gujarat_case_details("SCA", "8680", "2025")))
-    # Print cause list entries for a case
-    res = find_case_entries("/Users/tejaswgupta/Downloads/votum/backend/ecourts/Complete_Causelist_9th_February_2026.pdf", "SCA/4937/2022")
-    print(res[0].get("text") if res else "No entries found")
+    # logging.basicConfig(level=logging.INFO)
+    # print(json.dumps(get_gujarat_case_details("SCA", "8680", "2025")))
+    # # Print cause list entries for a case
+    # res = find_case_entries("/Users/tejaswgupta/Downloads/votum/backend/ecourts/Complete_Causelist_9th_February_2026.pdf", "SCA/4937/2022")
+    # print(res[0].get("text") if res else "No entries found")
+    a = fetch_cause_list_pdf_bytes(datetime(2026, 4, 1))
+    b = fetch_cause_list_pdf_bytes(datetime.combine(date(2026, 4, 1), datetime.min.time()))
+    print(len(a), len(b))
