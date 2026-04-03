@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from .order_storage import \
+from order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
@@ -827,7 +827,7 @@ if __name__ == '__main__':
     # Case Type 16 is "Company Petition IB(IBC)"
     
     print(nclt_search_by_case_number('ahmedabad', '4', '1', '2025')) 
-    # a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
-    # with open('nclt_details.json', 'w') as f:
-        # f.write(a)
+    a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
+    with open('nclt_details.json', 'w') as f:
+        f.write(a)
     # pass

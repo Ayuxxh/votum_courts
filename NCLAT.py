@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from .order_storage import \
+from order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
@@ -733,6 +733,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
     current_coram = None
     header_found = False
     stop_parsing = False
+    current_vc_link = None
     
     for page in doc:
         if stop_parsing:
@@ -787,6 +788,10 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
 
         for row in rows_data:
             row_text = " ".join(l["text"] for l in row)
+            vc_match = re.search(r'(https?://\S+)', row_text)
+            if vc_match:
+                current_vc_link = vc_match.group(1)
+                continue
             
             if "INSTRUCTIONS FOR" in row_text.upper():
                 stop_parsing = True
@@ -825,6 +830,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
                     "court": full_court_name,
                     "court_name": full_court_name,
                     "coram_name": current_coram,
+                    "vc_link" : current_vc_link,
                 })
             
             if entries:
@@ -861,7 +867,11 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
     """
     Fetch and parse NCLAT cause list for a given date and bench.
     """
+
+    print(listing_date)
     date_str = listing_date.strftime("%Y-%m-%d")
+    print(date_str,type(date_str))
+    
     params = {
         "field_final_date_value": date_str,
         "field_final_date_value_1": date_str,
@@ -875,11 +885,20 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
         "User-Agent": DEFAULT_UA
     }
     
+
+
     resp = requests.get(CAUSE_LIST_URL, params=params, headers=headers, timeout=30)
+
     resp.raise_for_status()
+
     
     soup = BeautifulSoup(resp.text, "html.parser")
+
+
+
+    
     table = soup.find("table", {"class": "cols-5"})
+
     if not table:
         logger.info(f"No cause list found for {date_str} and bench {bench}")
         return []
@@ -909,7 +928,7 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
             all_entries.extend(entries)
         except Exception as e:
             logger.error(f"Error parsing PDF {link_info['url']}: {e}")
-            
+
     return all_entries
 
 
@@ -952,3 +971,6 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
             continue
 
     return matched
+
+
+
