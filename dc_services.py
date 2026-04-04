@@ -1145,8 +1145,14 @@ class EcourtsWebScraper:
                     'purpose': str(item.get('purpose') or item.get('business') or item.get('stage') or '').strip(),
                 })
         if details['history']:
-            latest_history = details['history'][-1]
-            details['last_listing_date'] = latest_history.get('hearing_date') or latest_history.get('business_date')
+            # Find the most recent date in history to use as last_listing_date
+            latest_date = None
+            for h in details['history']:
+                d = h.get('hearing_date') or h.get('business_date')
+                if d and re.match(r"\d{4}-\d{2}-\d{2}", d):
+                    if not latest_date or d > latest_date:
+                        latest_date = d
+            details['last_listing_date'] = latest_date
 
         # IA Details
         ia_table = soup.find('table', class_='ia_table') or soup.find('table', class_='IAheading')
@@ -1251,8 +1257,19 @@ class EcourtsWebScraper:
 
         if not details['case_no'] and details['registration_no']:
             details['case_no'] = details['registration_no']
-        if html_content and not details['original_json'] and type(html_content) is dict:
-            details['original_json'] = html_content
+
+        # Format registration_no/case_no to include Case Type prefix (e.g. CC/55975/2018)
+        if details['case_type'] and details['registration_no'] and '/' in details['registration_no']:
+            prefix = details['case_type'].split(' - ')[0].strip()
+            if prefix and '/' not in prefix and not details['registration_no'].startswith(prefix + '/'):
+                details['registration_no'] = f"{prefix}/{details['registration_no']}"
+                details['case_no'] = details['registration_no']
+        
+        if html_content and not details['original_json']:
+            if isinstance(html_content, dict):
+                details['original_json'] = html_content
+            elif isinstance(html_content, str):
+                details['original_json'] = {'raw_html_extracted': html_content}
                         
         return details
 
