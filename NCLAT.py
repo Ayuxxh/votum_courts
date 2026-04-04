@@ -575,7 +575,9 @@ def nclat_search_by_case_no(
 
     session = _new_session()
     for attempt in range(8):
-        captcha = _solve_captcha(session)
+        print(session)
+        captcha = (_solve_captcha(session)).upper() # Captcha only accepts Capital Values
+        
         html = _ajax_post(
             session,
             {
@@ -588,6 +590,7 @@ def nclat_search_by_case_no(
                 "schema_name": schema,
             },
         )
+        print(html)
         if "Captch Value is incorrect" in html:
             continue
         return _parse_search_results(html, location=schema)
@@ -974,3 +977,11 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
 
 
 
+print(
+    nclat_search_by_case_no(
+        location="delhi",
+        case_type="33",
+        case_no="1292",
+        case_year="2025"
+    )
+)
