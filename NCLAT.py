@@ -355,6 +355,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
             if not has_ia_signal and not re.search(r"\b(?:I\.?A\.?|IA|INTERLOCUTORY)\b", ia_number, re.IGNORECASE):
                 continue
 
+
             party_idx = indexes.get("party")
             filing_idx = indexes.get("filing_date")
             next_idx = indexes.get("next_date")
@@ -378,6 +379,8 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                     "raw_row": cells,
                 }
             )
+        
+
         return rows
 
     # Iterate through each "card" in the accordion structure
@@ -590,7 +593,7 @@ def nclat_search_by_case_no(
                 "schema_name": schema,
             },
         )
-        print(html)
+
         if "Captch Value is incorrect" in html:
             continue
         return _parse_search_results(html, location=schema)
@@ -693,8 +696,10 @@ def nclat_get_details(filing_no: str, bench: str | None = None) -> dict[str, Any
             "schema_name": schema,
         },
     )
+    
     if "Direct access not allowed" in html:
         return None
+    
     return _parse_details(html, location=schema, filing_no=filing_no.strip())
 
 
@@ -975,13 +980,3 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
 
     return matched
 
-
-
-print(
-    nclat_search_by_case_no(
-        location="delhi",
-        case_type="33",
-        case_no="1292",
-        case_year="2025"
-    )
-)
