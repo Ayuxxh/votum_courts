@@ -981,4 +981,8 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     return matched
 
 if __name__ == '__main__':
-    print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'341'))
+    # print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'1076'))
+
+    # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
+
+    print(nclat_get_details('9910100052102020', 'delhi'))
