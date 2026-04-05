@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from order_storage import \
+from .order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
@@ -981,8 +981,8 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     return matched
 
 if __name__ == '__main__':
-    # print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'1076'))
+    print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'1076'))
 
     # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
 
-    print(nclat_get_details('9910100052102020', 'delhi'))
+    # print(nclat_get_details('9910100052102020', 'delhi'))

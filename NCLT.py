@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from order_storage import \
+from .order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
