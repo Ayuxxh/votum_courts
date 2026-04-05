@@ -208,6 +208,7 @@ def find_case_entries(pdf_path: str, case_no: str) -> List[Dict[str, Any]]:
     """
     target_tail = _case_tail(case_no)
     parsed = parse_cause_list_pdf(pdf_path)
+    
     if not target_tail:
         return parsed
 
@@ -216,7 +217,11 @@ def find_case_entries(pdf_path: str, case_no: str) -> List[Dict[str, Any]]:
         case_nos = entry.get("case_nos") or []
         tails = {_case_tail(value) for value in case_nos if value}
         if target_tail in tails:
+            # print(target_tail, tails)
+            # print("*" * 100)
+            # SystemExit()
             matched_entries.append(entry)
+
     return matched_entries
 
 
@@ -291,8 +296,10 @@ def fetch_cause_list_pdfs(
             if item.get("listing_date") and item["listing_date"] != date_token:
                 continue
             title = (item.get("title") or "").lower()
-            if title_contains and title_contains.lower() not in title:
-                continue
+
+            if title_contains:
+                if title_contains and title_contains.lower() not in title:
+                    continue
             found.append(item)
             seen_urls.add(item["pdf_url"])
 
@@ -757,7 +764,10 @@ if __name__ == "__main__":
     
     results = get_delhi_case_details("W.P.(C)", "533", "2025")
     print(json.dumps(results, indent=2))
-    
+
+    d=  datetime.strptime('02/04/2026', "%d/%m/%Y")
+    print(fetch_cause_list_entries('02/04/2026','535')
+    )
     # Optional: Test persist orders if needed (requires Supabase env vars)
     # if results and results[0]['orders']:
     #     asyncio.run(persist_orders_to_storage(results[0]['orders'], case_id="TEST_CASE_ID"))

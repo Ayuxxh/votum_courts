@@ -1197,10 +1197,12 @@ async def persist_orders_to_storage(
 
 if __name__ == "__main__":
     # Test
-    # logging.basicConfig(level=logging.INFO)
-    # print(json.dumps(get_gujarat_case_details("SCA", "8680", "2025")))
+    logging.basicConfig(level=logging.INFO)
+    print(json.dumps(get_gujarat_case_details("FA", "636", "2008"), indent=4))
     # # Print cause list entries for a case
-    # res = find_case_entries("/Users/tejaswgupta/Downloads/votum/backend/ecourts/Complete_Causelist_9th_February_2026.pdf", "SCA/4937/2022")
+    res = find_case_entries("c_g.pdf", "FA/636/2008")
+
+    print(res)
     # print(res[0].get("text") if res else "No entries found")
     a = fetch_cause_list_pdf_bytes(datetime(2026, 4, 1))
     b = fetch_cause_list_pdf_bytes(datetime.combine(date(2026, 4, 1), datetime.min.time()))

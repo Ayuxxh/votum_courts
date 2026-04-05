@@ -2,7 +2,7 @@ import html
 import json
 import logging
 import os
-import re
+import re, ast
 import time
 from datetime import datetime
 from tempfile import NamedTemporaryFile
@@ -431,6 +431,7 @@ class EcourtsWebScraper:
             self.initialize_session()
             
         result = self.search_case(state_code, dist_code, court_complex_code, case_type, case_no, year)
+      
         
         if result.get('status') == 'success':
             standard_cases = []
@@ -555,8 +556,13 @@ class EcourtsWebScraper:
         dist_code: str,
         court_complex_code_full: str,
         listing_date: str,
+        case_type: str,
+        case_no :str,
+        case_year: str,
         est_code: str = "",
-        registration_no: Optional[str] = None,
+
+        registration_no: Optional[str] = None, 
+
     ) -> Dict[str, Any]:
         """
         Fetch District Court cause-list PDF(s) and parse case-number entries.
@@ -590,6 +596,7 @@ class EcourtsWebScraper:
                     "selected_state_code": state_code,
                     "selected_dist_code": dist_code,
                     "selected_est_code": selected_est_code,
+                    
                 },
             )
             response_payloads.append(set_data_resp)
@@ -631,6 +638,7 @@ class EcourtsWebScraper:
                     if not captcha_text:
                         continue
                     try:
+
                         submit_resp = self._post(
                             "cause_list/submitCauseList",
                             {
@@ -643,8 +651,8 @@ class EcourtsWebScraper:
                                 "court_complex_code": complex_code,
                                 "est_code": selected_est_code,
                                 "cicri": cicri,
-                                "selprevdays": selprevdays,
-                            },
+                                "selprevdays": '1', # Error if any other number except 1
+                            },   
                         )
                     except Exception:
                         logger.debug(
@@ -654,90 +662,182 @@ class EcourtsWebScraper:
                             exc_info=True,
                         )
                         continue
-                    response_payloads.append(submit_resp)
+                    
+                    case_match =  f'{case_type.strip()}/{case_no.strip()}/{case_year.strip()}'
 
-                    if not isinstance(submit_resp, dict):
-                        break
-                    if int(submit_resp.get("status") or 0) == 1:
-                        pdf_links.extend(self._extract_pdf_links_from_payload(submit_resp.get("case_data")))
-                        break
 
-                    err = str(submit_resp.get("errormsg") or submit_resp.get("msg") or "").lower()
-                    if "captcha" in err:
-                        continue
-                    break
 
-        # Deduplicate while preserving order.
-        deduped_links: List[str] = []
-        seen_links = set()
-        for link in pdf_links:
-            if link not in seen_links:
-                seen_links.add(link)
-                deduped_links.append(link)
+                    soup = BeautifulSoup(submit_resp['case_data'], 'html.parser')
 
-        pdf_results: List[Dict[str, Any]] = []
-        all_entries: List[Dict[str, Any]] = []
-        matched_entries: List[Dict[str, Any]] = []
+                    vc_link = None
+                    corum = None
+                    item_no = None
+                    next_hearing_date = None
 
-        for pdf_url in deduped_links:
-            try:
-                pdf_bytes = self._download_pdf_bytes(pdf_url)
-            except Exception as exc:
-                pdf_results.append(
-                    {
-                        "url": pdf_url,
-                        "status": "error",
-                        "error": str(exc),
-                        "entries": [],
-                        "matched_entries": [],
-                    }
-                )
-                continue
 
-            tmp_path: Optional[str] = None
-            try:
-                with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
-                    tmp_pdf.write(pdf_bytes)
-                    tmp_path = tmp_pdf.name
+                    # saving corum and Vc link incase match is found later
 
-                parsed_entries = parse_dc_cause_list_pdf(tmp_path)
-                if registration_no:
-                    parsed_matched_entries = find_dc_case_entries(tmp_path, registration_no)
-                else:
-                    parsed_matched_entries = parsed_entries
+                    center_div = soup.find('center')
+                    if center_div:
+                        another_center_div = center_div.find('center')
+                        if another_center_div:
+                            corum = another_center_div( "span", string=lambda x: x and "In the court of" in x)
+                            designation = another_center_div.find_all('span')
+                            if len(designation) >= 3:
 
-                pdf_results.append(
-                    {
-                        "url": pdf_url,
-                        "status": "success",
-                        "entries": parsed_entries,
-                        "matched_entries": parsed_matched_entries,
-                    }
-                )
-                all_entries.extend(parsed_entries)
-                matched_entries.extend(parsed_matched_entries)
-            finally:
-                if tmp_path and os.path.exists(tmp_path):
-                    os.remove(tmp_path)
+                                corum = corum[0].get_text(" ", strip=True).split(":")[-1].strip() + " " + (designation[-1].text).strip()
 
-        if not deduped_links:
-            return {
-                "status": "error",
-                "msg": "Could not locate cause-list PDF links from District Court cause-list responses",
-                "listing_date": formatted_date,
-                "responses_checked": len(response_payloads),
-                "pdfs": [],
-                "entries": [],
-                "matched_entries": [],
-            }
 
-        return {
-            "status": "success",
-            "listing_date": formatted_date,
-            "pdfs": pdf_results,
-            "entries": all_entries,
-            "matched_entries": matched_entries,
-        }
+                        vc_span =center_div.find_all('span')
+                        if vc_span:
+                            vc_link = (vc_span[-1].text).split('url :')[-1].strip() 
+                            link_is_valid = bool(re.match(r'https?://[^\s]+', vc_link))
+                            if not link_is_valid:
+                                vc_link = None
+
+
+
+
+                
+                    # Checking if  case no and year matches
+                    
+                    table = soup.find('tbody')
+                    if table:
+                        tables= table.find_all('tr')
+                        for tr in tables:
+                            tds = tr.find_all('td')
+                            if len(tds) >= 3:
+                                item_no = (tds[0].text).strip()
+                                text = list(tds[1].stripped_strings)
+
+                                details = tds[1].find('a').get('onclick')
+                                args_str = re.search(r"viewHistory\((.*)\)", details).group(1)
+                                p = list(ast.literal_eval(f"({args_str})"))
+                                print(p)
+
+                                if len(text) >= 2 :
+                                    next_hearing_date =  datetime.strptime((text[2]).split('\xa0')[-1], '%d-%m-%Y' )   
+                                if text[1].strip() == case_match:
+                                    html_response = self._post(
+                                                "home/viewHistory",
+                                                {
+                                                    "state_code": state_code,
+                                                    "dist_code": dist_code,
+                                                    "court_complex_code": complex_code,
+                                                    "est_code": parts[1] if len(parts) > 1 else selected_est_code,
+                                                    "search_flag": "CLcauselist",
+                                                    "search_by" : "CauseList",
+                                                    "case_no" : p[0],
+                                                    "cino" : p[1],
+                                                    "court_code":[2]
+                                                },
+                                        )
+                                    print('case_match found!')
+                                   
+
+                                    return {
+                                        "status": "success",
+                                        "listing_date": formatted_date,
+                                        "item_no": item_no,
+                                        "vc_link": vc_link,
+                                        "coram": corum,
+                                        "next_date": next_hearing_date.strftime("%Y-%m-%d"),
+                                        "html" : html_response
+                                    }
+
+
+                            
+
+
+                    """
+
+                    Cause List is not pdf, Hence. Parsing Html instead
+                    """    
+                    
+        #             response_payloads.append(submit_resp)
+
+        #             if not isinstance(submit_resp, dict):
+        #                 break
+        #             if int(submit_resp.get("status") or 0) == 1:
+        #                 pdf_links.extend(self._extract_pdf_links_from_payload(submit_resp.get("case_data")))
+        #                 break
+
+        #             err = str(submit_resp.get("errormsg") or submit_resp.get("msg") or "").lower()
+        #             if "captcha" in err:
+        #                 continue
+        #             break
+
+        # # Deduplicate while preserving order.
+        # deduped_links: List[str] = []
+        # seen_links = set()
+        # for link in pdf_links:
+        #     if link not in seen_links:
+        #         seen_links.add(link)
+        #         deduped_links.append(link)
+
+        # pdf_results: List[Dict[str, Any]] = []
+        # all_entries: List[Dict[str, Any]] = []
+        # matched_entries: List[Dict[str, Any]] = []
+
+        # for pdf_url in deduped_links:
+        #     try:
+        #         pdf_bytes = self._download_pdf_bytes(pdf_url)
+        #     except Exception as exc:
+        #         pdf_results.append(
+        #             {
+        #                 "url": pdf_url,
+        #                 "status": "error",
+        #                 "error": str(exc),
+        #                 "entries": [],
+        #                 "matched_entries": [],
+        #             }
+        #         )
+        #         continue
+
+        #     tmp_path: Optional[str] = None
+        #     try:
+        #         with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
+        #             tmp_pdf.write(pdf_bytes)
+        #             tmp_path = tmp_pdf.name
+
+        #         parsed_entries = parse_dc_cause_list_pdf(tmp_path)
+        #         if registration_no:
+        #             parsed_matched_entries = find_dc_case_entries(tmp_path, registration_no)
+        #         else:
+        #             parsed_matched_entries = parsed_entries
+
+        #         pdf_results.append(
+        #             {
+        #                 "url": pdf_url,
+        #                 "status": "success",
+        #                 "entries": parsed_entries,
+        #                 "matched_entries": parsed_matched_entries,
+        #             }
+        #         )
+        #         all_entries.extend(parsed_entries)
+        #         matched_entries.extend(parsed_matched_entries)
+        #     finally:
+        #         if tmp_path and os.path.exists(tmp_path):
+        #             os.remove(tmp_path)
+
+        # if not deduped_links:
+        #     return {
+        #         "status": "error",
+        #         "msg": "Could not locate cause-list PDF links from District Court cause-list responses",
+        #         "listing_date": formatted_date,
+        #         "responses_checked": len(response_payloads),
+        #         "pdfs": [],
+        #         "entries": [],
+        #         "matched_entries": [],
+        #     }
+
+        # return {
+        #     "status": "success",
+        #     "listing_date": formatted_date,
+        #     "pdfs": pdf_results,
+        #     "entries": all_entries,
+        #     "matched_entries": matched_entries,
+        # }
 
     def get_case_details(self, case_params):
         """
@@ -1285,6 +1385,7 @@ class EcourtsWebScraper:
         # Retry logic for CAPTCHA
         max_retries = 5
         for attempt in range(max_retries):
+
             captcha_img = self.get_captcha_image()
             if not captcha_img:
                 logger.error("Failed to get captcha image")
@@ -1319,8 +1420,11 @@ class EcourtsWebScraper:
                 'submit_btn': 'Go',
                 'appFlag': 'web'
             }
-            
+
+            # Problem with posting here, Invalid JSON response
+
             resp = self._post('casestatus/submitCaseNo', data)
+
             
             if isinstance(resp, dict):
                 if resp.get('status') == 1:
@@ -1592,17 +1696,33 @@ if __name__ == "__main__":
     if not scraper.initialize_session():
         raise SystemExit("Failed to initialize eCourts web session")
 
-    details = scraper.get_case_details(params)
-    print(
-        json.dumps(
-            {
-                "cino": details.get("cino") if isinstance(details, dict) else None,
-                "case_no": details.get("case_no") if isinstance(details, dict) else None,
-                "registration_no": details.get("registration_no") if isinstance(details, dict) else None,
-                "next_listing_date": details.get("next_listing_date") if isinstance(details, dict) else None,
-                "status": details.get("status") if isinstance(details, dict) else None,
-                "ia_details": details.get("ia_details") if isinstance(details, dict) else None,
-            },
-            indent=2,
-        )
+    # details = scraper.get_states()
+    # details = scraper.get_districts(state_code='26')
+    # details = scraper.get_court_complexes(state_code='26', dist_code='7')
+    details = scraper.search_by_case_no(state_code='26', dist_code='7', court_complex_code='1260007', case_type="SC", case_no='308', year='2021')
+    
+    details =  scraper.fetch_cause_list(
+        state_code='26', dist_code='7', court_complex_code_full ='1260007@1,2,3,4@Y',  listing_date='04/04/2026', case_no='2',
+        case_type='MCD APPL', case_year='2025'
     )
+    print(details)
+    print(scraper._parse_case_details(details['html']))
+
+    
+    
+    print(details)
+    # print(
+    #     json.dumps(
+    #         {
+    #             "cino": details.get("cino") if isinstance(details, dict) else None,
+    #             "case_no": details.get("case_no") if isinstance(details, dict) else None,
+    #             "registration_no": details.get("registration_no") if isinstance(details, dict) else None,
+    #             "next_listing_date": details.get("next_listing_date") if isinstance(details, dict) else None,
+    #             "status": details.get("status") if isinstance(details, dict) else None,
+    #             "ia_details": details.get("ia_details") if isinstance(details, dict) else None,
+    #         },
+    #         indent=2,
+    #     )
+    # )
+
+

@@ -355,6 +355,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
             if not has_ia_signal and not re.search(r"\b(?:I\.?A\.?|IA|INTERLOCUTORY)\b", ia_number, re.IGNORECASE):
                 continue
 
+
             party_idx = indexes.get("party")
             filing_idx = indexes.get("filing_date")
             next_idx = indexes.get("next_date")
@@ -378,6 +379,8 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                     "raw_row": cells,
                 }
             )
+        
+
         return rows
 
     # Iterate through each "card" in the accordion structure
@@ -575,7 +578,9 @@ def nclat_search_by_case_no(
 
     session = _new_session()
     for attempt in range(8):
-        captcha = _solve_captcha(session)
+        print(session)
+        captcha = (_solve_captcha(session)).upper() # Captcha only accepts Capital Values
+        
         html = _ajax_post(
             session,
             {
@@ -588,6 +593,7 @@ def nclat_search_by_case_no(
                 "schema_name": schema,
             },
         )
+
         if "Captch Value is incorrect" in html:
             continue
         return _parse_search_results(html, location=schema)
@@ -690,8 +696,10 @@ def nclat_get_details(filing_no: str, bench: str | None = None) -> dict[str, Any
             "schema_name": schema,
         },
     )
+    
     if "Direct access not allowed" in html:
         return None
+    
     return _parse_details(html, location=schema, filing_no=filing_no.strip())
 
 
@@ -733,6 +741,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
     current_coram = None
     header_found = False
     stop_parsing = False
+    current_vc_link = None
     
     for page in doc:
         if stop_parsing:
@@ -787,6 +796,10 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
 
         for row in rows_data:
             row_text = " ".join(l["text"] for l in row)
+            vc_match = re.search(r'(https?://\S+)', row_text)
+            if vc_match:
+                current_vc_link = vc_match.group(1)
+                continue
             
             if "INSTRUCTIONS FOR" in row_text.upper():
                 stop_parsing = True
@@ -825,6 +838,7 @@ def nclat_parse_cause_list_pdf(pdf_content: bytes, court_name: Optional[str] = N
                     "court": full_court_name,
                     "court_name": full_court_name,
                     "coram_name": current_coram,
+                    "vc_link" : current_vc_link,
                 })
             
             if entries:
@@ -861,7 +875,11 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
     """
     Fetch and parse NCLAT cause list for a given date and bench.
     """
+
+    print(listing_date)
     date_str = listing_date.strftime("%Y-%m-%d")
+    print(date_str,type(date_str))
+    
     params = {
         "field_final_date_value": date_str,
         "field_final_date_value_1": date_str,
@@ -875,11 +893,20 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
         "User-Agent": DEFAULT_UA
     }
     
+
+
     resp = requests.get(CAUSE_LIST_URL, params=params, headers=headers, timeout=30)
+
     resp.raise_for_status()
+
     
     soup = BeautifulSoup(resp.text, "html.parser")
+
+
+
+    
     table = soup.find("table", {"class": "cols-5"})
+
     if not table:
         logger.info(f"No cause list found for {date_str} and bench {bench}")
         return []
@@ -909,7 +936,7 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
             all_entries.extend(entries)
         except Exception as e:
             logger.error(f"Error parsing PDF {link_info['url']}: {e}")
-            
+
     return all_entries
 
 
@@ -952,3 +979,10 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
             continue
 
     return matched
+
+if __name__ == '__main__':
+    print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'1076'))
+
+    # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
+
+    # print(nclat_get_details('9910100052102020', 'delhi'))
