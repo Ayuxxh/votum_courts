@@ -1,5 +1,4 @@
 import hashlib
-from io import BytesIO
 import json
 import logging
 import os
@@ -346,13 +345,8 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
     entries: list[dict] = []
     current_coram = ""
     current_vc_link = ""
-
-    response = requests.get(pdf_path, verify=False)  # Fix: Open pdf via link
-    response.raise_for_status()
-
-    pdf_bytes = BytesIO(response.content)
     
-    with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+    with fitz.open(pdf_path) as doc:
         open_entry = None
         
         for page_idx in range(doc.page_count):
@@ -833,10 +827,12 @@ if __name__ == '__main__':
     # Case Type 16 is "Company Petition IB(IBC)"
     
     # print(nclt_search_by_case_number('ahmedabad', '4', '1', '2025')) 
-    # a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'), indent=4)) # Use a valid filing number found from search
+    # a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
     # with open('nclt_details.json', 'w') as f:
     #     f.write(a)
-    pass
-    # lists = fetch_cause_list_pdfs('112', datetime.strptime('02/04/2026',"%d/%m/%Y"))
-    # a = parse_cause_list_pdf(lists[0])
-    # print(a)
+
+    a = fetch_cause_list_pdfs('111', datetime.strptime('02/04/2026', "%d/%m/%Y"))
+
+    a= parse_cause_list_pdf(r'D:\Projects\2026\April 26\votum_courts\02.04.2026.pdf')
+    print(a)
+    # pass
