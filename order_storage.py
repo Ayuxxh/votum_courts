@@ -115,10 +115,14 @@ def _upload_order_document(
 
     supabase_url = _resolve_supabase_url()
     if supabase_url and order_url.startswith(supabase_url):
+        storage_path: Optional[str] = None
+        prefix = f"{supabase_url}/storage/v1/object/public/{ORDER_STORAGE_BUCKET}/"
+        if order_url.startswith(prefix):
+            storage_path = order_url[len(prefix):]
         return {
             "public_url": order_url,
             "storage_bucket": ORDER_STORAGE_BUCKET,
-            "storage_path": None,
+            "storage_path": storage_path,
             "source_url": order_url,
         }
 
