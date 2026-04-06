@@ -1,0 +1,99 @@
+{
+    "cin_no": "SCIN010056992026",
+    "registration_no": null,
+    "filing_no": "5699/2026",
+    "case_no": "SLP(C) No. 005585 -  / 2026",
+    "registration_date": "06-02-2026",
+    "filing_date": "28-01-2026 09:18 PM",
+    "first_listing_date": "09-02-2026)",
+    "next_listing_date": "17-04-2026",
+    "last_listing_date": "13-02-2026",
+    "decision_date": null,
+    "court_no": null,
+    "disposal_nature": "pending",
+    "purpose_next": "Pending[] (Motion Hearing [AFTER NOTICE (FOR ADMISSION) - CIVIL CASES]) Notice Returnable (D:0,W:6,M:0)-Ord dt:13-02-2026",
+    "case_type": "4301-Service Laws : Appointment, Compassionate appointment, temporary appointment, recruitment,probation and confirmation, suspension, reduction in rank, termination, dismissal, removal, retirement, disciplinary proceedings against employees",
+    "pet_name": [
+        "1 MOHAMMAD RAFIQ",
+        "2 AYISH AHMED YATOO"
+    ],
+    "res_name": [
+        "1 UT OF J AND K",
+        "2 DIRECTOR GENERAL OF POLICE, JANDK",
+        "3 SUPERINTENDENT OF POLICE, KULGAM",
+        "4 ADDITIONAL SUPERINTENDENT OF POLICE, KULGAM"
+    ],
+    "advocates": "Petitioner:\nSIDDHARTH JAIN",
+    "judges": "HON'BLE MR. JUSTICE MANOJ MISRA, HON'BLE MR. JUSTICE N.V. ANJARIA",
+    "bench_name": null,
+    "court_name": null,
+    "history": null,
+    "acts": [
+        "4301-Service Laws : Appointment, Compassionate appointment, temporary appointment, recruitment,probation and confirmation, suspension, reduction in rank, termination, dismissal, removal, retirement, disciplinary proceedings against employees"
+    ],
+    "orders": [
+        {
+            "date": "2026-02-13",
+            "description": "ROP - of Main Case",
+            "document_url": "https://api.sci.gov.in/supremecourt/2026/5699/5699_2026_14_20_68647_Order_13-Feb-2026.pdf"
+        }
+    ],
+    "ia_details": [
+        {
+            "ia_no": "41669/2026",
+            "ia_number": "41669/2026",
+            "description": null,
+            "party": null,
+            "filing_date": null,
+            "next_date": "13-02-2026",
+            "status": "Notice Returnable [D:0,W:6,M:0]",
+            "disposal_date": null,
+            "cin_no": null
+        }
+    ],
+    "listing_dates": [
+        {
+            "cl_date": "13-02-2026",
+            "misc_regular": "Misc.",
+            "stage": "[FRESH (FOR ADMISSION) - CIVIL CASES]",
+            "purpose": "FRESH",
+            "proposed_list_in": "Judge",
+            "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE N.V. ANJARIA",
+            "ia": "41669/2026",
+            "remarks": "Notice Returnable [D:0,W:6,M:0]",
+            "listed": "LISTED"
+        },
+        {
+            "cl_date": "13-02-2026",
+            "misc_regular": "Misc.",
+            "stage": "[FRESH (FOR ADMISSION) - CIVIL CASES]",
+            "purpose": "FRESH",
+            "proposed_list_in": "Judge",
+            "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE N.V. ANJARIA",
+            "ia": "41669/2026",
+            "remarks": "Notice Returnable [D:0,W:6,M:0]",
+            "listed": "LISTED"
+        }
+    ],
+    "additional_info": {
+        "office_reports": []
+    },
+    "original_json": {
+        "case_details": {
+            "success": true,
+            "data": "           \n    <div class='distTableContent'>\n            <table class=\"caseDetailsTable no-responsive\">\n                                <tbody class=\"\" data-fetched=\"true\">\n                <tr>\n                    <td style=\"width:20%\">Diary Number</td>\n                    <td>\n                        <font color='blue' style='font-weight:bold;'>5699/2026</font> Filed on 28-01-2026 09:18 PM                                                    [<font style='font-weight:bold;'> SECTION: </font><font color='red' style='font-weight:bold;'>XI-B</font>]\n                                                <div class=\"push-right caseStatus p\" >PENDING</div>\n                    </td>\n                </tr>\n                <tr>\n                    <td>Case Number</td>\n                    <td>SLP(C) No. 005585 -  / 2026 Registered on 06-02-2026<br>(Verified On 09-02-2026)</td>\n                </tr>\n                <tr>\n                    <td>CNR Number</td>\n                    <td>SCIN010056992026</td>\n                </tr>\n                <tr>\n                    <td>Present/Last Listed On</td>\n                    <td><font color='blue' style='font-weight:bold;'>13-02-2026 [<font color='green' style='font-weight:bold;'>HON'BLE MR. JUSTICE MANOJ MISRAand HON'BLE MR. JUSTICE N.V. ANJARIA</font>]</b></td>\n                </tr>\n                <tr>\n                    <td>Status/Stage</td>\n                    <td><font color='red'>Pending[] (Motion Hearing [AFTER NOTICE (FOR ADMISSION) - CIVIL CASES]) Notice Returnable (D:0,W:6,M:0)-Ord dt:13-02-2026 </font></td>\n                </tr>\n                                <tr>\n                    <td>Tentatively case may be listed on (likely to be listed on)</td>\n                    <td><font color='blue'>17-04-2026</font> (Computer generated)</td>\n                </tr>\n                                                                <tr>\n                    <td>Category</td>\n                    <td>4301-Service Laws : Appointment, Compassionate appointment, temporary appointment, recruitment,probation and confirmation, suspension, reduction in rank, termination, dismissal, removal, retirement, disciplinary proceedings against employees</td>\n                </tr>\n                                <tr>\n                    <td>Petitioner(s)</td>\n                    <td>1 MOHAMMAD RAFIQ<br>2 AYISH AHMED YATOO<br></td>\n                </tr>\n                <tr>\n                    <td>Respondent(s)</td>\n                    <td>1 UT OF J AND K<br>2 DIRECTOR GENERAL OF POLICE, JANDK<br>3 SUPERINTENDENT OF POLICE, KULGAM<br>4 ADDITIONAL SUPERINTENDENT OF POLICE, KULGAM<br></td>\n                </tr>\n                <tr>\n                    <td>Petitioner Advocate(s)</td>\n                    <td>SIDDHARTH JAIN<br></td>\n                </tr>\n                <tr>\n                    <td>Respondent Advocate(s)</td>\n                    <td></td>\n                </tr>\n                                                                                                </tbody>\n            </table>\n                    </div>\n"
+        },
+        "listing_dates": {
+            "success": true,
+            "data": "<tr>\n    <td class=\"over-x-scroll\">\n        <table>\n            <thead>\n            <tr>\n                <td>CL Date</td>\n                <td>Misc./Regular</td>\n                <td>Stage</td>\n                <td>Purpose</td>\n                <td>Proposed/ List in</td>\n                <td>Judges</td>\n                <td>IA</td>\n                <td>Remarks</td>\n                <td>Listed</td>\n            </tr>\n            </thead>\n            <tbody>\n                            <tr>\n                    <td>13-02-2026</td>\n                    <td>Misc.</td>\n                    <td>[FRESH (FOR ADMISSION) - CIVIL CASES]</td>\n                    <td>FRESH</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE N.V. ANJARIA</td>\n                    <td>41669/2026</td>\n                    <td>Notice Returnable [D:0,W:6,M:0]</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>13-02-2026</td>\n                    <td>Misc.</td>\n                    <td>[FRESH (FOR ADMISSION) - CIVIL CASES]</td>\n                    <td>FRESH</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE N.V. ANJARIA</td>\n                    <td>41669/2026</td>\n                    <td>Notice Returnable [D:0,W:6,M:0]</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                        </tbody>\n        </table>\n    </td>\n</tr>"
+        },
+        "judgement_orders": {
+            "success": true,
+            "data": "<tr>\n    <td><strong>Date of Judgment/Order</strong></td>\n</tr>\n    <tr>\n        <td>\n            <a target=\"_blank\" href=\"https://api.sci.gov.in/supremecourt/2026/5699/5699_2026_14_20_68647_Order_13-Feb-2026.pdf\"> 13-02-2026 </a>\n            &nbsp&nbsp [ROP - of Main Case ]\n        </td>\n    </tr>\n"
+        },
+        "office_report": {
+            "success": false,
+            "data": "{\"message\":\"No records found\"}"
+        }
+    }
+}
