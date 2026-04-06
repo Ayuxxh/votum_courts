@@ -550,18 +550,18 @@ class EcourtsWebScraper:
         response.raise_for_status()
         return response.content
 
+
+## Needs registration number, output as json the matched case
     def fetch_cause_list(
         self,
         state_code: str,
         dist_code: str,
         court_complex_code_full: str,
         listing_date: str,
-        case_type: str,
-        case_no :str,
-        case_year: str,
+        registration_no: str , 
         est_code: str = "",
 
-        registration_no: Optional[str] = None, 
+   
 
     ) -> Dict[str, Any]:
         """
@@ -584,6 +584,8 @@ class EcourtsWebScraper:
 
         response_payloads: List[Any] = []
         pdf_links: List[str] = []
+
+        case_match = _case_tail(registration_no)
 
         # Browser-observed flow:
         # casestatus/set_data -> cause_list/fillCauseList -> cause_list/submitCauseList
@@ -631,9 +633,12 @@ class EcourtsWebScraper:
         )
 
         selprevdays = self._selprevdays_for_date(formatted_date)
+
+        matched_entries = []
         for court in court_options:
             for cicri in ("civ", "cri"):
                 for _ in range(4):
+                    print(_)
                     captcha_text = self._solve_captcha_text()
                     if not captcha_text:
                         continue
@@ -654,7 +659,109 @@ class EcourtsWebScraper:
                                 "selprevdays": '1', # Error if any other number except 1
                             },   
                         )
-                    except Exception:
+
+                        if submit_resp.get('status') ==  1 :
+
+                           
+
+
+
+                            soup = BeautifulSoup(submit_resp['case_data'], 'html.parser')
+
+                            vc_link = None
+                            corum = None
+                            item_no = None
+                            next_hearing_date = None
+
+
+                            # saving corum and Vc link incase match is found later
+
+                            center_div = soup.find('center')
+                            if center_div:
+                                another_center_div = center_div.find('center')
+                                if another_center_div:
+                                    corum = another_center_div( "span", string=lambda x: x and "In the court of" in x)
+                                    designation = another_center_div.find_all('span')
+                                    if len(designation) >= 3:
+
+                                        corum = corum[0].get_text(" ", strip=True).split(":")[-1].strip() + " " + (designation[-1].text).strip()
+
+
+                                vc_span =center_div.find_all('span')
+                                if vc_span:
+                                    vc_link = (vc_span[-1].text).split('url :')[-1].strip() 
+                                    link_is_valid = bool(re.match(r'https?://[^\s]+', vc_link))
+                                    if not link_is_valid:
+                                        vc_link = None
+
+
+
+                        
+                            # Checking if  case no and year matches
+                            
+                            table = soup.find('tbody')
+                            if table:
+                                tables= table.find_all('tr')
+                                for tr in tables:
+                                    tds = tr.find_all('td')
+                                    if len(tds) >= 3:
+                                        item_no = (tds[0].text).strip()
+                                        text = list(tds[1].stripped_strings)
+
+                                        details = tds[1].find('a').get('onclick')
+                                        args_str = re.search(r"viewHistory\((.*)\)", details).group(1)
+                                        p = list(ast.literal_eval(f"({args_str})"))
+                                        print(p)
+
+                                        if len(text) >= 3 :
+                                            next_hearing_date =  datetime.strptime((text[2]).split('\xa0')[-1], '%d-%m-%Y' )   
+                                        if _case_tail(text[1].strip()) == case_match:
+                                            html_response = self._post(
+                                                        "home/viewHistory",
+                                                        {
+                                                            "state_code": state_code,
+                                                            "dist_code": dist_code,
+                                                            "court_complex_code": complex_code,
+                                                            "est_code": parts[1] if len(parts) > 1 else selected_est_code,
+                                                            "search_flag": "CLcauselist",
+                                                            "search_by" : "CauseList",
+                                                            "case_no" : p[0],
+                                                            "cino" : p[1],
+                                                            "court_code":[2]
+                                                        },
+                                                )
+                                            print('case_match found!')
+
+                                            parsed = self._parse_case_details(html_response)
+
+                                            matched_entry = {
+                                                "matched_entries": [
+                                                    {
+                                                        "status": "success",
+                                                        "case_no": parsed.get('case_no'),
+                                                        "case_nos": parsed.get('case_nos'),
+                                                        "listing_date": formatted_date,
+                                                        "item_no": item_no,
+                                                        "vc_link": vc_link,
+                                                        "page_no": '1',
+                                                        "coram": corum,
+                                                        "next_date": next_hearing_date.strftime("%Y-%m-%d") if next_hearing_date else None,
+                                                        "case_details": parsed,
+                                                        # "text": html_response.text
+                                                    }
+                                                ]
+                                            }
+
+
+
+                                            return matched_entry
+
+                            print('success_request')
+                            break
+                
+                            
+                    except Exception as e:
+                        print("ERROR HERE:", e)
                         logger.debug(
                             "Cause-list submit failed for court=%s cicri=%s",
                             court.get("value"),
@@ -662,97 +769,23 @@ class EcourtsWebScraper:
                             exc_info=True,
                         )
                         continue
+
+            return []
+
+
                     
-                    case_match =  f'{case_type.strip()}/{case_no.strip()}/{case_year.strip()}'
 
 
-
-                    soup = BeautifulSoup(submit_resp['case_data'], 'html.parser')
-
-                    vc_link = None
-                    corum = None
-                    item_no = None
-                    next_hearing_date = None
-
-
-                    # saving corum and Vc link incase match is found later
-
-                    center_div = soup.find('center')
-                    if center_div:
-                        another_center_div = center_div.find('center')
-                        if another_center_div:
-                            corum = another_center_div( "span", string=lambda x: x and "In the court of" in x)
-                            designation = another_center_div.find_all('span')
-                            if len(designation) >= 3:
-
-                                corum = corum[0].get_text(" ", strip=True).split(":")[-1].strip() + " " + (designation[-1].text).strip()
-
-
-                        vc_span =center_div.find_all('span')
-                        if vc_span:
-                            vc_link = (vc_span[-1].text).split('url :')[-1].strip() 
-                            link_is_valid = bool(re.match(r'https?://[^\s]+', vc_link))
-                            if not link_is_valid:
-                                vc_link = None
-
-
-
-
-                
-                    # Checking if  case no and year matches
                     
-                    table = soup.find('tbody')
-                    if table:
-                        tables= table.find_all('tr')
-                        for tr in tables:
-                            tds = tr.find_all('td')
-                            if len(tds) >= 3:
-                                item_no = (tds[0].text).strip()
-                                text = list(tds[1].stripped_strings)
-
-                                details = tds[1].find('a').get('onclick')
-                                args_str = re.search(r"viewHistory\((.*)\)", details).group(1)
-                                p = list(ast.literal_eval(f"({args_str})"))
-                                print(p)
-
-                                if len(text) >= 2 :
-                                    next_hearing_date =  datetime.strptime((text[2]).split('\xa0')[-1], '%d-%m-%Y' )   
-                                if text[1].strip() == case_match:
-                                    html_response = self._post(
-                                                "home/viewHistory",
-                                                {
-                                                    "state_code": state_code,
-                                                    "dist_code": dist_code,
-                                                    "court_complex_code": complex_code,
-                                                    "est_code": parts[1] if len(parts) > 1 else selected_est_code,
-                                                    "search_flag": "CLcauselist",
-                                                    "search_by" : "CauseList",
-                                                    "case_no" : p[0],
-                                                    "cino" : p[1],
-                                                    "court_code":[2]
-                                                },
-                                        )
-                                    print('case_match found!')
-                                   
-
-                                    return {
-                                        "status": "success",
-                                        "listing_date": formatted_date,
-                                        "item_no": item_no,
-                                        "vc_link": vc_link,
-                                        "coram": corum,
-                                        "next_date": next_hearing_date.strftime("%Y-%m-%d"),
-                                        "html" : html_response
-                                    }
-
+                  
 
                             
 
 
-                    """
+    """
 
-                    Cause List is not pdf, Hence. Parsing Html instead
-                    """    
+    Cause List is not pdf, Hence. Parsing Html instead
+    """    
                     
         #             response_payloads.append(submit_resp)
 
@@ -1699,18 +1732,23 @@ if __name__ == "__main__":
     # details = scraper.get_states()
     # details = scraper.get_districts(state_code='26')
     # details = scraper.get_court_complexes(state_code='26', dist_code='7')
-    details = scraper.search_by_case_no(state_code='26', dist_code='7', court_complex_code='1260007', case_type="SC", case_no='308', year='2021')
+    # details = scraper.search_by_case_no(state_code='26', dist_code='7', court_complex_code='1260007', case_type="SC", case_no='308', year='2021')
     
-    details =  scraper.fetch_cause_list(
-        state_code='26', dist_code='7', court_complex_code_full ='1260007@1,2,3,4@Y',  listing_date='04/04/2026', case_no='2',
-        case_type='MCD APPL', case_year='2025'
+
+    print(_case_tail('CS/448/2025'))
+    print(_case_tail('448/2025'))
+
+    a =  scraper.fetch_cause_list(
+        state_code='26', dist_code='7', court_complex_code_full ='1260007@1,2,3,4@Y',  listing_date='04/06/2026', registration_no='PPA/27/2024'
     )
-    print(details)
-    print(scraper._parse_case_details(details['html']))
+
 
     
-    
-    print(details)
+    a= json.dumps(a, indent=4)
+    with open('dc_services.json', 'w') as f:
+        f.write(a)
+
+    print(a)
     # print(
     #     json.dumps(
     #         {
