@@ -981,7 +981,14 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     return matched
 
 if __name__ == '__main__':
-    print(nclat_find_case_in_causelist(datetime.strptime('02/04/2026', "%d/%m/%Y"),'1076'))
+    import json
+    a= nclat_find_case_in_causelist(datetime.strptime('06/04/2026', "%d/%m/%Y"),'965')
+    a = json.dumps(a, indent=4)# Use a valid filing number found from search
+    with open('nclat_find_case_causelist_.json', 'w') as f:
+        f.write(a)
+
+    print(a)
+    
 
     # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
 

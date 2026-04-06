@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from .order_storage import \
+from order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
@@ -549,12 +549,19 @@ def find_case_entries(pdf_path: str, case_no: str) -> list[dict]:
     """
     target_tail = _case_tail(case_no)
     parsed = parse_cause_list_pdf(pdf_path)
+
+    print(target_tail)
     if not target_tail:
         return parsed
         
     matched = []
     for entry in parsed:
         tails = [_case_tail(cn) for cn in entry.get("case_nos", [])]
+
+        for case_n in entry.get('case_nos'):
+            case = _case_tail(case_n)
+            print(case, '|', target_tail)
+            print('found')
         if target_tail in tails:
             matched.append(entry)
     return matched
@@ -859,15 +866,26 @@ if __name__ == '__main__':
     a = ('ahmedabad', '4', '1', '2025')
 
 
+    a = fetch_cause_list_pdfs('kolkata', datetime.strptime('06/04/2026', "%d/%m/%Y"))
+    a = json.dumps(a, indent=4)
+    with open('nclt_fetch_cause_list.json', 'w') as f:
+        f.write(a)
 
     
-    a = json.dumps(nclt_get_details('ahmedabad', '2401105033432025'), indent=4)# Use a valid filing number found from search
+    a = json.dumps(nclt_get_details('kolkata', '1908134021072024'), indent=4)# Use a valid filing number found from search
     with open('nclt_get_details.json', 'w') as f:
         f.write(a)
 
-    # a = fetch_cause_list_pdfs('111', datetime.strptime('02/04/2026', "%d/%m/%Y"))
+    a = fetch_cause_list_pdfs('111', datetime.strptime('02/04/2026', "%d/%m/%Y"))
 
-    a = parse_cause_list_pdf(r'D:\Projects\2026\April 26\votum_courts\02.04.2026.pdf')
+    a = find_case_entries(r'D:\Projects\2026\April 26\votum_courts\kol.pdf', '301/2024') ## case/year format only!!
+    a = json.dumps(a, indent=4)
+    with open('find_case_entries.json', 'w') as f:
+        f.write(a)
+    # print(a)
+    # pass
+
+    a = parse_cause_list_pdf(r'D:\Projects\2026\April 26\votum_courts\kol.pdf')
     a = json.dumps(a, indent=4)
     with open('parse_cause_list_pdf.json', 'w') as f:
         f.write(a)
