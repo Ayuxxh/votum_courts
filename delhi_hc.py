@@ -121,14 +121,34 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     text = "\n".join(raw_lines).strip()
     entry_hash_src = f"{entry.get('item_no')}|{entry.get('page_no')}|{text}"
     entry_hash = sha256(entry_hash_src.encode("utf-8")).hexdigest()
+    # return {
+    #     "item_no": entry.get("item_no"),
+    #     "page_no": entry.get("page_no"),
+    #     "case_no": case_no,
+    #     "case_nos": case_numbers,
+    #     "text": text,
+    #     "entry_hash": entry_hash,
+    # }
     return {
-        "item_no": entry.get("item_no"),
-        "page_no": entry.get("page_no"),
-        "case_no": case_no,
-        "case_nos": case_numbers,
-        "text": text,
-        "entry_hash": entry_hash,
-    }
+    "item_no": entry.get("item_no"),
+    "page_no": entry.get("page_no"),
+    "case_no": case_no,
+    "case_nos":[
+        case_numbers
+    ],
+    "parties":[
+
+    ],
+    "petitioner":"",
+    "respondent":"",
+    "party_names":"",
+    "advocates":"",
+    "court_name":entry.get('coram'),
+    "vc_link":entry.get('vc_link'),
+    "text":text,
+    "entry_hash":entry_hash
+}
+
 
 
 def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
@@ -139,8 +159,42 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
     with fitz.open(pdf_path) as doc:
         open_entry: Optional[Dict[str, Any]] = None
 
+
+        vc_link = ''
+        coram = ''
         for page_idx in range(doc.page_count):
             page = doc[page_idx]
+            page_txt = page.get_text()
+
+
+            domain = "dhcvirtualcourt.webex.com"
+
+            pattern = rf"https?://[^\s]*{re.escape(domain)}[^\s]*"
+
+            match = re.search(pattern, page_txt)
+
+            if match:
+                match = match.group(0)
+
+
+            pattern = r"(HON\S*BLE\s+(?:MR|MS|DR)\.?\s+JUSTICE\s+[A-Z\s\.]+?)(?=\s+HON|\n|$)"
+
+            matches = re.findall(pattern, page_txt)
+
+            # clean up formatting
+            judges = [" ".join(m.split()) for m in matches]
+
+
+
+            for judge in judges:
+                coram = coram + ', ' + judge
+
+
+
+            if "HON'BLE" in page_txt:
+                if match:
+                    vc_link = match
+        
             lines: List[Dict[str, Any]] = []
 
             for block in page.get_text("dict").get("blocks", []):
@@ -152,6 +206,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                         continue
                     line_text = "".join(span.get("text", "") for span in line.get("spans", []))
                     cleaned = _clean_pdf_line(line_text)
+
                     if not cleaned:
                         continue
                     lines.append({"x": float(x0), "y": float(y0), "text": cleaned})
@@ -185,6 +240,8 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     "item_no": start["text"],
                     "page_no": page_idx + 1,
                     "raw_lines": [],
+                    "vc_link" : vc_link,
+                    "coram" :coram ,
                 }
                 for line in lines:
                     if y_start <= line["y"] < y_end:
@@ -195,9 +252,12 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                 else:
                     open_entry = segment
 
+            
+   
+
         if open_entry:
             entries.append(_parse_single_cause_list_entry(open_entry))
-
+    
     return [entry for entry in entries if entry.get("case_nos")]
 
 
@@ -208,19 +268,25 @@ def find_case_entries(pdf_path: str, case_no: str) -> List[Dict[str, Any]]:
     """
     target_tail = _case_tail(case_no)
     parsed = parse_cause_list_pdf(pdf_path)
+
     
     if not target_tail:
         return parsed
 
     matched_entries: List[Dict[str, Any]] = []
     for entry in parsed:
-        case_nos = entry.get("case_nos") or []
-        tails = {_case_tail(value) for value in case_nos if value}
-        if target_tail in tails:
-            # print(target_tail, tails)
-            # print("*" * 100)
-            # SystemExit()
+        case_nos = entry.get("case_no") or []
+        # tails = {_case_tail(value) for value in case_nos if value}
+
+
+        if target_tail in _case_tail(case_nos):
+            # print(target_tail, _case_tail(case_nos), 'hello')
+
             matched_entries.append(entry)
+
+
+
+
 
     return matched_entries
 
@@ -277,7 +343,7 @@ def fetch_cause_list_pdfs(
     all_page_urls: List[str] = []
 
     for page_idx in range(max_pages):
-        suffix = f"?page={page_idx}" if page_idx else ""
+        suffix = f"?page={str(page_idx)}" if page_idx else ""
         all_page_urls.append(f"{CAUSE_LIST_URL}{suffix}")
 
     found: List[Dict[str, Any]] = []

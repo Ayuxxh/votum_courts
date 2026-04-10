@@ -33,7 +33,7 @@ SEARCH_API_URL = f"{BASE_URL}/get-case-status-by-caseno-new"
 # Cause List Constants
 OLD_BASE_URL = "https://bombayhighcourt.nic.in"
 CAUSE_LIST_PDF_PAGE = f"{OLD_BASE_URL}/netbdpdf.php"
-CAPTCHA_URL = f"{OLD_BASE_URL}/captcha.php"
+CAPTCHA_URL = f"{OLD_BASE_URL}/bhccaptcha/captcha.php"
 
 CASE_NO_PATTERN = re.compile(r"\b(?:[A-Z]{1,6}/)?[A-Z]{1,10}/\d{1,7}/\d{4}\b")
 
@@ -56,7 +56,10 @@ class BombayHCService:
         self.session = requests.Session()
         self.session.verify = False
         self.session.headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0',
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive"
         }
         self.ocr = ddddocr.DdddOcr(show_ad=False)
         self.case_types_path = Path(__file__).with_name("bombay_case_types.json")
@@ -109,21 +112,32 @@ class BombayHCService:
     def solve_captcha(self) -> Optional[str]:
         """Download and solve CAPTCHA for the old site."""
         try:
-            # First visit the page to get tokens
+                # First visit the page to get tokens
+            resp = self.session.get(OLD_BASE_URL, timeout=30)
             resp = self.session.get(CAUSE_LIST_PDF_PAGE, timeout=30)
             soup = BeautifulSoup(resp.content, 'html.parser')
+
             csrf_name_tag = soup.find('input', {'name': 'CSRFName'})
+
             if not csrf_name_tag:
                 return None
             
             csrf_name = csrf_name_tag.get('value')
             csrf_token = soup.find('input', {'name': 'CSRFToken'}).get('value')
+
+            captcha_text = soup.find("img", {"id": "captchaimg"})
+            captcha_text = captcha_text.get("src").split( 'rand=')[-1].strip() if captcha_text else ""
+
             
-            # Get Captcha
-            resp_cap = self.session.get(CAPTCHA_URL, timeout=10)
-            if resp_cap.status_code == 200:
-                captcha_text = self.ocr.classification(resp_cap.content)
-                return captcha_text, csrf_name, csrf_token
+
+                    # Get Captcha
+            # resp_cap = self.session.get(CAPTCHA_URL, timeout=10)
+
+            # if resp_cap.status_code == 200:
+            #     captcha_text = self.ocr.classification(resp_cap.content)
+            #     print(captcha_text)
+            breakpoint()
+            return captcha_text, csrf_name, csrf_token
         except Exception as e:
             logger.error(f"Error solving CAPTCHA: {e}")
         return None
@@ -133,7 +147,10 @@ class BombayHCService:
         Fetch cause list PDF for a given date and bench.
         Bench codes: B=Bombay, N=Nagpur, A=Aurangabad, G=Goa, K=Kolhapur
         """
+        
         captcha_res = self.solve_captcha()
+        
+        
         if not captcha_res:
             raise ValueError("Failed to solve CAPTCHA or get tokens")
         
@@ -143,15 +160,22 @@ class BombayHCService:
             'CSRFName': csrf_name,
             'CSRFToken': csrf_token,
             'm_juris': bench,
-            'm_causedt': listing_date.strftime("%d/%m/%Y"),
+            'm_causedt': str(listing_date.strftime("%d-%m-%Y")),
             'captcha_code': captcha_text,
             'captchaflg': '',
             'usubmit': 'GO' # Trigger the submission
         }
+
+
+
         
         # The GO button calls go('usubmit')
         # We might need to handle redirects if the PDF is served via another page
-        resp = self.session.post(CAUSE_LIST_PDF_PAGE, data=payload, timeout=60)
+        resp = self.session.post(CAUSE_LIST_PDF_PAGE, data=payload, headers={"Referer": CAUSE_LIST_PDF_PAGE}, timeout=60)
+
+        print( resp)
+
+        breakpoint()
         resp.raise_for_status()
         
         if 'pdf' in resp.headers.get('Content-Type', '').lower():
@@ -562,7 +586,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     # Test Case Details
     # print("Testing AS...")
-    # print(json.dumps(get_bombay_case_details("1", "1", "2025", side="1"), indent=2, default=str))
+    print(json.dumps(get_bombay_case_details("1", "1", "2025", side="1"), indent=2, default=str))
     
     # Test Cause List
     print("Testing Cause List Fetching...")

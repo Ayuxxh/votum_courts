@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
 
-from order_storage import \
+from .order_storage import \
     persist_orders_to_storage as _persist_orders_to_storage
 
 logger = logging.getLogger(__name__)
@@ -558,10 +558,8 @@ def find_case_entries(pdf_path: str, case_no: str) -> list[dict]:
     for entry in parsed:
         tails = [_case_tail(cn) for cn in entry.get("case_nos", [])]
 
-        for case_n in entry.get('case_nos'):
-            case = _case_tail(case_n)
-            print(case, '|', target_tail)
-            print('found')
+
+
         if target_tail in tails:
             matched.append(entry)
     return matched

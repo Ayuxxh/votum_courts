@@ -424,7 +424,7 @@ def find_case_entries(pdf_path: str, registration_no: str) -> List[Dict[str, Any
     for entry in parsed:
         case_nos = entry.get("case_nos") or []
         tails = {_case_tail(case_no) for case_no in case_nos if case_no}
-        print(tails)
+        
         if target_tail in tails:
             matched_entries.append(entry)
     return matched_entries

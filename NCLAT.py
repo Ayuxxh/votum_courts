@@ -982,14 +982,20 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
 
 if __name__ == '__main__':
     import json
-    a= nclat_find_case_in_causelist(datetime.strptime('06/04/2026', "%d/%m/%Y"),'965')
-    a = json.dumps(a, indent=4)# Use a valid filing number found from search
-    with open('nclat_find_case_causelist_.json', 'w') as f:
-        f.write(a)
+    # a= nclat_find_case_in_causelist(datetime.strptime('06/04/2026', "%d/%m/%Y"),'965')
+    # a = json.dumps(a, indent=4)# Use a valid filing number found from search
+    # with open('nclat_find_case_causelist_.json', 'w') as f:
+    #     f.write(a)
 
-    print(a)
+    # print(a)
     
 
-    # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
+    a = nclat_search_by_case_no('delhi','35', '121', '2026')
+
+    a = json.dumps(a, indent=4)# Use a valid filing number found from search
+
+    print(a)
+    with open('nclat_test_.json', 'w') as f:
+        f.write(a)
 
     # print(nclat_get_details('9910100052102020', 'delhi'))

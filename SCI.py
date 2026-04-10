@@ -231,9 +231,7 @@ def init_captcha(max_attempts: int = 3):
     for attempt in range(1, max_attempts + 1):
         token_page = _session_get(TOKEN_URL)
         token_page_text = token_page.text
-        # print('='*20)
-        # print(token_page_text)
-        # print('='*20)
+
         captcha_id = token_page_text.split('name="scid" value="')[1].split('"')[0]
         captcha_image = _session_get(CAPTCHA_URL + captcha_id).content
         question = ocr.classification(captcha_image)
@@ -640,7 +638,7 @@ def sci_get_details(diary_no, diary_year):
             m = re.search(r"Registered on\s*(\d{2}-\d{2}-\d{4})", case_info or "")
             if m:
                 registration_date = m.group(1)
-                print("reg" ,registration_date)
+
 
         verified_on = None
         if case_info and "Verified On" in case_info:
