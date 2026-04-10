@@ -31,9 +31,8 @@ CASE_TYPE_URL = f"{BASE_URL}/get-case-types-new"
 SEARCH_API_URL = f"{BASE_URL}/get-case-status-by-caseno-new"
 
 # Cause List Constants
-OLD_BASE_URL = "https://bombayhighcourt.nic.in"
-CAUSE_LIST_PDF_PAGE = f"{OLD_BASE_URL}/netbdpdf.php"
-CAPTCHA_URL = f"{OLD_BASE_URL}/captcha.php"
+CAUSE_LIST_FINAL_URL = f"{BASE_URL}/causelistFinal"
+CAUSE_LIST_DATA_URL = f"{BASE_URL}/causelist/get-data"
 
 CASE_NO_PATTERN = re.compile(r"\b(?:[A-Z]{1,6}/)?[A-Z]{1,10}/\d{1,7}/\d{4}\b")
 
@@ -106,68 +105,105 @@ class BombayHCService:
             logger.error(f"Failed to refresh session: {e}")
             raise
 
-    def solve_captcha(self) -> Optional[str]:
-        """Download and solve CAPTCHA for the old site."""
+    def _get_causelist_tokens(self) -> Dict[str, str]:
+        """Visit causelistFinal page to get tokens."""
         try:
-            # First visit the page to get tokens
-            resp = self.session.get(CAUSE_LIST_PDF_PAGE, timeout=30)
+            resp = self.session.get(CAUSE_LIST_FINAL_URL, timeout=30)
+            resp.raise_for_status()
             soup = BeautifulSoup(resp.content, 'html.parser')
-            csrf_name_tag = soup.find('input', {'name': 'CSRFName'})
-            if not csrf_name_tag:
-                return None
-            
-            csrf_name = csrf_name_tag.get('value')
-            csrf_token = soup.find('input', {'name': 'CSRFToken'}).get('value')
-            
-            # Get Captcha
-            resp_cap = self.session.get(CAPTCHA_URL, timeout=10)
-            if resp_cap.status_code == 200:
-                captcha_text = self.ocr.classification(resp_cap.content)
-                return captcha_text, csrf_name, csrf_token
-        except Exception as e:
-            logger.error(f"Error solving CAPTCHA: {e}")
-        return None
 
-    def fetch_cause_list_pdf_bytes(self, listing_date: datetime, bench: str = "B") -> bytes:
+            token_meta = soup.find('meta', {'name': 'csrf-token'})
+            token = token_meta['content'] if token_meta else ''
+
+            form = soup.find('form', class_='pdfcauselist_form')
+            if not form:
+                # Fallback to causelist_form if pdfcauselist_form not found
+                form = soup.find('form', class_='causelist_form')
+
+            if not form:
+                raise ValueError("Could not find causelist form")
+
+            form_secret = form.find('input', {'name': 'form_secret'}).get('value')
+            chkpassphrase = (
+                form.find('input', {'name': 'chkpassphrase'}).get('value')
+                if form.find('input', {'name': 'chkpassphrase'})
+                else ""
+            )
+
+            return {
+                "_token": token,
+                "form_secret": form_secret,
+                "chkpassphrase": chkpassphrase,
+            }
+        except Exception as e:
+            logger.error(f"Failed to get causelist tokens: {e}")
+            raise
+
+    def fetch_cause_list_pdf_bytes(
+        self, listing_date: datetime, bench: str = "B"
+    ) -> bytes:
         """
-        Fetch cause list PDF for a given date and bench.
+        Fetch cause list PDF for a given date and bench using the new endpoint.
         Bench codes: B=Bombay, N=Nagpur, A=Aurangabad, G=Goa, K=Kolhapur
         """
-        captcha_res = self.solve_captcha()
-        if not captcha_res:
-            raise ValueError("Failed to solve CAPTCHA or get tokens")
-        
-        captcha_text, csrf_name, csrf_token = captcha_res
-        
-        payload = {
-            'CSRFName': csrf_name,
-            'CSRFToken': csrf_token,
-            'm_juris': bench,
-            'm_causedt': listing_date.strftime("%d/%m/%Y"),
-            'captcha_code': captcha_text,
-            'captchaflg': '',
-            'usubmit': 'GO' # Trigger the submission
+        tokens = self._get_causelist_tokens()
+
+        headers = {
+            "X-CSRF-TOKEN": tokens["_token"],
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": CAUSE_LIST_FINAL_URL,
         }
-        
-        # The GO button calls go('usubmit')
-        # We might need to handle redirects if the PDF is served via another page
-        resp = self.session.post(CAUSE_LIST_PDF_PAGE, data=payload, timeout=60)
+
+        payload = {
+            "_token": tokens["_token"],
+            "form_secret": tokens["form_secret"],
+            "chkpassphrase": tokens["chkpassphrase"],
+            "m_juris": bench,
+            "m_causedt": listing_date.strftime("%d-%m-%Y"),
+        }
+
+        resp = self.session.post(
+            CAUSE_LIST_DATA_URL, data=payload, headers=headers, timeout=60
+        )
         resp.raise_for_status()
-        
-        if 'pdf' in resp.headers.get('Content-Type', '').lower():
-            return resp.content
-        
-        # If not a PDF, check if it's a page with PDF links
-        soup = BeautifulSoup(resp.content, 'html.parser')
-        pdf_links = [a['href'] for a in soup.find_all('a', href=True) if '.pdf' in a['href'].lower()]
-        if pdf_links:
-            # Download the first PDF found
-            pdf_url = urljoin(OLD_BASE_URL, pdf_links[0])
-            resp_pdf = self.session.get(pdf_url, timeout=60)
-            resp_pdf.raise_for_status()
-            return resp_pdf.content
-            
-        raise ValueError(f"Failed to fetch cause list PDF. Response type: {resp.headers.get('Content-Type')}")
+
+        json_resp = resp.json()
+        if not json_resp.get("status"):
+            raise ValueError(
+                f"Failed to fetch cause list data: {json_resp.get('message')}"
+            )
+
+        html_page = json_resp.get("page")
+        if not html_page:
+            raise ValueError("No page content returned in cause list response")
+
+        soup = BeautifulSoup(html_page, "html.parser")
+        # Find PDF links
+        pdf_links = [
+            a["href"]
+            for a in soup.find_all("a", href=True)
+            if ".pdf" in a["href"].lower()
+        ]
+
+        if not pdf_links:
+            # Check for generic links that might lead to PDFs
+            pdf_links = [
+                a["href"]
+                for a in soup.find_all("a", href=True)
+                if "download" in a["href"].lower()
+            ]
+
+        if not pdf_links:
+            raise ValueError("No PDF links found in cause list result page")
+
+        # Download the first PDF
+        pdf_url = pdf_links[0]
+        if not pdf_url.startswith("http"):
+            pdf_url = urljoin(BASE_URL, pdf_url)
+
+        resp_pdf = self.session.get(pdf_url, timeout=60)
+        resp_pdf.raise_for_status()
+        return resp_pdf.content
 
     def parse_cause_list_pdf(self, pdf_path: str) -> List[Dict[str, Any]]:
         """
