@@ -1,9 +1,17 @@
 # Court Scraper Feature Readiness Matrix
 
-> **Last Updated**: 2026-03-22
+> **Last Updated**: 2026-04-10
 > **Analysis Coverage**: All court scrapers in `/backend/ecourts/` directory
 
 ## Recent Updates
+
+- **2026-04-10**: Major updates to **Bombay HC**, **DC Services**, and **Automation Engine**
+  - **Bombay HC**: Updated to new `causelistFinal` and `causelist/get-data` endpoints. Enhanced HTML parsing for case details, including robust IA extraction from `CaseNoApplCases` and CNR extraction from header text.
+  - **DC Services**: Significant enhancement to `EcourtsWebScraper`. Implemented full cause list fetch/parse cycle with CAPTCHA solving. Robust case details parsing now handles `ia_table` and `IAheading` for IA extraction.
+  - **Gujarat HC**: Improved `parse_cause_list_pdf` with widened column logic. Added `court_name` (judges) and `vc_link` extraction from cause lists. Details parsing now uses reliable section lookup instead of hardcoded indexes.
+  - **NCLT**: Enhanced `parse_cause_list_pdf` with better item number and Coram detection. Added `vc_link` extraction from cause lists. `nclt_get_details` now extracts IA details from `mainFilnowithIaNoList`.
+  - **Automation Engine**: `case_hearing_sync.py` now includes specialized Saturday/Sunday windows for Monday listing fetches and more robust next-listing-date change detection.
+  - **e-Jagriti**: Confirmed production readiness for NCDRC/SCDRC/DCDRC via direct JSON API integration. Extracts full hearing history and order paths.
 
 - **2026-03-22**: Expanded **DRT.py** readiness to cover **DRAT** and aligned frontend metadata strategy
   - Browser-inspected `https://drt.gov.in/#/casedetail` to capture the site’s real DRAT endpoint contract
@@ -35,11 +43,6 @@
   - **Overall Cause List Readiness**: Increased from 67% to 78%.
   - **Party Search**: Added dedicated tracking for party-name based searching (67% readiness).
 
-- **2026-02-15**: Added IA extraction for Delhi HC scraper (`delhi_hc.py`)
-  - New `fetch_ia_details()` method to fetch IA information
-  - New `_normalize_date()` helper for date parsing
-  - Integrated IA details into `_parse_results()` output
-
 ## Overview
 
 This document provides a comprehensive feature readiness assessment for all court scrapers in the Votum platform, covering the core features required for legal case management automation and reporting.
@@ -52,14 +55,14 @@ This document provides a comprehensive feature readiness assessment for all cour
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------- | ----------------------------------------- | -------------------------------------- | ------------------------------------------------------------------- |
 | **DRT / DRAT**                   | ✅ `drt_search_by_case_number()`<br>✅ `drt_search_by_diary_number()`<br>✅ `drat_search_by_case_number()`<br>✅ `drat_search_by_diary_number()` | ✅ `drt_search_by_party_name()`<br>✅ `drat_search_by_party_name()` | ✅ `drt_get_details(drt, filing_no)`<br>✅ `drat_get_details(drat, filing_no)` | ✅ Extracts from `iaDetails` / proceeding rows | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Uses `filing_no` when available     | DRT live-verified March 20, 2026; DRAT live-verified March 22, 2026 |
 | **e-Jagriti**                    | ✅ `jagriti_search_case_details()`                                                                                                               | ✅ Free-text / advanced search                                      | ✅ `get_case_status()` + `get_case_history()`                                  | ❌ Not implemented                             | ❌ Not implemented                    | ❌ Not implemented                        | ✅ Filing reference / case number      | Live-verified; public daily order PDF fetch works                   |
-| **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                                                                                                   | ✅ `nclat_search_by_free_text()`                                    | ✅ `nclat_get_details(filing_no)`                                              | ✅ **NEW** Extracts from HTML tables           | ✅ **NEW** `nclat_fetch_cause_list()` | ✅ **NEW** `nclat_parse_cause_list_pdf()` | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                                      |
-| **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()`                                                                         | ✅ `nclt_search_by_party_name()`                                    | ✅ `nclt_get_details(bench, filing_no)`                                        | ✅ **NEW** Maps from `mainFilnowithIaNoList`   | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                                        |
-| **SCI** (Supreme Court)          | ✅ `sci_search_by_diary_number()`<br>✅ `sci_search_by_case_number()`                                                                            | ✅ `sci_search_by_party_name()`                                     | ✅ `sci_get_details(diary_no, diary_year)`                                     | ✅ **NEW** Extracts from listing dates         | ✅ `sci_get_cause_list()`             | ✅ `sci_parse_cause_list_pdf()`           | ✅ Diary No + Year                     | Math captcha via OCR                                                |
-| **Bombay HC**                    | ✅ `fetch_case_details(case_type, no, year)`                                                                                                     | ❌ Not implemented                                                  | ✅ HTML parsing via `_parse_html_response()`                                   | ✅ **NEW** Extracts from `CaseNoApplCases` tab | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ⚠️ **NEW** Extracts `cnr_no` from text | Can extract CNR but no fetch by CNR                                 |
+| **NCLAT**                        | ✅ `nclat_search_by_case_no()`                                                                                                                   | ✅ `nclat_search_by_free_text()`                                    | ✅ `nclat_get_details(filing_no)`                                              | ✅ Extracts from HTML tables                   | ✅ `nclat_fetch_cause_list()`         | ✅ `nclat_parse_cause_list_pdf()`         | ✅ Uses `filing_no` as unique ID       | Now supports daily cause lists                                      |
+| **NCLT**                         | ✅ `nclt_search_by_filing_number()`<br>✅ `nclt_search_by_case_number()`                                                                         | ✅ `nclt_search_by_party_name()`                                    | ✅ `nclt_get_details(bench, filing_no)`                                        | ✅ Maps from `mainFilnowithIaNoList`           | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ✅ Uses `filing_no`                    | Bench-specific (14+ benches)                                        |
+| **SCI** (Supreme Court)          | ✅ `sci_search_by_diary_number()`<br>✅ `sci_search_by_case_number()`                                                                            | ✅ `sci_search_by_party_name()`                                     | ✅ `sci_get_details(diary_no, diary_year)`                                     | ✅ Extracts from listing dates                 | ✅ `sci_get_cause_list()`             | ✅ `sci_parse_cause_list_pdf()`           | ✅ Diary No + Year                     | Math captcha via OCR                                                |
+| **Bombay HC**                    | ✅ `fetch_case_details(case_type, no, year)`                                                                                                     | ❌ Not implemented                                                  | ✅ HTML parsing via `_parse_html_response()`                                   | ✅ Extracts from `CaseNoApplCases` tab         | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ✅ Extracts `cnr_no` from text         | Updated April 10, 2026                              |
 | **Delhi HC**                     | ✅ `fetch_case_details(case_type, no, year)`                                                                                                     | ❌ Not implemented                                                  | ✅ DataTables parsing + orders                                                 | ✅ `fetch_ia_details()`                        | ✅ `fetch_cause_list_pdfs()`          | ✅ `parse_cause_list_pdf()`               | ❌ No CNR fetch                        | Visual captcha validation                                           |
-| **Gujarat HC**                   | ✅ `fetch_case_details()`                                                                                                                        | ✅ `search_by_party_name()`                                         | ✅ Comprehensive JSON parsing                                                  | ✅ IA details from `applicationmatters`        | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ✅ **Has CNR fetch**                   | Most feature-complete HC scraper                                    |
+| **Gujarat HC**                   | ✅ `fetch_case_details()`                                                                                                                        | ✅ `search_by_party_name()`                                         | ✅ Comprehensive JSON parsing                                                  | ✅ IA details from `applicationmatters`        | ✅ `fetch_cause_list_pdf_bytes()`     | ✅ `parse_cause_list_pdf()`               | ✅ **Has CNR fetch**                   | Improved PDF parsing & Judge/VC extraction                          |
 | **HC Services** (Generic HC)     | ✅ `hc_search_by_case_number()`                                                                                                                  | ✅ `hc_search_by_party_name()`                                      | ✅ `hc_get_case_history()`                                                     | ✅ IA table parsing (`ia_table`)               | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `hc_search_by_cnr()`                | Uses hcservices.ecourts.gov.in                                      |
-| **DC Services** (District Court) | ✅ `search_by_case_no()`<br>✅ `search_by_advocate_name()`                                                                                       | ✅ `search_by_party_name()`                                         | ✅ `get_case_details()`                                                        | ✅ IA table parsing                            | ✅ `fetch_cause_list()`               | ✅ `parse_dc_cause_list_pdf()`            | ✅ Uses CIN/CNR                        | OCR captcha solving                                                 |
+| **DC Services** (District Court) | ✅ `search_by_case_no()`<br>✅ `search_by_advocate_name()`                                                                                       | ✅ `search_by_party_name()`                                         | ✅ `get_case_details()`                                                        | ✅ IA table parsing                            | ✅ `fetch_cause_list()`               | ✅ `parse_dc_cause_list_pdf()`            | ✅ Uses CIN/CNR                        | OCR captcha solving; Full Cause List support                        |
 | **eCourts** (Mobile API)         | ✅ `search_by_case_number()`                                                                                                                     | ❌ Not implemented                                                  | ✅ `get_by_cnr()`                                                              | ❌ Not in API response                         | ❌ Not implemented                    | ❌ Not implemented                        | ✅ `get_by_cnr()`                      | Encrypted API (AES-256)                                             |
 
 ---
@@ -98,11 +101,11 @@ Automated reporting pipeline that generates and delivers professional PDF summar
 
 ## Feature-by-Feature Analysis
 
-### 1. Case Search Function (10/10 ✅)
+### 1. Case Search Function (11/11 ✅)
 
 All scrapers implement case search with multiple modes including case number, party name, and advocate name.
 
-### 2. Party Search Function (7/10 ✅) - _New Column_
+### 2. Party Search Function (8/11 ✅)
 
 Most scrapers support searching for cases by party name (Petitioner/Respondent).
 
@@ -120,20 +123,20 @@ Most scrapers support searching for cases by party name (Petitioner/Respondent).
 | Delhi HC    | ❌                    | N/A                                                          |
 | eCourts     | ❌                    | N/A                                                          |
 
-### 3. Details Search Function (10/10 ✅)
+### 3. Details Search Function (11/11 ✅)
 
 All scrapers can fetch comprehensive case details including parties, advocates, orders, and hearing history.
 
-### 4. IA Data Extraction Logic (9/10 ✅) - _Major Update_
+### 4. IA Data Extraction Logic (10/11 ✅)
 
 **Ready for Production:**
 
-- ✅ **e-Jagriti**: Public order/judgement rows can be normalized from `caseHearingDetails` and persisted via `/ecourts/store_orders/`
+- ✅ **e-Jagriti**: Normalized from `caseHearingDetails` (hearing history records often contain IA context)
 - ✅ **DRT / DRAT**: Extracts from `iaDetails` and proceeding/order rows in the rich detail response
-- ✅ **NCLAT**: Extracts from HTML tables using `_extract_ia_rows` (Lines 300-380)
-- ✅ **NCLT**: Maps from `mainFilnowithIaNoList` in JSON response (Lines 720-750)
-- ✅ **SCI**: Extracts from listing dates section (Lines 700-730)
-- ✅ **Bombay HC**: Extracts from `CaseNoApplCases` div in HTML (Lines 440-470)
+- ✅ **NCLAT**: Extracts from HTML tables using `_extract_ia_rows`
+- ✅ **NCLT**: Maps from `mainFilnowithIaNoList` in JSON response
+- ✅ **SCI**: Extracts from listing dates section
+- ✅ **Bombay HC**: Extracts from `CaseNoApplCases` div in HTML
 - ✅ **Gujarat HC**: Extracts from `applicationmatters` section
 - ✅ **Delhi HC**: Fetches via `fetch_ia_details` method
 - ✅ **HC Services**: Parses `IAheading` table
@@ -143,37 +146,37 @@ All scrapers can fetch comprehensive case details including parties, advocates, 
 
 - ❌ eCourts (Mobile API does not expose IA details)
 
-### 5. Cause List Fetching Logic (7/10 ✅) - _Update_
+### 5. Cause List Fetching Logic (8/11 ✅)
 
-| Scraper     | Implementation                     | Method                    | Notes                    |
-| ----------- | ---------------------------------- | ------------------------- | ------------------------ |
-| e-Jagriti   | ❌ Not implemented                 | N/A                       | No cause-list source yet |
-| DRT / DRAT  | ❌ Not implemented                 | N/A                       | No fetcher yet           |
-| NCLAT       | **NEW** `nclat_fetch_cause_list()` | GET from daily-cause-list | Scrapes for PDF links    |
-| NCLT        | `fetch_cause_list_pdfs()`          | POST with math captcha    | Returns PDF URLs         |
-| SCI         | `sci_get_cause_list()`             | POST with math captcha    | Returns HTML + PDF links |
-| Bombay HC   | `fetch_cause_list_pdf_bytes()`     | POST with captcha         | Direct PDF download      |
-| Delhi HC    | `fetch_cause_list_pdfs()`          | GET from index page       | Scrapes for PDF links    |
-| Gujarat HC  | `fetch_cause_list_pdf_bytes()`     | POST with token           | Direct PDF download      |
-| DC Services | `fetch_cause_list()`               | POST with captcha         | Extract PDF links        |
+| Scraper     | Implementation                 | Method                    | Notes                    |
+| ----------- | ------------------------------ | ------------------------- | ------------------------ |
+| e-Jagriti   | ❌ Not implemented             | N/A                       | No cause-list source yet |
+| DRT / DRAT  | ❌ Not implemented             | N/A                       | No fetcher yet           |
+| NCLAT       | `nclat_fetch_cause_list()`     | GET from daily-cause-list | Scrapes for PDF links    |
+| NCLT        | `fetch_cause_list_pdfs()`      | POST with math captcha    | Returns PDF URLs         |
+| SCI         | `sci_get_cause_list()`         | POST with math captcha    | Returns HTML + PDF links |
+| Bombay HC   | `fetch_cause_list_pdf_bytes()` | POST with tokens          | Updated April 10, 2026   |
+| Delhi HC    | `fetch_cause_list_pdfs()`      | GET from index page       | Scrapes for PDF links    |
+| Gujarat HC  | `fetch_cause_list_pdf_bytes()` | POST with token           | Direct PDF download      |
+| DC Services | `fetch_cause_list()`           | POST with captcha         | **NEW** Full support     |
 
-### 6. Cause List Parsing Logic (7/10 ✅) - _Update_
+### 6. Cause List Parsing Logic (8/11 ✅)
 
 All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify case numbers.
 
-| Scraper     | Function                               | Pattern                     |
-| ----------- | -------------------------------------- | --------------------------- |
-| e-Jagriti   | ❌ Not implemented                     | N/A                         |
-| DRT / DRAT  | ❌ Not implemented                     | N/A                         |
-| NCLAT       | **NEW** `nclat_parse_cause_list_pdf()` | Item/Case No/Party/Advocate |
-| NCLT        | `parse_cause_list_pdf()`               | Columnar SR/Case Details    |
-| SCI         | `sci_parse_cause_list_pdf()`           | Item number + columns       |
-| Bombay HC   | `parse_cause_list_pdf()`               | Item-based detection        |
-| Delhi HC    | `parse_cause_list_pdf()`               | Vertical spacing based      |
-| Gujarat HC  | `parse_cause_list_pdf()`               | Multi-column format         |
-| DC Services | `parse_dc_cause_list_pdf()`            | Numbered entry detection    |
+| Scraper     | Function                           | Pattern                     |
+| ----------- | ---------------------------------- | --------------------------- |
+| e-Jagriti   | ❌ Not implemented                 | N/A                         |
+| DRT / DRAT  | ❌ Not implemented                 | N/A                         |
+| NCLAT       | `nclat_parse_cause_list_pdf()`     | Item/Case No/Party/Advocate |
+| NCLT        | `parse_cause_list_pdf()`           | Columnar SR/Case Details    |
+| SCI         | `sci_parse_cause_list_pdf()`       | Item number + columns       |
+| Bombay HC   | `parse_cause_list_pdf()`           | Item-based detection        |
+| Delhi HC    | `parse_cause_list_pdf()`           | Vertical spacing based      |
+| Gujarat HC  | `parse_cause_list_pdf()`           | Widened column format       |
+| DC Services | `parse_dc_cause_list_pdf()`        | **NEW** Full support        |
 
-### 7. CNR/Unique Number Based Fetching (8/10 ✅) - _Update_
+### 7. CNR/Unique Number Based Fetching (10/11 ✅)
 
 | Scraper     | Unique ID Format      | Fetch Status                                      |
 | ----------- | --------------------- | ------------------------------------------------- |
@@ -186,7 +189,7 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 | NCLAT       | Filing Number         | ✅ Fetch by filing_no                             |
 | NCLT        | Filing Number         | ✅ Fetch by filing_no                             |
 | SCI         | Diary Number + Year   | ✅ Fetch by diary info                            |
-| Bombay HC   | CNR Number            | ⚠️ **NEW** Extracts from text but no fetch by CNR |
+| Bombay HC   | CNR Number            | ✅ Extracts from text                             |
 | Delhi HC    | Case Type + No + Year | ❌ No CNR support                                 |
 
 ---
@@ -195,55 +198,46 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 
 ### DRT / DRAT (`DRT.py`)
 
-**New Features:**
-
 - ✅ **DRT Case Search**: `drt_search_by_case_number()` and `drt_search_by_diary_number()` use the live multipart DRT API.
-- ✅ **DRAT Case Search**: `drat_search_by_case_number()` and `drat_search_by_diary_number()` use the browser-verified DRAT endpoints `getDratCaseDetailCaseNoWise` and `getDratCaseDetailDiaryNoWise`.
-- ✅ **Party Search**: `drt_search_by_party_name()` and `drat_search_by_party_name()` are supported; DRAT uses the site’s `drat_party_name_wise` endpoint.
-- ✅ **Details Search**: `drt_get_details()` and `drat_get_details()` normalize the response into the shared case schema.
-- ✅ **IA Extraction**: Extracts `iaDetails` where present and preserves proceeding/order metadata.
-- ✅ **Order Persistence**: `/ecourts/store_orders/` supports canonical `court_type="DRT"`; frontend tribunal metadata for DRT/DRAT is now static.
+- ✅ **DRAT Case Search**: `drat_search_by_case_number()` and `drat_search_by_diary_number()` use browser-verified DRAT endpoints.
+- ✅ **Party Search**: `drt_search_by_party_name()` and `drat_search_by_party_name()` supported.
+- ✅ **Details Search**: Normalized response into shared case schema.
+- ✅ **IA Extraction**: Extracts `iaDetails` and preserves proceeding/order metadata.
 - ❌ **Cause List**: Not implemented yet.
 
 ---
 
 ### e-Jagriti
 
-**New Features:**
-
-- ✅ **Search**: `jagriti_search_case_details()` supports the site payload contract, including free-text (`serchType=8`) and advanced search fields.
-- ✅ **Status & History**: `get_case_status()` and `get_case_history()` are live-verified against production.
-- ✅ **Public Orders**: `get_daily_order_judgement_pdf()` uses the public `courtmaster/courtRoom/judgement/v1` endpoint and returns the document payload.
-- ✅ **Order Persistence**: `/ecourts/store_orders/` now supports canonical `court_type="JAGRITI"` through `persist_orders_to_storage()`.
+- ✅ **Search**: `search_by_case_no()` supports filing reference and case number candidates.
+- ✅ **Status & History**: Extracts full hearing history including `proceedingText`.
+- ✅ **Public Orders**: `orderDocumentPath` extraction from hearing details.
+- ✅ **Commissions**: Full catalog of NCDRC/SCDRC/DCDRC via `get_commission_catalog()`.
 - ❌ **Cause List**: Not implemented yet.
 
 ---
 
-### NCLAT (`NCLAT.py`)
+### NCLT (`NCLT.py`)
 
-**New Features:**
-
-- ✅ **Cause List**: `nclat_fetch_cause_list` and `nclat_parse_cause_list_pdf` now fully operational.
-- ✅ **IA Extraction**: `_extract_ia_rows` handles varying HTML table structures to extract IA numbers, parties, and dates.
-- ✅ **Searching**: Multiple modes including free text search for parties/advocates.
+- ✅ **Cause List**: Improved parser handles both start and end-of-line item numbers and extracts VC links.
+- ✅ **IA Extraction**: Maps IA numbers and details from `mainFilnowithIaNoList`.
+- ✅ **Details**: Robust extraction of party advocates and order paths.
 
 ---
 
 ### Bombay HC (`bombay_hc.py`)
 
-**New Features:**
-
-- ✅ **IA Extraction**: Now parses the `CaseNoApplCases` tab for interlocutory applications.
-- ✅ **CNR Extraction**: Uses regex to extract `CNR No` from the case details text (Line 355).
-- ✅ **Cause List**: Robust PDF fetching and parsing for all benches.
+- ✅ **IA Extraction**: Extracts from `CaseNoApplCases` tab.
+- ✅ **CNR Extraction**: Extracts `CNR No` from header text using regex.
+- ✅ **Cause List**: Updated to new endpoints; extracts PDF links from JSON page response.
 
 ---
 
-### SCI (`SCI.py`)
+### District Court (`dc_services.py`)
 
-**New Features:**
-
-- ✅ **IA Extraction**: Extracts IA numbers from the listing dates table, providing next dates and status remarks for each IA.
+- ✅ **Cause List**: Full automated fetch and parse cycle implemented in `EcourtsWebScraper`.
+- ✅ **IA Extraction**: Robustly handles `ia_table` and `IAheading` in details HTML.
+- ✅ **Orders**: Handles temporary PDF generation via `home/display_pdf` POST flow.
 
 ---
 
@@ -255,13 +249,13 @@ All cause list parsers use PyMuPDF (fitz) to extract text and regex to identify 
 | Party Search        | 8     | 0       | 3       | 73%     |
 | Details Search      | 11    | 0       | 0       | 100%    |
 | IA Extraction       | 10    | 0       | 1       | 91%     |
-| Cause List Fetch    | 7     | 0       | 4       | 64%     |
-| Cause List Parse    | 7     | 0       | 4       | 64%     |
-| CNR/Unique ID Fetch | 9     | 1       | 1       | 82%     |
+| Cause List Fetch    | 8     | 0       | 3       | 73%     |
+| Cause List Parse    | 8     | 0       | 3       | 73%     |
+| CNR/Unique ID Fetch | 10    | 0       | 1       | 91%     |
 | **Automation Flow** | 12    | 0       | 0       | 100%    |
-| **Overall**         | -     | -       | -       | **86%** |
+| **Overall**         | -     | -       | -       | **88%** |
 
 ---
 
-_Generated: 2026-03-20_
+_Generated: 2026-04-10_
 _Analysis Tool: Gemini CLI_
