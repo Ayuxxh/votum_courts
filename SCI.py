@@ -1,6 +1,5 @@
 import ast
 import asyncio
-from datetime import datetime
 import logging
 import operator
 import os
@@ -8,6 +7,7 @@ import random
 import re
 import string
 import tempfile
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import ddddocr
@@ -1222,7 +1222,7 @@ async def persist_orders_to_storage(
 
 if __name__ == "__main__":
     import json
-    
+
     # Test a single court fetch
     # print("\nFetching cases for Court 1 on 09-02-2026...")
     # cases = sci_get_cause_list("09-02-2026", search_by="court", court="1")
@@ -1235,7 +1235,7 @@ if __name__ == "__main__":
     #     f.write(a)
 
 
-    a = sci_get_details('5699', '2026')
+    a = sci_get_details('8960', '2025')
 
     a = json.dumps(a, indent=4)
     with open('sci_get_details_6-4-26.json', 'w') as f:

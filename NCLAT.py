@@ -7,8 +7,8 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import ddddocr
-import requests
 import fitz
+import requests
 from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
@@ -1108,11 +1108,12 @@ def _test_case_type_extraction() -> None:
 if __name__ == '__main__':
     import json
 
-    print("=== Case-type extraction tests ===")
-    _test_case_type_extraction()
-
+    # print("=== Case-type extraction tests ===")
+    # _test_case_type_extraction()
     # Live search example (uncomment to run against portal):
     # a = nclat_search_by_case_no('delhi', '35', '121', '2026')
     # print(json.dumps(a, indent=4))
 
-    # print(nclat_get_details('9910100052102020', 'delhi'))
+    a = nclat_get_details('9910110084442023', 'delhi')
+    with open("nclt_output.json", "w") as f:
+        json.dump(a, f, indent=4)
