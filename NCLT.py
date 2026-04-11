@@ -791,7 +791,15 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
             "last_listing_date": _normalize_order_date(last_listing_date),
             "decision_date": _normalize_order_date(final_status.get('disposal_date')),
             "court_no": final_status.get('court_no'),
-            "disposal_nature": final_status.get('action_type'),
+            "disposal_nature": (
+                1
+                if (final_status.get('case_status') or '').strip().upper() == 'PENDING'
+                or (
+                    not (final_status.get('case_status') or '').strip()
+                    and not (final_status.get('disposal_date') or '').strip().upper().replace('NA', '').strip()
+                )
+                else 0
+            ),
             "purpose_next": final_status.get('next_listing_purpose') or final_status.get('last_purpose_step'),
             "case_type": final_status.get('case_type'),
             "pet_name": pet_names,

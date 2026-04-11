@@ -283,8 +283,8 @@ def table_to_list(soup):
             {
                 "cino": data.get("Diary Number", ""),
                 "date_of_decision": None,
-                "pet_name": data.get("Petitioner Name", ""),
-                "res_name": data.get("Respondent Name", ""),
+                "pet_name": _strip_leading_number(data.get("Petitioner Name", "")),
+                "res_name": _strip_leading_number(data.get("Respondent Name", "")),
                 "type_name": data.get("Status", ""),
             }
         )
@@ -325,6 +325,20 @@ def _fetch_case_tab(
 
     html_fragment = _extract_html_fragment(payload)
     return html_fragment, payload
+
+
+def _strip_leading_number(name: str) -> str:
+    """Remove leading ordinal numbers from a name string.
+
+    Examples::
+
+        "1. John Doe"  -> "John Doe"
+        "2) Jane Smith" -> "Jane Smith"
+        "3: Bob"        -> "Bob"
+        "10 Alice"      -> "Alice"
+        "Alice"         -> "Alice"
+    """
+    return re.sub(r"^\s*\d+([\.\):]\s*|\s+)", "", name or "").strip()
 
 
 def _normalize_key(label: str) -> str:
@@ -665,13 +679,13 @@ def sci_get_details(diary_no, diary_year):
 
         petitioners_raw = _extract_td_text(soup, "Petitioner(s)", separator="\n")
         petitioners = (
-            [p.strip() for p in petitioners_raw.splitlines() if p.strip()]
+            [_strip_leading_number(p) for p in petitioners_raw.splitlines() if p.strip()]
             if petitioners_raw
             else None
         )
         respondents_raw = _extract_td_text(soup, "Respondent(s)", separator="\n")
         respondents = (
-            [r.strip() for r in respondents_raw.splitlines() if r.strip()]
+            [_strip_leading_number(r) for r in respondents_raw.splitlines() if r.strip()]
             if respondents_raw
             else None
         )
@@ -1013,11 +1027,11 @@ def _parse_single_sci_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     vs_match = re.search(r"\b(Versus|VS\.?|V/S)\b", party_text, re.IGNORECASE)
     
     if vs_match:
-        petitioner = party_text[:vs_match.start()].strip().replace("\n", " ")
-        respondent = party_text[vs_match.end():].strip().replace("\n", " ")
+        petitioner = _strip_leading_number(party_text[:vs_match.start()].strip().replace("\n", " "))
+        respondent = _strip_leading_number(party_text[vs_match.end():].strip().replace("\n", " "))
     else:
         # Fallback: simple join
-        petitioner = party_text.replace("\n", " ")
+        petitioner = _strip_leading_number(party_text.replace("\n", " "))
 
     pet_advocate = None
     res_advocate = None
