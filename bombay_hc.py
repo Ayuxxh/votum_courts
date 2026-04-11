@@ -55,7 +55,10 @@ class BombayHCService:
         self.session = requests.Session()
         self.session.verify = False
         self.session.headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0',
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive"
         }
         self.ocr = ddddocr.DdddOcr(show_ad=False)
         self.case_types_path = Path(__file__).with_name("bombay_case_types.json")
@@ -598,7 +601,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     # Test Case Details
     # print("Testing AS...")
-    # print(json.dumps(get_bombay_case_details("1", "1", "2025", side="1"), indent=2, default=str))
+    print(json.dumps(get_bombay_case_details("1", "1", "2025", side="1"), indent=2, default=str))
     
     # Test Cause List
     print("Testing Cause List Fetching...")

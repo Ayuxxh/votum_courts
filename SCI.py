@@ -231,9 +231,7 @@ def init_captcha(max_attempts: int = 3):
     for attempt in range(1, max_attempts + 1):
         token_page = _session_get(TOKEN_URL)
         token_page_text = token_page.text
-        # print('='*20)
-        # print(token_page_text)
-        # print('='*20)
+
         captcha_id = token_page_text.split('name="scid" value="')[1].split('"')[0]
         captcha_image = _session_get(CAPTCHA_URL + captcha_id).content
         question = ocr.classification(captcha_image)
@@ -641,14 +639,21 @@ def sci_get_details(diary_no, diary_year):
             if m:
                 registration_date = m.group(1)
 
+
         verified_on = None
         if case_info and "Verified On" in case_info:
             verified_parts = case_info.split("Verified On", 1)
             verified_on = verified_parts[1].split("[", 1)[0].strip(" :")
 
         listed_info = _extract_td_text(soup, "Present/Last Listed On")
-        # print('listed_info:', listed_info)
         listed_on = listed_info.split("[", 1)[0].strip() if listed_info else None
+
+
+        next_listing = _extract_td_text(soup, "Tentatively case may be listed on (likely to be listed on)")
+        # print('next:', next_listing)
+        next_listing = next_listing.split("[", 1)[0].strip() if next_listing else None
+        next_listing = next_listing.split(" ")[0].strip() if next_listing else None
+
         status_info = _extract_td_text(soup, "Status/Stage")
 
         status = (
@@ -761,8 +766,8 @@ def sci_get_details(diary_no, diary_year):
             "registration_date": registration_date,
             "filing_date": filing_date,
             "first_listing_date": verified_on,
-            "next_listing_date": listed_on,
-            "last_listing_date": None,
+            "next_listing_date": next_listing,
+            "last_listing_date": listed_on,
             "decision_date": None,
             "court_no": None,
             "disposal_nature": pending_or_disposed,
@@ -1202,9 +1207,24 @@ async def persist_orders_to_storage(
 
 
 if __name__ == "__main__":
+    import json
+    
     # Test a single court fetch
-    print("\nFetching cases for Court 1 on 09-02-2026...")
-    cases = sci_get_cause_list("09-02-2026", search_by="court", court="1")
-    print(f"Found {len(cases)} cases in Court 1.")
-    if cases:
-        print("First case snippet:", str(cases[0])[:200])
+    # print("\nFetching cases for Court 1 on 09-02-2026...")
+    # cases = sci_get_cause_list("09-02-2026", search_by="court", court="1")
+    # print(f"Found {len(cases)} cases in Court 1.")
+    # if cases:
+    #     print("First case snippet:", str(cases[0])[:200])
+    # a = sci_get_all_cases_for_day('06-04-2026')
+    # a = json.dumps(a, indent=4)
+    # with open('SCI_get_all_cases_for_day_6-4-26.json', 'w') as f:
+    #     f.write(a)
+
+
+    a = sci_get_details('5699', '2026')
+
+    a = json.dumps(a, indent=4)
+    with open('sci_get_details_6-4-26.json', 'w') as f:
+        f.write(a)
+    
+    # print(a)

@@ -338,12 +338,20 @@ def _parse_single_cause_list_entry(entry: dict, court_name: str = "", vc_link: s
         "vc_link": vc_link,
     }
 
+
+def extract_coram(lines):
+    for line in lines:
+        line_upper = line.upper()
+        if "CORAM" in line_upper and ":" in line_upper:
+            return line.split(":", 1)[1].strip()
+    return None
+
 def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
     """
     Parse NCLT cause-list PDF and extract structured entries.
     """
     entries: list[dict] = []
-    current_coram = ""
+    current_coram = ''
     current_vc_link = ""
     
     with fitz.open(pdf_path) as doc:
@@ -378,6 +386,7 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
             has_header = False
             header_y = -1
             coram_lines_above = []
+            coram_found = False
             for line in lines:
                 line_text = _clean_pdf_line(" ".join(it['text'] for it in line))
                 if not line_text:
@@ -389,6 +398,23 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                     current_vc_link = url_match.group(0)
 
                 line_text_upper = line_text.upper()
+
+                is_coram_line = (
+                not coram_found and
+                "CORAM" in line_text_upper and
+                ":" in line_text_upper
+            )
+
+                if is_coram_line:
+                    parts = line_text.split(":", 1)
+                    current_coram = parts[1].strip() if len(parts) > 1 else line_text.strip()
+                    coram_found = True
+                    continue
+
+
+
+
+                
                 
                 # Header detection: looking for common column names
                 if any(h in line_text_upper for h in ["CP. NO.", "CP NO.", "CASE NO.", "SECTION/RULE", "CP/CA/IA/MA", "SR. NO", "S.NO"]):
@@ -403,11 +429,11 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                         if not any(noise in line_text_upper for noise in ["DATE:", "TIME:", "VIDEO CONFERENCING"]):
                             coram_lines_above.append(line_text)
 
-            if coram_lines_above:
-                # If we found new coram info, use it. Some PDFs have it on every page.
-                new_coram = " | ".join(coram_lines_above)
-                if new_coram != current_coram:
-                    current_coram = new_coram
+            # if coram_lines_above:
+            #     # If we found new coram info, use it. Some PDFs have it on every page.
+            #     new_coram = " | ".join(coram_lines_above)
+            #     if new_coram != current_coram:
+            #         current_coram = new_coram
             
             if not has_header and not open_entry:
                 continue
@@ -441,21 +467,25 @@ def parse_cause_list_pdf(pdf_path: str) -> list[dict]:
                         open_entry = None
                     continue
 
-                # Check for Coram line (might appear between tables)
-                is_coram_line = any(k in line_text_upper for k in ["CORAM", "COURT", "HON'BLE", "MEMBER"]) and \
-                               not any(noise in line_text_upper for noise in ["DATE:", "TIME:", "VIDEO CONFERENCING"])
+
+
                 
-                if is_coram_line:
-                    if open_entry:
-                        entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
-                        open_entry = None
+
+                # # Check for Coram line (might appear between tables)
+                # is_coram_line = any(k in line_text_upper for k in ["CORAM", "COURT", "HON'BLE", "MEMBER"]) and \
+                #                not any(noise in line_text_upper for noise in ["DATE:", "TIME:", "VIDEO CONFERENCING"])
+                
+                # if is_coram_line:
+                #     if open_entry:
+                #         entries.append(_parse_single_cause_list_entry(open_entry, current_coram, current_vc_link))
+                #         open_entry = None
                     
-                    # Update current coram
-                    if any(k in line_text_upper for k in ["CORAM", "COURT"]):
-                         current_coram = line_text
-                    else:
-                         current_coram = (current_coram + " | " + line_text) if current_coram else line_text
-                    continue
+                #     # Update current coram
+                #     if any(k in line_text_upper for k in ["CORAM", "COURT"]):
+                #          current_coram = line_text
+                #     else:
+                #          current_coram = (current_coram + " | " + line_text) if current_coram else line_text
+                #     continue
 
                 # Detection of item number (Sr. No.)
                 # In Mumbai PDFs, it's often at the end of the line or in a specific x-range
@@ -519,12 +549,17 @@ def find_case_entries(pdf_path: str, case_no: str) -> list[dict]:
     """
     target_tail = _case_tail(case_no)
     parsed = parse_cause_list_pdf(pdf_path)
+
+    print(target_tail)
     if not target_tail:
         return parsed
         
     matched = []
     for entry in parsed:
         tails = [_case_tail(cn) for cn in entry.get("case_nos", [])]
+
+
+
         if target_tail in tails:
             matched.append(entry)
     return matched
@@ -826,8 +861,31 @@ if __name__ == '__main__':
     # NOTE: You need valid IDs for bench and case types for this to work.
     # Case Type 16 is "Company Petition IB(IBC)"
     
-    print(nclt_search_by_case_number('ahmedabad', '4', '1', '2025')) 
-    # a = (json.dumps(nclt_get_details('ahmedabad', '2401105033432025'))) # Use a valid filing number found from search
-    # with open('nclt_details.json', 'w') as f:
-        # f.write(a)
+    a = ('ahmedabad', '4', '1', '2025')
+
+
+    a = fetch_cause_list_pdfs('kolkata', datetime.strptime('06/04/2026', "%d/%m/%Y"))
+    a = json.dumps(a, indent=4)
+    with open('nclt_fetch_cause_list.json', 'w') as f:
+        f.write(a)
+
+    
+    a = json.dumps(nclt_get_details('kolkata', '1908134021072024'), indent=4)# Use a valid filing number found from search
+    with open('nclt_get_details.json', 'w') as f:
+        f.write(a)
+
+    a = fetch_cause_list_pdfs('111', datetime.strptime('02/04/2026', "%d/%m/%Y"))
+
+    a = find_case_entries(r'D:\Projects\2026\April 26\votum_courts\kol.pdf', '301/2024') ## case/year format only!!
+    a = json.dumps(a, indent=4)
+    with open('find_case_entries.json', 'w') as f:
+        f.write(a)
+    # print(a)
+    # pass
+
+    a = parse_cause_list_pdf(r'D:\Projects\2026\April 26\votum_courts\kol.pdf')
+    a = json.dumps(a, indent=4)
+    with open('parse_cause_list_pdf.json', 'w') as f:
+        f.write(a)
+    # print(a)
     # pass

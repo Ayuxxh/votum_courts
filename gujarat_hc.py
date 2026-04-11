@@ -424,6 +424,7 @@ def find_case_entries(pdf_path: str, registration_no: str) -> List[Dict[str, Any
     for entry in parsed:
         case_nos = entry.get("case_nos") or []
         tails = {_case_tail(case_no) for case_no in case_nos if case_no}
+        
         if target_tail in tails:
             matched_entries.append(entry)
     return matched_entries
@@ -1198,10 +1199,26 @@ async def persist_orders_to_storage(
 if __name__ == "__main__":
     # Test
     # logging.basicConfig(level=logging.INFO)
-    # print(json.dumps(get_gujarat_case_details("SCA", "8680", "2025")))
-    # # Print cause list entries for a case
-    # res = find_case_entries("/Users/tejaswgupta/Downloads/votum/backend/ecourts/Complete_Causelist_9th_February_2026.pdf", "SCA/4937/2022")
+    # print(json.dumps(get_gujarat_case_details("FA", "636", "2008"), indent=4))
+    # # # Print cause list entries for a case
+    # res = find_case_entries("c_g.pdf", "FA/636/2008")
+
+    # print(res)
     # print(res[0].get("text") if res else "No entries found")
-    a = fetch_cause_list_pdf_bytes(datetime(2026, 4, 1))
-    b = fetch_cause_list_pdf_bytes(datetime.combine(date(2026, 4, 1), datetime.min.time()))
-    print(len(a), len(b))
+
+    # a = fetch_cause_list_pdf_bytes(datetime.combine(date(2026, 4, 6), datetime.min.time()))
+
+    # print(a)
+
+    a = get_gujarat_case_details('CA', '1526', '2026')
+
+    a = json.dumps(a, indent=4)
+    with open('get_gujarat_case_details.json', 'w') as f:
+        f.write(a)
+
+    a = find_case_entries(r'D:\Projects\2026\April 26\votum_courts\guj.pdf', 'CA/1526/2026')
+
+    a = json.dumps(a, indent=4)
+    with open('guj_find_case_entries.json', 'w') as f:
+        f.write(a)
+    print(a)
