@@ -663,10 +663,7 @@ def sci_get_details(diary_no, diary_year):
         listed_on = listed_info.split("[", 1)[0].strip() if listed_info else None
 
 
-        next_listing = _extract_td_text(soup, "Tentatively case may be listed on (likely to be listed on)")
-        # print('next:', next_listing)
-        next_listing = next_listing.split("[", 1)[0].strip() if next_listing else None
-        next_listing = next_listing.split(" ")[0].strip() if next_listing else None
+        next_listing = None  # derived from listing_dates below
 
         status_info = _extract_td_text(soup, "Status/Stage")
 
@@ -719,6 +716,22 @@ def sci_get_details(diary_no, diary_year):
             logger.warning("Failed to fetch SCI listing dates: %s", exc)
 
         listings = _parse_listing_dates(listing_html) if listing_html else []
+
+        # Derive next_listing_date: earliest cl_date >= today from listing_dates
+        _today = datetime.today().date()
+        _future: list[tuple] = []
+        for _entry in listings:
+            _cl = _entry.get("cl_date")
+            if _cl:
+                try:
+                    _d = datetime.strptime(_cl, "%d-%m-%Y").date()
+                    if _d >= _today:
+                        _future.append((_d, _cl))
+                except ValueError:
+                    pass
+        if _future:
+            _future.sort()
+            next_listing = _future[0][1]
 
         ia_details = []
         if listings:
