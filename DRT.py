@@ -328,7 +328,7 @@ def _proceeding_to_order(item: dict[str, Any]) -> dict[str, Any]:
         "description": " | ".join(part for part in desc_parts if part) or None,
         "document_url": order_url,
         "source_document_url": order_url,
-        "listing_date": cause_date,
+        "listing_date": _normalize_date(cause_date),
         "purpose": purpose or None,
         "court_name": court_name or ascourt_name or None,
         "court_no": court_no or None,
@@ -367,6 +367,19 @@ def _normalize_detail(
     orders = [_proceeding_to_order(item) for item in proceedings]
     ia_details = [_ia_to_detail(item) for item in (data.get("iaDetails") or [])]
 
+    _today_str = datetime.today().strftime("%Y-%m-%d")
+    _order_dates = sorted(
+        o["date"] for o in orders
+        if o.get("date") and re.match(r"\d{4}-\d{2}-\d{2}", o["date"])
+    )
+    first_listing_date = _order_dates[0] if _order_dates else None
+    _past_dates = [d for d in _order_dates if d <= _today_str]
+    last_listing_date = _past_dates[-1] if _past_dates else None
+
+    _disposal_str = _normalize_space(data.get("disposalNature"))
+    _status_code = _normalize_space(data.get("status"))
+    disposal_nature = 0 if (_disposal_str or _status_code == "D") else 1
+
     advocates = "\n".join(
         part
         for part in [
@@ -393,14 +406,21 @@ def _normalize_detail(
         "court_no": _normalize_space(data.get("courtNo")) or None,
         "court_name": _normalize_space(data.get("courtName")) or _get_drt_name(drt_id, tribunal_type),
         "bench_name": _get_drt_name(drt_id, tribunal_type),
-        "disposal_nature": _normalize_space(data.get("disposalNature")) or None,
+        "first_listing_date": first_listing_date,
+        "last_listing_date": last_listing_date,
+        "disposal_nature": disposal_nature,
         "purpose_next": _normalize_space(data.get("nextListingPurpose")) or None,
         "case_type": _normalize_space(data.get("casetype")) or None,
         "pet_name": [petitioner] if petitioner else [],
         "res_name": [respondent] if respondent else [],
         "advocates": advocates,
+        "judges": None,
+        "history": proceedings,
+        "acts": [],
         "orders": orders,
         "ia_details": ia_details,
+        "connected_matters": [],
+        "application_appeal_matters": [],
         "additional_info": {
             "case_status": _normalize_space(data.get("casestatus")) or None,
             "status_code": _normalize_space(data.get("status")) or None,
@@ -419,6 +439,21 @@ def _normalize_detail(
         },
         "original_json": data,
     }
+
+
+def _parse_filing_no(filing_no: str) -> dict[str, str | None]:
+    """Extract diary_no and diary_year from a 15-digit DRT/DRAT filing number.
+
+    Format: <5-digit court code> + <6-digit zero-padded diary no> + <4-digit year>
+    e.g. "070110005432019" → {"diaryno": "543", "diaryyear": "2019"}
+         "071090023872025" → {"diaryno": "2387", "diaryyear": "2025"}
+    """
+    s = (filing_no or "").strip()
+    if len(s) == 15 and s.isdigit():
+        diary_no = str(int(s[5:11]))
+        diary_year = s[11:15]
+        return {"diaryno": diary_no, "diaryyear": diary_year}
+    return {"diaryno": None, "diaryyear": None}
 
 
 def _fetch_rich_case_detail(
@@ -593,15 +628,22 @@ def drt_get_details(
     tribunal_type: str = TRIBUNAL_TYPE_DRT,
 ) -> dict[str, Any]:
     drt_id = _resolve_drt_id(drt, tribunal_type=tribunal_type)
-    data = _post(
-        "getCaseDetailPartyWise",
-        {
-            "schemeNameDrtId": drt_id,
-            "filingNo": filing_no,
-        },
-    )
-    if isinstance(data, dict) and not (data.get("caseProceedingDetails") or data.get("iaDetails")):
-        data = _fetch_rich_case_detail(drt_id, data, tribunal_type=tribunal_type)
+    if tribunal_type == TRIBUNAL_TYPE_DRAT:
+        # DRAT has no filing-no-wise lookup endpoint; extract diary info from the
+        # 15-digit filing number (<5-char court code><6-digit diary no><4-digit year>)
+        # and go directly to the diary-number endpoint.
+        stub = _parse_filing_no(filing_no)
+        data = _fetch_rich_case_detail(drt_id, stub, tribunal_type=tribunal_type)
+    else:
+        data = _post(
+            "getCaseDetailPartyWise",
+            {
+                "schemeNameDrtId": drt_id,
+                "filingNo": filing_no,
+            },
+        )
+        if isinstance(data, dict) and not (data.get("caseProceedingDetails") or data.get("iaDetails")):
+            data = _fetch_rich_case_detail(drt_id, data, tribunal_type=tribunal_type)
     return _normalize_detail(
         data or {},
         drt_id,

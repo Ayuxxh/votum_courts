@@ -1,13 +1,16 @@
 {
-  "status": "Pre-Admission_Fresh",
-  "cnr_no": "HCBM010044872025",
+  "cin_no": "HCBM010044872025",
   "filing_no": "WP/2709/2025",
   "registration_no": "WP/5775/2025",
+  "case_type": "WP",
   "registration_date": "2025-04-29",
   "filing_date": "2025-01-23",
-  "case_type": "WP",
-  "case_no": "5775",
-  "case_year": "2025",
+  "first_listing_date": "2025-01-29",
+  "next_listing_date": "2026-04-29",
+  "last_listing_date": "2026-04-10",
+  "decision_date": null,
+  "disposal_nature": 1,
+  "purpose_next": null,
   "pet_name": [
     "SHRIDHAR VINAYAK BHIDE S/O LATE VINAYAK KRISHNA BHIDE"
   ],
@@ -18,129 +21,133 @@
     "THE SR. SUPERINTENDENT OF RMS",
     "THE CHIEF POSTMASTER GENERAL"
   ],
-  "advocates": "Petitioner: R B Kadam\nRespondent: \u2014",
+  "advocates": "Petitioner: R B Kadam",
   "judges": null,
-  "court_name": "Bombay High Court",
   "bench_name": null,
-  "district": null,
-  "first_hearing_date": null,
-  "next_listing_date": "2026-04-29",
-  "decision_date": null,
-  "orders": [
-    {
-      "date": "2025-11-18",
-      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IjFFRFA4Yis1cXdoNEE5aDhBd3JJbUE9PSIsInZhbHVlIjoib1Y1T3ZFaVk3UXZ1Q0ZVb0N1SS9Gb1BYd0FWVHc0VmdpWnU4V0N0UzRBRS9TN2xtYmkzRHdHby80cXljM3QwcGNMSDJrSEVKUWN4UHZ0NlJ0cmFQTFE9PSIsIm1hYyI6IjNmOGY1OWM0YmVmNjU3MzliZjI0ZjU5MDY1MjVhZGYxZWVlYmQzNmU1YjAzYjg2ZjgzZWIzODJlZDZjMzk4ZDQiLCJ0YWciOiIifQ==?expires=1775964448&signature=5efd62dcc14c8c17f211ac217f99b2b33352d0df8da9b7dabfe8946a1ba86f71"
-    },
-    {
-      "date": "2025-10-06",
-      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IklGYlZaeXV5M1I4VHJLdkh6angrR1E9PSIsInZhbHVlIjoibWNRcUkzTDIvY2R0SEJGV0FZa2s2c0tkMmMySmc5N3Q4NzRGS05yMk45b0ZqQ0VsMVJkVUZBSjVERkFYOXZoVS9vbTJmd3VSaFplODJUd2RiOW13T3c9PSIsIm1hYyI6IjFiMTMzZmU1NzYyNjY3OThlNGYzMzc0MjNlM2I2NmY4OGQzZDBkYTNkOTVkZjBlMDhkN2ExMTNlY2UzMDE5MTciLCJ0YWciOiIifQ==?expires=1775964448&signature=7b297082f9520e9df658499ecdbdc51f615541de4d524d54b04f943e3adc925e"
-    },
-    {
-      "date": "2025-09-30",
-      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IjlwN2R6VEJwblo1TGpJWE5sdnViYlE9PSIsInZhbHVlIjoiQlNyOHFsQXg5cVh5aE5OaWRIZ0h3Vm1ZVGlQUTlheStiek5xRzZSUThBc1ZMQm9mclhCSXpydHU0Z0FkUjNuSTFDaXloQU1vM2pmWlltbGlYQmIwOGc9PSIsIm1hYyI6ImIzYWFkZGQ3M2U1NDNmMjliMzBkZDc3NTNlYTU5ZjE1MGU3MGNkM2U0Njg3ZDRkNmNjMzI4ZmViMjAwZDYyMTEiLCJ0YWciOiIifQ==?expires=1775964448&signature=14594e857f4c05946f97e521d6791b43f8b073395755c9bc475dc77a0c3f7af0"
-    },
-    {
-      "date": "2025-09-08",
-      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6ImlSMEQ0RC9ETE5wK0hZRUJaWDhqRXc9PSIsInZhbHVlIjoiV3FUL0tvQjRTMk5xL1NYVFlDL0tPZEpFOFZ1UkcrQ1R0L29sZ2tHTmFvS2Jsc2NmVWxBbUtublpSdEE3bTV0YmFuYU1KcGVZRXh4WFBxNVBaeU1NZ1E9PSIsIm1hYyI6ImM4MDZhYWRhNGZmNWVmNGExZTM1OGM3MTdhODVhNmMwYjYyN2U4ZWEzMThkOWRlYmRmMjVlNWUzYWFhYjdmZTQiLCJ0YWciOiIifQ==?expires=1775964448&signature=a8ef4c801d23ad072cbd18d198abdca4c65380b30861030ed42b18df7c2f4e72"
-    },
-    {
-      "date": "2025-07-18",
-      "description": "Order by HON'BLE SHRI JUSTICE M. S. KARNIK,HON'BLE SHRI JUSTICE N. R. BORKAR",
-      "judge": "HON'BLE SHRI JUSTICE M. S. KARNIK,HON'BLE SHRI JUSTICE N. R. BORKAR",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IkFSMUlBUzQ5MXdWbDRCbkdCR2phQVE9PSIsInZhbHVlIjoiQS9HaUVvQ0tmSXoybTRUR2F2aG9BTUdPNEp6a1VXTDBxVjFPenpnRElsSy9IZFlqQ1dJOHdlR0EyRmo4eUFQWnRSQnZKdmJWSlN5ZmxaTGlOeW9mZHc9PSIsIm1hYyI6IjkwZWI5MjZkODk2MzIzMjg3NDAwMjI0YjMzYTY0NGIzYmI4ZGNlM2RkYWU4NWRhMjNjNzM3N2ExNTdjZjc4YTEiLCJ0YWciOiIifQ==?expires=1775964448&signature=fd9caf9b102f6c8ed4213279bb94baabdedc028b64977f3d4c315af9f83e850f"
-    },
-    {
-      "date": "2025-05-09",
-      "description": "Order by HON'BLE JUSTICE DR. NEELA KEDAR GOKHALE,HON'BLE SHRI JUSTICE A.S. CHANDURKAR",
-      "judge": "HON'BLE JUSTICE DR. NEELA KEDAR GOKHALE,HON'BLE SHRI JUSTICE A.S. CHANDURKAR",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6ImNkbmhDd3JiZHdRYVdaOG9oNU9nQkE9PSIsInZhbHVlIjoid3ZBT1NhSk9xYnhZaWJrVFoyWGNINnFLSVJ5OWdnQUNFb3ZjMDlSQ3JKM09uZm1rNnhrTGw3cjNkdjdrQXRxWm1PMFhhdndaQTVUYmpvN1dQR0kzL0E9PSIsIm1hYyI6ImQyMDY4ZTM0NWJlMWU4YWViMzQwYmU2ZjI1YzIxMTQ2ZDE1ZTcyNzM4OGUzMDc2MzliYTc5YTA3NjU2ZTViMjAiLCJ0YWciOiIifQ==?expires=1775964448&signature=3ff140c04802712a2a19918475a1c418c0110736f89c684598cd75993c2c0d63"
-    },
-    {
-      "date": "2025-02-28",
-      "description": "Order by SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IkRqVVdZdjgzQjdmellraXNya2YxN2c9PSIsInZhbHVlIjoiL2NmK0crdnMxWnRGWUdWYUZKM2JqcmpkbnJlNEdvMW5BR3N2SStpaGh2SUZWakVGYXNER3RWbWIzU2JZcmwrRjZpVmp5VWlNUjE3dlZJTWgranl1NXc9PSIsIm1hYyI6ImZhYjdkZTZlMGIwOTBmMjA3Mzg4YTM4ZGVkMzk3NDYxMzViNTBjODQ0MWU4YjRlZDM3MGM5OTEyOTg0Y2Q5YjYiLCJ0YWciOiIifQ==?expires=1775964448&signature=15dea11b415b4f6dbb56cb7ac85bada27a8a9b345406f8cf2467a2014831b0de"
-    },
-    {
-      "date": "2025-02-13",
-      "description": "Order by SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6ImYxQ09kMmpsUkkwS0ZlMXR4OEpEeXc9PSIsInZhbHVlIjoiQjNieWdndVpqNjJYRVQwdHZLUGdGNVlmZEY0NnVFNlZ1d2tPOExSckcram51YVZEVGJQeENpb2p0WFhqQTIyRU9iRWNEcmp6NXMzRHpjaVRvcmFUUFE9PSIsIm1hYyI6ImI0NzU1OTE4MjgwZTBiZTVhMGUzZWI1M2YyODEwNGM0OTY4OTc2NWZmZmI3NmM2YWExZTUyYzFjMzg1OGQ1M2YiLCJ0YWciOiIifQ==?expires=1775964448&signature=ca9454eba3732e4379b53c9ac7907d0a876f91eb70af107233d365bc7f10111f"
-    }
-  ],
+  "court_name": "Bombay High Court",
+  "acts": [],
   "history": [
     {
       "business_date": "2026-04-10",
       "hearing_date": "2026-04-10",
       "judge": "HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE,HON'BLE SHRI JUSTICE ABHAY J. MANTRI",
-      "purpose": ",528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-11-18",
       "hearing_date": "2025-11-18",
       "judge": "HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE,HON'BLE SHRI JUSTICE ASHWIN D. BHOBE",
-      "purpose": ",528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-10-06",
       "hearing_date": "2025-10-06",
       "judge": "HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE,HON'BLE SHRI JUSTICE ASHWIN D. BHOBE",
-      "purpose": ",528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-09-30",
       "hearing_date": "2025-09-30",
       "judge": "HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE,HON'BLE SHRI JUSTICE ASHWIN D. BHOBE",
-      "purpose": ".528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-09-08",
       "hearing_date": "2025-09-08",
       "judge": "HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE,HON'BLE SHRI JUSTICE ASHWIN D. BHOBE",
-      "purpose": ".528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-07-18",
       "hearing_date": "2025-07-18",
       "judge": "HON'BLE SHRI JUSTICE M. S. KARNIK,HON'BLE SHRI JUSTICE N. R. BORKAR",
-      "purpose": ".528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-05-09",
       "hearing_date": "2025-05-09",
       "judge": "HON'BLE SHRI JUSTICE A.S. CHANDURKAR,HON'BLE JUSTICE DR. NEELA KEDAR GOKHALE",
-      "purpose": "//528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-02-28",
       "hearing_date": "2025-02-28",
       "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "purpose": ",528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-02-13",
       "hearing_date": "2025-02-13",
       "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
-      "purpose": ",528144721634,3"
+      "purpose": null
     },
     {
       "business_date": "2025-01-29",
       "hearing_date": "2025-01-29",
       "judge": "ASSISTANT REGISTRAR",
-      "purpose": ".528144721634,3"
+      "purpose": null
     }
   ],
+  "orders": [
+    {
+      "date": "2025-11-18",
+      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6InJpVk5hNEhhVGlwL216SmUrZC8rcUE9PSIsInZhbHVlIjoid0J3SmpxUkEwNFBHK1hNMlZ1cnVYSjFhVkhSMjhkUDlPMU9VV0VqcDBwVzdwekhBOE0yZzhuNW1tM0poVXFXTVVBVzRkRmRWUzdlTlFCWmYzTVFaeWc9PSIsIm1hYyI6IjM5NTA0ZmViOTQ0MTU3M2I4OWJkNzI3NWM3M2E5YmFmODVmZTZlYjE0OGNjODM1ZDhjNmQ3NTdlNDU2ZmZjNTMiLCJ0YWciOiIifQ==?expires=1775999594&signature=cf80a00a971026355c49a6a8c92e8cdea66b47bab00d5571bdc426b795e15274"
+    },
+    {
+      "date": "2025-10-06",
+      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6InRleS9KZis2dlJkemVYRzhldld1cWc9PSIsInZhbHVlIjoiMWx5TnEvaVlPTEx1UU94MDI0QlRuNmxqa2twUTFYeUVWK2psUVlSWlRwM1lkZkNUZ1E5NlV2STRZbUZZUWNneG5veVltQysyTTZVTE91elcwbVc3TEE9PSIsIm1hYyI6IjQ5NzdkNTcyYzdjNDQ0OTllZjVjMTcwMzI1OTQwY2MzNTJhMDUyMjUwM2FkNjg2YTMyYjBhYTIwZDM2MDI4MGYiLCJ0YWciOiIifQ==?expires=1775999594&signature=191fc69e95b24eb03077e933ddab7bfdf07356758b78e9ba015c166469418369"
+    },
+    {
+      "date": "2025-09-30",
+      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IlIvMHZ2ellNMnBjOGxCcmc5WXpieEE9PSIsInZhbHVlIjoiTlcyODNhdXowWHZDMThES1ZrcmtZYkNPMWdTSWx0d1laN1pHMEE0YzJTUFFuZXVhVDdQZXFyWTBDV0NEVUpCaTM1QnJneFhHVWJqbEljbjF5YUJWZUE9PSIsIm1hYyI6IjkwYzY0YjMwNmZlMjVjMDgxOWQ4ODc4NmU4MDhmZTAzNjcwYjRjZWM0Y2Y1Mzk2NGIyYmNjYTE4ZmY2ZGI1ZGIiLCJ0YWciOiIifQ==?expires=1775999594&signature=a97f52e3aa08d485c80515c112c6c4a48a6ef565a49b3711e032cad5840b4811"
+    },
+    {
+      "date": "2025-09-08",
+      "description": "Order by HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "judge": "HON'BLE SHRI JUSTICE ASHWIN D. BHOBE,HON'BLE SHRI JUSTICE RAVINDRA V. GHUGE",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IlU1Wjl5K1RvczMwYnI1U1dKTjZIYkE9PSIsInZhbHVlIjoiTDdwRVIyN2FETWZhbFBEeVpNYTNvTHR3OUNITmJGYzJhSXpVWmRhYTVGcm40czVsTDN5KzBDN05Ya0JNMThjYnQ4RVphelFqdXFXSDR6d3NyY2RQcUE9PSIsIm1hYyI6ImQ2NzVkYjBmNDk5OWZkMGIxYzI2M2I1MmQ0NDA5OTI2NzdiZWY4MjIxNmEzMGYyYTI0NDY2N2E5NzY5YTJhMGIiLCJ0YWciOiIifQ==?expires=1775999594&signature=45a6c9c6b3166f48b813102b7abdf83f445d937dfc7275dcb56eac85140fa179"
+    },
+    {
+      "date": "2025-07-18",
+      "description": "Order by HON'BLE SHRI JUSTICE M. S. KARNIK,HON'BLE SHRI JUSTICE N. R. BORKAR",
+      "judge": "HON'BLE SHRI JUSTICE M. S. KARNIK,HON'BLE SHRI JUSTICE N. R. BORKAR",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IjdHZC80bEIyd3JpelVDdlNYVm9Gcmc9PSIsInZhbHVlIjoiWWFrNnhWRmYrdXJhL3JqKzIyS0EzZ3pnYk5CMjBoT3ZrTkdSd0UvUDlLSHlOOTJRT2laN1Vuc2ZtT2YxNzdKcEFZNjFXRG1POWxpRmQ2aVpGbDhsY0E9PSIsIm1hYyI6IjZjNjgyYTZmZTFmYzU0OTg5MGFlOWJjNzY4OGFiYjY3NTE1ZjIzMjJlZmYzYmZkYWE5Y2I4NDZhZWE3Mzc3NDEiLCJ0YWciOiIifQ==?expires=1775999594&signature=072eb463d29a0e26cab4f01d8acd60243b4e4de8bd46ff426e7f6a89321cddd1"
+    },
+    {
+      "date": "2025-05-09",
+      "description": "Order by HON'BLE JUSTICE DR. NEELA KEDAR GOKHALE,HON'BLE SHRI JUSTICE A.S. CHANDURKAR",
+      "judge": "HON'BLE JUSTICE DR. NEELA KEDAR GOKHALE,HON'BLE SHRI JUSTICE A.S. CHANDURKAR",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IjB2VGZkcGM2c0tIWE0xalhncUtyR2c9PSIsInZhbHVlIjoiS3o2WkRtcUhaR0RmSTFVVW5abE9MM0tKcW1ndnk5NzU4M1JCM1l1QlowMSszWXZZZWxUOXVvZmFrMUQzSEUwWFY4S3VEV0I2OHh5b2lvSEVnMGdSYXc9PSIsIm1hYyI6IjA5MWQ5NjZiNzNkMjg0ZDI1ODA2Y2M2ODljMDQxMjc1Y2U0NjIwZDgyNDA0ZjAxNTk0Mjg0MDgzY2U5YzlmOWYiLCJ0YWciOiIifQ==?expires=1775999594&signature=943d412636d4103a57dc835280d0ccaf2ae9d9b673a915fd5d4af5b0d3a6603d"
+    },
+    {
+      "date": "2025-02-28",
+      "description": "Order by SHRI H.M.BHOSALE, Registrar(Judl I)",
+      "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6Ik1GNUliTC8rVmVzTUNPMXU4Nk9VaHc9PSIsInZhbHVlIjoid3ZGeFk3Qk5VS2dYeDVVUHBtSjBoMkNCUTZOdGg3c29FeFFYM3FjZEFaS0RBNjViWmNNOFZjK0x0b25zeDRZQkd0RFhna1RzZUZIQXdYNUhLL3lCWXc9PSIsIm1hYyI6ImM3YmM4NDQyMzBjZmU1ZGRkZWI5ODMyM2JiYTg5MDI3Mjc2OGRhZjFhZDhkNTZiYWFhZmM3NTJhYmU0ZmMzOGIiLCJ0YWciOiIifQ==?expires=1775999594&signature=d76ba028b44d6bb925a4798827112a13fc505c2f67849e573674d9080888b3fd"
+    },
+    {
+      "date": "2025-02-13",
+      "description": "Order by SHRI H.M.BHOSALE, Registrar(Judl I)",
+      "judge": "SHRI H.M.BHOSALE, Registrar(Judl I)",
+      "document_url": "https://bombayhighcourt.gov.in/bhc/file/download/eyJpdiI6IjZRaldxbWN1eEtXMUlwUFhjWURsQ2c9PSIsInZhbHVlIjoiZjVHbGI1ZWhXbUhvUm1tMEpyRmZFcytXaFlQZUJsQ0lsTnhYanRsUkI2ZHU1RVptV0tuTHB2REJaa29UOHNPYjZoeWJEVWxKK0NJS0trTU5ZOFZOVXc9PSIsIm1hYyI6Ijg2Y2ViMGE4MmFmYmVhOTY1MjRlOWFlZjRhOTMzMThhYjYyYTFmOWEyZWI3NTJmNTJlNjllMzg5MWM2YWNkY2YiLCJ0YWciOiIifQ==?expires=1775999594&signature=9c20deeb2527abde15f96a56e02a8d60912018f037f7bd063f5a45c7c7322351"
+    }
+  ],
+  "ia_details": [],
   "connected_matters": [],
   "application_appeal_matters": [],
-  "ia_details": [],
+  "additional_info": {
+    "cnr_no": "HCBM010044872025",
+    "case_no": "5775",
+    "case_year": "2025",
+    "status": "Pre-Admission_Fresh",
+    "district": null
+  },
   "original_json": {
     "documents": [],
     "objections": [],

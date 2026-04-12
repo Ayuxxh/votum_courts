@@ -1,10 +1,176 @@
 {
-  "status": "error",
-  "error_type": "RetryError",
-  "error": "RetryError[<Future at 0x1177bc390 state=finished raised HTTPError>]",
-  "params": {
-    "drat": "delhi",
-    "filing_no": "071090023872025"
+  "cin_no": "071090023872025",
+  "filing_no": "071090023872025",
+  "registration_no": null,
+  "case_no": null,
+  "diary_no": "2387/2025",
+  "registration_date": "2025-12-11",
+  "filing_date": "2025-12-11",
+  "next_listing_date": "2026-03-16",
+  "decision_date": null,
+  "court_no": "2",
+  "court_name": "Registrar",
+  "bench_name": "DEBT RECOVERY APPELLATE TRIBUNAL - DELHI",
+  "first_listing_date": "2026-01-28",
+  "last_listing_date": "2026-03-16",
+  "disposal_nature": 1,
+  "purpose_next": "Removal of defects",
+  "case_type": "REGULAR APPEAL",
+  "pet_name": [
+    "STATE BANK OF INDIA"
+  ],
+  "res_name": [
+    "ANUP GUPTA"
+  ],
+  "advocates": "Petitioner: KAKRA AND ASSOCIATES",
+  "judges": null,
+  "history": [
+    {
+      "causelistdate": "16/3/2026",
+      "purpose": "Removal of defects\r\n",
+      "ascourtName": "Registrar",
+      "courtName": "Registrar",
+      "courtNo": "2"
+    },
+    {
+      "causelistdate": "19/2/2026",
+      "purpose": "Removal of defects\r\n",
+      "ascourtName": "Registrar",
+      "courtName": "Registrar",
+      "courtNo": "2"
+    },
+    {
+      "causelistdate": "28/1/2026",
+      "purpose": "Removal of defects\r\n",
+      "ascourtName": "Registrar",
+      "courtName": "Registrar",
+      "courtNo": "2"
+    }
+  ],
+  "acts": [],
+  "orders": [
+    {
+      "date": "2026-03-16",
+      "description": "Purpose: Removal of defects | As Court: Registrar | Court: Registrar / 2",
+      "document_url": null,
+      "source_document_url": null,
+      "listing_date": "2026-03-16",
+      "purpose": "Removal of defects",
+      "court_name": "Registrar",
+      "court_no": "2"
+    },
+    {
+      "date": "2026-02-19",
+      "description": "Purpose: Removal of defects | As Court: Registrar | Court: Registrar / 2",
+      "document_url": null,
+      "source_document_url": null,
+      "listing_date": "2026-02-19",
+      "purpose": "Removal of defects",
+      "court_name": "Registrar",
+      "court_no": "2"
+    },
+    {
+      "date": "2026-01-28",
+      "description": "Purpose: Removal of defects | As Court: Registrar | Court: Registrar / 2",
+      "document_url": null,
+      "source_document_url": null,
+      "listing_date": "2026-01-28",
+      "purpose": "Removal of defects",
+      "court_name": "Registrar",
+      "court_no": "2"
+    }
+  ],
+  "ia_details": [],
+  "connected_matters": [],
+  "application_appeal_matters": [],
+  "additional_info": {
+    "case_status": "PENDING",
+    "status_code": "P",
+    "status_label": "PENDING",
+    "petitioner_address": "12TH FLOOR, JAWAHAR VYAPAR BHAWAN, STC, BUILDING, 1 TOLSTOY MARG, JANPATH ROAD, NEW DELHI",
+    "respondent_address": "G 42 LAJPAT NAGAR II NEW DELHI",
+    "main_case_case_no": null,
+    "additional_party_petitioner": null,
+    "additional_party_respondent": null,
+    "suit_amount": null,
+    "rc_detail": null,
+    "listing_history": [
+      {
+        "causelistdate": "16/3/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      },
+      {
+        "causelistdate": "19/2/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      },
+      {
+        "causelistdate": "28/1/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      }
+    ]
   },
-  "note": "Live upstream DRAT details call returned an error during this run."
+  "original_json": {
+    "diaryno": "2387",
+    "diaryyear": "2025",
+    "casestatus": "PENDING",
+    "dateoffiling": "11/12/2025",
+    "caseno": null,
+    "caseyear": null,
+    "casetype": "REGULAR APPEAL",
+    "maincasediaryno": "1939/2023",
+    "additionalpartypet": null,
+    "additionalpartyres": null,
+    "nextlistingdate": "16/3/2026",
+    "dateofdisposal": null,
+    "nextListingPurpose": "Removal of defects\r\n",
+    "disposalNature": null,
+    "petitionerName": "STATE BANK OF INDIA",
+    "petitionerApplicantAddress": "12TH FLOOR, JAWAHAR VYAPAR BHAWAN, STC, BUILDING, 1 TOLSTOY MARG, JANPATH ROAD, NEW DELHI",
+    "advocatePetName": "KAKRA AND ASSOCIATES",
+    "advocateResName": null,
+    "respondentName": "ANUP GUPTA",
+    "courtNo": "2",
+    "courtName": "Registrar",
+    "status": "P",
+    "location": "delhi2",
+    "respondentDefendentAddress": "G 42 LAJPAT NAGAR II NEW DELHI",
+    "drtcase_no": [
+      {
+        "drtcaseno": "SA/97/2023"
+      }
+    ],
+    "othercase": [],
+    "caseProceedingDetails": [
+      {
+        "causelistdate": "16/3/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      },
+      {
+        "causelistdate": "19/2/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      },
+      {
+        "causelistdate": "28/1/2026",
+        "purpose": "Removal of defects\r\n",
+        "ascourtName": "Registrar",
+        "courtName": "Registrar",
+        "courtNo": "2"
+      }
+    ]
+  }
 }

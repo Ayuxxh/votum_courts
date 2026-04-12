@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-04-12T02:59:11.223523+00:00",
-  "output_dir": "backend/ecourts/results/details_runs_2026-04-12",
+  "generated_at_utc": "2026-04-12T12:40:05.271836+00:00",
+  "output_dir": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12",
   "runs": [
     {
       "name": "SCI",
@@ -9,7 +9,7 @@
         "diary_no": "8960",
         "diary_year": "2025"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/sci_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/sci_details.json"
     },
     {
       "name": "NCLAT",
@@ -18,17 +18,17 @@
         "filing_no": "9910110084442023",
         "bench": "delhi"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/nclat_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/nclat_details.json"
     },
     {
       "name": "NCLT",
-      "status": "success",
+      "status": "error",
       "params": {
         "bench": "kolkata",
         "filing_no": "1908134021072024"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/nclt_details.json",
-      "note": "Applied a one-off runtime timeout patch to session.get for this execution only."
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/nclt_details.json",
+      "note": "Applied a one-off runtime timeout patch to NCLT session.get for this execution only."
     },
     {
       "name": "DRT",
@@ -37,7 +37,7 @@
         "drt": "delhi",
         "filing_no": "070110005432019"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/drt_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/drt_details.json"
     },
     {
       "name": "DRAT",
@@ -46,8 +46,8 @@
         "drat": "delhi",
         "filing_no": "071090023872025"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/drat_details.json",
-      "note": "Upstream details endpoint returned an error; saved error payload instead of a detail object."
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/drat_details.json",
+      "note": "DRAT details can fail upstream; errors are saved to JSON instead of aborting the run."
     },
     {
       "name": "Bombay HC",
@@ -57,7 +57,7 @@
         "case_no": "5775",
         "case_year": "2025"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/bombay_hc_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/bombay_hc_details.json"
     },
     {
       "name": "Gujarat HC",
@@ -67,7 +67,7 @@
         "case_no": "1526",
         "case_year": "2026"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/gujarat_hc_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/gujarat_hc_details.json"
     },
     {
       "name": "Delhi HC",
@@ -77,7 +77,7 @@
         "case_no": "533",
         "case_year": "2025"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/delhi_hc_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/delhi_hc_details.json"
     },
     {
       "name": "HC Services",
@@ -85,8 +85,8 @@
       "params": {
         "cnr_number": "GJHC240325432025"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/hc_services_details.json",
-      "note": "Used the scraper's live CNR/history flow, which returns detailed case data."
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/hc_services_details.json",
+      "note": "Uses the live HC services CNR/history flow."
     },
     {
       "name": "DC Services",
@@ -100,11 +100,9 @@
         "state_code": "17",
         "dist_code": "13",
         "court_complex_code": "1170040",
-        "search_by": "CScaseNumber",
-        "app_token": "",
-        "ajax_req": "true"
+        "search_by": "CScaseNumber"
       },
-      "file": "backend/ecourts/results/details_runs_2026-04-12/dc_services_details.json"
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/dc_services_details.json"
     }
   ]
 }

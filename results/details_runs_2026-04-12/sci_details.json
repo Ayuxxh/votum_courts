@@ -3,14 +3,14 @@
   "registration_no": null,
   "filing_no": "8960/2025",
   "case_no": "Crl.A. No. 000001 / 2026",
-  "registration_date": "02-01-2026",
-  "filing_date": "17-02-2025 03:25 PM",
-  "first_listing_date": "07-04-2025)",
-  "next_listing_date": "15-04-2026",
-  "last_listing_date": "15-04-2026",
+  "registration_date": "2026-01-02",
+  "filing_date": "2025-02-17",
+  "first_listing_date": "2025-04-07",
+  "next_listing_date": "2026-04-15",
+  "last_listing_date": "2026-04-15",
   "decision_date": null,
   "court_no": null,
-  "disposal_nature": "pending",
+  "disposal_nature": 1,
   "purpose_next": "SCLSC PENDING[] (Final Hearing) Not taken up/ Not Today-Ord dt:09-04-2026",
   "case_type": "1506LI-Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
   "pet_name": [
@@ -23,7 +23,7 @@
   "judges": "HON'BLE MR. JUSTICE MANOJ MISRA, HON'BLE MR. JUSTICE MANMOHAN",
   "bench_name": null,
   "court_name": null,
-  "history": null,
+  "history": [],
   "acts": [
     "1506LI-Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)"
   ],
@@ -56,7 +56,7 @@
       "description": null,
       "party": null,
       "filing_date": null,
-      "next_date": "15-04-2025",
+      "next_date": "2025-04-15",
       "status": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
       "disposal_date": null,
       "cin_no": null
@@ -67,166 +67,10 @@
       "description": null,
       "party": null,
       "filing_date": null,
-      "next_date": "15-04-2025",
+      "next_date": "2025-04-15",
       "status": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
       "disposal_date": null,
       "cin_no": null
-    }
-  ],
-  "listing_dates": [
-    {
-      "cl_date": "15-04-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "09-04-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE VIPUL M. PANCHOLI",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "08-04-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "19-03-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "18-03-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "12-03-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "11-03-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "26-02-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "25-02-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Next Week / Week Commencing / C.O.Week",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "19-02-2026",
-      "misc_regular": "Regular",
-      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
-      "purpose": "Fixed Date by Court",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
-      "ia": "",
-      "remarks": "Not taken up/ Not Today",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "19-12-2025",
-      "misc_regular": "Misc.",
-      "stage": "[AFTER NOTICE (FOR ADMISSION) - CRIMINAL CASES]",
-      "purpose": "After Week/Month/Vacation",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
-      "ia": "",
-      "remarks": "Leave Granted / Rule NISI / Appeal Admitted, Week Commencing [16-02-2026]",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "26-08-2025",
-      "misc_regular": "Misc.",
-      "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
-      "purpose": "Fixed Date by Court",
-      "proposed_list_in": "Registrar",
-      "judges": "REGISTRAR",
-      "ia": "",
-      "remarks": "List before court/bench",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "18-07-2025",
-      "misc_regular": "Misc.",
-      "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
-      "purpose": "Fixed Date by Court",
-      "proposed_list_in": "Registrar",
-      "judges": "REGISTRAR",
-      "ia": "",
-      "remarks": "List On (Date) [26-08-2025]",
-      "listed": "LISTED"
-    },
-    {
-      "cl_date": "15-04-2025",
-      "misc_regular": "Misc.",
-      "stage": "[FRESH (FOR ADMISSION) - CRIMINAL CASES]",
-      "purpose": "FRESH",
-      "proposed_list_in": "Judge",
-      "judges": "HON'BLE MR. JUSTICE ABHAY S. OKA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
-      "ia": "87412/2025,87413/2025",
-      "remarks": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
-      "listed": "LISTED"
     }
   ],
   "additional_info": {
@@ -250,6 +94,162 @@
       {
         "date": "18-02-2026",
         "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2026-02-18_284.pdf"
+      }
+    ],
+    "listing_dates": [
+      {
+        "cl_date": "2026-04-15",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-04-09",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE VIPUL M. PANCHOLI",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-04-08",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-03-19",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-03-18",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-03-12",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-03-11",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-02-26",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-02-25",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Next Week / Week Commencing / C.O.Week",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2026-02-19",
+        "misc_regular": "Regular",
+        "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+        "purpose": "Fixed Date by Court",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+        "ia": "",
+        "remarks": "Not taken up/ Not Today",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2025-12-19",
+        "misc_regular": "Misc.",
+        "stage": "[AFTER NOTICE (FOR ADMISSION) - CRIMINAL CASES]",
+        "purpose": "After Week/Month/Vacation",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+        "ia": "",
+        "remarks": "Leave Granted / Rule NISI / Appeal Admitted, Week Commencing [16-02-2026]",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2025-08-26",
+        "misc_regular": "Misc.",
+        "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
+        "purpose": "Fixed Date by Court",
+        "proposed_list_in": "Registrar",
+        "judges": "REGISTRAR",
+        "ia": "",
+        "remarks": "List before court/bench",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2025-07-18",
+        "misc_regular": "Misc.",
+        "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
+        "purpose": "Fixed Date by Court",
+        "proposed_list_in": "Registrar",
+        "judges": "REGISTRAR",
+        "ia": "",
+        "remarks": "List On (Date) [26-08-2025]",
+        "listed": "LISTED"
+      },
+      {
+        "cl_date": "2025-04-15",
+        "misc_regular": "Misc.",
+        "stage": "[FRESH (FOR ADMISSION) - CRIMINAL CASES]",
+        "purpose": "FRESH",
+        "proposed_list_in": "Judge",
+        "judges": "HON'BLE MR. JUSTICE ABHAY S. OKA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+        "ia": "87412/2025,87413/2025",
+        "remarks": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
+        "listed": "LISTED"
       }
     ]
   },
