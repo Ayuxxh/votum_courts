@@ -640,7 +640,7 @@ def sci_get_details(diary_no, diary_year):
         if diary_info:
             filing_parts = diary_info.split("Filed on", 1)
             if len(filing_parts) > 1:
-                filing_date = filing_parts[1].split("[", 1)[0].strip()
+                filing_date = _extract_order_date(filing_parts[1].split("[", 1)[0].strip())
 
         case_info = _extract_td_text(soup, "Case Number")
         case_number = (
@@ -651,16 +651,16 @@ def sci_get_details(diary_no, diary_year):
             # Prefer the date immediately following "Registered on"
             m = re.search(r"Registered on\s*(\d{2}-\d{2}-\d{4})", case_info or "")
             if m:
-                registration_date = m.group(1)
+                registration_date = _extract_order_date(m.group(1))
 
 
         verified_on = None
         if case_info and "Verified On" in case_info:
             verified_parts = case_info.split("Verified On", 1)
-            verified_on = verified_parts[1].split("[", 1)[0].strip(" :")
+            verified_on = _extract_order_date(verified_parts[1].split("[", 1)[0].strip(" :"))
 
         listed_info = _extract_td_text(soup, "Present/Last Listed On")
-        listed_on = listed_info.split("[", 1)[0].strip() if listed_info else None
+        listed_on = _extract_order_date(listed_info.split("[", 1)[0].strip()) if listed_info else None
 
 
         next_listing = None  # derived from listing_dates below
@@ -670,7 +670,7 @@ def sci_get_details(diary_no, diary_year):
         status = (
             status_info.split("List On", 1)[0].strip() if status_info else None
         )
-        pending_or_disposed = 'pending' if 'pending' in status.lower() else 'disposed'
+        disposal_nature = 0 if status and 'disposed' in status.lower() else 1
         category = _extract_td_text(soup, "Category")
         acts = [category]
 
@@ -716,6 +716,10 @@ def sci_get_details(diary_no, diary_year):
             logger.warning("Failed to fetch SCI listing dates: %s", exc)
 
         listings = _parse_listing_dates(listing_html) if listing_html else []
+        # Normalize cl_date to ISO in each listing entry
+        for _listing in listings:
+            if _listing.get("cl_date"):
+                _listing["cl_date"] = _extract_order_date(_listing["cl_date"]) or _listing["cl_date"]
 
         # Derive next_listing_date: earliest cl_date >= today from listing_dates
         _today = datetime.today().date()
@@ -724,14 +728,14 @@ def sci_get_details(diary_no, diary_year):
             _cl = _entry.get("cl_date")
             if _cl:
                 try:
-                    _d = datetime.strptime(_cl, "%d-%m-%Y").date()
+                    _d = datetime.strptime(_cl, "%Y-%m-%d").date()
                     if _d >= _today:
                         _future.append((_d, _cl))
                 except ValueError:
                     pass
         if _future:
             _future.sort()
-            next_listing = _future[0][1]
+            next_listing = _future[0][0].strftime("%Y-%m-%d")
 
         ia_details = []
         if listings:
@@ -749,7 +753,7 @@ def sci_get_details(diary_no, diary_year):
                                 "description": None,
                                 "party": None,
                                 "filing_date": None,
-                                "next_date": entry.get("cl_date"),
+                                "next_date": _extract_order_date(entry.get("cl_date")),
                                 "status": entry.get("remarks"),
                                 "disposal_date": None,
                                 "cin_no": None,
@@ -797,7 +801,7 @@ def sci_get_details(diary_no, diary_year):
             "last_listing_date": listed_on,
             "decision_date": None,
             "court_no": None,
-            "disposal_nature": pending_or_disposed,
+            "disposal_nature": disposal_nature,
             "purpose_next": status,
             "case_type": category,
             "pet_name": petitioners or [],
@@ -806,13 +810,13 @@ def sci_get_details(diary_no, diary_year):
             "judges": ", ".join(judges) if judges else None,
             "bench_name": None,
             "court_name": None,
-            "history": None,
+            "history": [],
             "acts": acts,
             "orders": orders,
             "ia_details": ia_details,
-            "listing_dates": listings,
             "additional_info": {
                 "office_reports": office_reports,
+                "listing_dates": listings,
             },
             "original_json": {
                 "case_details": case_payload,

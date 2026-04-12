@@ -343,40 +343,51 @@ class BombayHCService:
 
     def _parse_html_response(self, html_content: str) -> Dict[str, Any]:
         soup = BeautifulSoup(html_content, 'html.parser')
-        
-        result = {
-            "status": None,
-            "cnr_no": None,
+
+        result: Dict[str, Any] = {
+            # canonical identifiers
+            "cin_no": None,           # mapped from CNR No.
             "filing_no": None,
             "registration_no": None,
+            "case_type": None,
+            # canonical dates
             "registration_date": None,
             "filing_date": None,
-            "case_type": None,
-            "case_no": None,
-            "case_year": None,
+            "first_listing_date": None,
+            "next_listing_date": None,
+            "last_listing_date": None,
+            "decision_date": None,
+            # canonical status
+            "disposal_nature": 1,     # 1=pending, 0=disposed
+            "purpose_next": None,
+            # canonical parties
             "pet_name": [],
             "res_name": [],
             "advocates": None,
             "judges": None,
-            "court_name": "Bombay High Court",
+            # canonical court
             "bench_name": None,
-            "district": None,
-            "first_hearing_date": None,
-            "next_listing_date": None,
-            "decision_date": None,
-            "orders": [],
+            "court_name": "Bombay High Court",
+            # canonical collections
+            "acts": [],
             "history": [],
+            "orders": [],
+            "ia_details": [],
             "connected_matters": [],
             "application_appeal_matters": [],
-            "ia_details": [],
+            # auxiliary
+            "additional_info": {},
             "original_json": {
                 "documents": [],
                 "objections": [],
                 "ia_details": [],
-            }
+            },
         }
 
         # 1. Header Parsing
+        _cnr_no = None
+        _case_no = None
+        _case_year = None
         header_div = soup.find('div', class_=lambda c: c and 'border-bottom' in c and 'pb-2' in c)
         if header_div:
             text = header_div.get_text(" ", strip=True)
@@ -387,14 +398,15 @@ class BombayHCService:
                 parts = result['registration_no'].split('/')
                 if len(parts) >= 3:
                     result['case_type'] = parts[0]
-                    result['case_no'] = parts[1]
-                    result['case_year'] = parts[2]
+                    _case_no = parts[1]
+                    _case_year = parts[2]
 
             # CNR No. HCBM010149552025
             cnr_match = re.search(r"CNR No[\.:]?\s*([A-Z0-9]+)", text, re.IGNORECASE)
             if cnr_match:
-                result['cnr_no'] = cnr_match.group(1)
-            
+                _cnr_no = cnr_match.group(1)
+                result['cin_no'] = _cnr_no
+
             # Filing Date
             date_match = re.search(r"filed on\s*(\d{2}/\d{2}/\d{4})", text, re.IGNORECASE)
             if date_match:
@@ -403,11 +415,17 @@ class BombayHCService:
         # 2. Structured fields
         result['filing_no'] = self._clean_text(self._extract_label_value(soup, "Filing Number"))
         result['registration_date'] = self._parse_date(self._extract_label_value(soup, "Registration Date"))
-        result['status'] = self._clean_text(self._extract_label_value(soup, "Status"))
+        _status = self._clean_text(self._extract_label_value(soup, "Status"))
         result['next_listing_date'] = self._parse_date(self._extract_label_value(soup, "Next Listing Date"))
-        
-        # 3. Petitioner / Respondent extraction (multiple p tags)
-        def extract_parties(label):
+
+        # disposal_nature from status
+        if _status and 'dispos' in _status.lower():
+            result['disposal_nature'] = 0
+
+        # 3. Petitioner / Respondent extraction
+        _DASH_VALUES = {'—', '-', '–', '', 'na', 'nil', 'n/a'}
+
+        def extract_parties(label: str) -> List[str]:
             label_b = soup.find('b', string=lambda s: s and label.lower() in s.lower())
             if label_b:
                 label_col = label_b.find_parent('div')
@@ -415,88 +433,98 @@ class BombayHCService:
                     value_col = label_col.find_next_sibling('div')
                     if value_col:
                         ps = value_col.find_all('p')
-                        if ps:
-                            return [p.get_text(strip=True) for p in ps]
-                        return [value_col.get_text(strip=True)]
+                        raw = [p.get_text(strip=True) for p in ps] if ps else [value_col.get_text(strip=True)]
+                        return [v for v in raw if v and v.lower() not in _DASH_VALUES]
             return []
 
         result['pet_name'] = extract_parties("Petitioner")
         result['res_name'] = extract_parties("Respondent")
-            
-        # Advocates
+
+        # Advocates — filter dash/empty entries
         pet_advs = extract_parties("Petitioner's Advocate")
         res_advs = extract_parties("Respondent's Advocate")
-        adv_lines = []
+        adv_lines: List[str] = []
         if pet_advs:
             adv_lines.append(f"Petitioner: {', '.join(pet_advs)}")
         if res_advs:
             adv_lines.append(f"Respondent: {', '.join(res_advs)}")
         result["advocates"] = "\n".join(adv_lines) if adv_lines else None
 
-        # 4. Tabs
-        # History / Proceedings
+        # 4. History / Proceedings
         history_tab = soup.find('div', id='CaseNoHistory')
         if not history_tab:
-             history_tab = soup.find('div', id='CaseNoListing') # They seem to use Listing for history sometimes
+            history_tab = soup.find('div', id='CaseNoListing')
 
         if history_tab:
-            rows = history_tab.find_all('tr')
-            for row in rows[1:]:
+            for row in history_tab.find_all('tr')[1:]:
                 cols = row.find_all('td')
                 if len(cols) >= 3:
-                    # Date, Coram, Remark
-                    date_text = cols[0].get_text(strip=True)
-                    date_val = self._parse_date(date_text)
+                    date_val = self._parse_date(cols[0].get_text(strip=True))
                     if date_val:
+                        # Filter junk-coded purpose values (no alphabetic chars = garbage)
+                        purpose_raw = cols[2].get_text(strip=True)
+                        purpose_val = purpose_raw if re.search(r'[A-Za-z]', purpose_raw) else None
                         result["history"].append({
                             "business_date": date_val,
                             "hearing_date": date_val,
-                            "judge": cols[1].get_text(strip=True),
-                            "purpose": cols[2].get_text(strip=True)
+                            "judge": cols[1].get_text(strip=True) or None,
+                            "purpose": purpose_val,
                         })
 
-        # Orders
+        # Derive first/last listing dates from history
+        _today_str = datetime.today().strftime("%Y-%m-%d")
+        _hist_dates = sorted(h["hearing_date"] for h in result["history"] if h.get("hearing_date"))
+        if _hist_dates:
+            result["first_listing_date"] = _hist_dates[0]
+            _past = [d for d in _hist_dates if d <= _today_str]
+            result["last_listing_date"] = _past[-1] if _past else None
+
+        # 5. Orders
         orders_tab = soup.find('div', id='CaseNoOrders')
         if orders_tab:
-            rows = orders_tab.find_all('tr')
-            for row in rows[1:]:
+            for row in orders_tab.find_all('tr')[1:]:
                 cols = row.find_all('td')
                 if len(cols) >= 3:
-                    coram = cols[1].get_text(strip=True)
-                    date_text = cols[2].get_text(strip=True).split('\n')[0].strip() # Date is before link
-                    date_val = self._parse_date(date_text)
-                    
+                    coram = cols[1].get_text(strip=True) or None
+                    date_val = self._parse_date(cols[2].get_text(strip=True).split('\n')[0].strip())
                     doc_url = None
                     link = row.find('a', href=True)
                     if link:
                         doc_url = link['href']
                         if not doc_url.startswith('http'):
                             doc_url = urljoin(BASE_URL, doc_url)
-
                     result['orders'].append({
                         "date": date_val,
-                        "description": f"Order by {coram}",
+                        "description": f"Order by {coram}" if coram else "Order",
                         "judge": coram,
-                        "document_url": doc_url
+                        "document_url": doc_url,
                     })
 
-        # IA Details / Application Cases
+        # 6. IA Details
         ia_tab = soup.find('div', id='CaseNoApplCases')
         if ia_tab:
-            rows = ia_tab.find_all('tr')
-            for row in rows[1:]:
+            for row in ia_tab.find_all('tr')[1:]:
                 cols = row.find_all('td')
                 if len(cols) >= 4:
-                    ia_entry = {
-                        "ia_no": cols[3].get_text(strip=True),
-                        "ia_number": cols[3].get_text(strip=True),
-                        "cnr_no": cols[1].get_text(strip=True),
-                        "filing_no": cols[2].get_text(strip=True),
-                        "description": f"IA Filing: {cols[2].get_text(strip=True)}"
-                    }
-                    result['ia_details'].append(ia_entry)
-        
+                    ia_no = cols[3].get_text(strip=True)
+                    filing = cols[2].get_text(strip=True)
+                    result['ia_details'].append({
+                        "ia_no": ia_no,
+                        "ia_number": ia_no,
+                        "filing_no": filing,
+                        "description": f"IA Filing: {filing}",
+                    })
+
         result['original_json']['ia_details'] = result['ia_details']
+
+        # 7. additional_info — auxiliary / non-canonical fields
+        result['additional_info'] = {
+            "cnr_no": _cnr_no,
+            "case_no": _case_no,
+            "case_year": _case_year,
+            "status": _status,
+            "district": None,
+        }
 
         return result
 

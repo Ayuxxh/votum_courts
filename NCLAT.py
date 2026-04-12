@@ -574,6 +574,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                 ia_details.extend(_extract_ia_rows(table, force_ia=True))
 
     fmt_case_no = _reformat_case_no(case_no)
+
     # Deduplicate IA rows while preserving order.
     seen_ias: set[tuple[Any, ...]] = set()
     deduped_ias: list[dict[str, Any]] = []
@@ -590,32 +591,70 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         seen_ias.add(key)
         deduped_ias.append(row)
 
+    # Derive first/last listing dates from hearing history
+    _today_str = datetime.today().strftime("%Y-%m-%d")
+    hearing_dates = sorted(
+        h["hearing_date"]
+        for h in hearings
+        if h.get("hearing_date") and re.match(r"\d{4}-\d{2}-\d{2}", h["hearing_date"])
+    )
+    first_listing_date = hearing_dates[0] if hearing_dates else None
+    # last = most recent hearing on or before today
+    past_dates = [d for d in hearing_dates if d <= _today_str]
+    last_listing_date = past_dates[-1] if past_dates else None
+
+    # Purpose for next hearing (from hearings list, first future date)
+    future_hearings = [
+        h for h in hearings
+        if h.get("hearing_date") and h["hearing_date"] > _today_str
+    ]
+    purpose_next = future_hearings[0].get("purpose") if future_hearings else None
+
     return {
         "cin_no": filing_no,
+        "registration_no": None,
         "filing_no": filing_no,
         "case_no": fmt_case_no,
         "type_name": _extract_type_name(fmt_case_no),
+        "case_type": _extract_type_name(fmt_case_no),
         "status": status,  # 'Disposed' or 'Pending'
-        "disposal_nature": 0 if (status or "").strip() == "Disposed" else 1,
-        "filing_date": filing_date,
         "registration_date": registration_date,
+        "filing_date": filing_date,
+        "first_listing_date": first_listing_date,
+        "next_listing_date": next_listing_date,
+        "last_listing_date": last_listing_date,
+        "decision_date": None,
+        "court_no": None,
+        "disposal_nature": 0 if (status or "").strip() == "Disposed" else 1,
+        "purpose_next": purpose_next,
         "bench_name": location,
         "court_name": "NCLAT",
         "pet_name": petitioners or ([pet_title] if pet_title else []),
         "res_name": respondents or ([res_title] if res_title else []),
+        "advocates": "\n".join(
+            x
+            for x in [
+                f"Petitioner: {', '.join(sorted({a for a in pet_advs if a}))}" if pet_advs else None,
+                f"Respondent: {', '.join(sorted({a for a in res_advs if a}))}" if res_advs else None,
+            ]
+            if x
+        ).strip() or None,
         "petitioner_advocates": sorted({a for a in pet_advs if a}),
         "respondent_advocates": sorted({a for a in res_advs if a}),
-        "next_listing_date": next_listing_date,
+        "judges": None,
+        "acts": [],
         "orders": orders,
         "history": [],
         "ia_details": deduped_ias,
+        "connected_matters": [],
+        "application_appeal_matters": [],
         "additional_info": {
             "status": status,
             "case_title": title_text,
             "hearings": hearings,
             "location": location,
         },
-        "original_html": html,
+        "original_json": {"original_html": html},
     }
 
 

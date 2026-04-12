@@ -552,7 +552,7 @@ class GujaratHCService:
             logger.error(f"Failed to fetch case types: {e}")
             raise
 
-    def _parse_date(self, date_str: str) -> Optional[str]:
+    def _parse_date(self, date_str: Optional[str]) -> Optional[str]:
         if not date_str or date_str.strip() in ['-', '', 'NA']:
             return None
         value = date_str.strip()
