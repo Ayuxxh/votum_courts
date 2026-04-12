@@ -1,0 +1,108 @@
+{
+  "generated_at_utc": "2026-04-12T12:40:05.271836+00:00",
+  "output_dir": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12",
+  "runs": [
+    {
+      "name": "SCI",
+      "status": "success",
+      "params": {
+        "diary_no": "8960",
+        "diary_year": "2025"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/sci_details.json"
+    },
+    {
+      "name": "NCLAT",
+      "status": "success",
+      "params": {
+        "filing_no": "9910110084442023",
+        "bench": "delhi"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/nclat_details.json"
+    },
+    {
+      "name": "NCLT",
+      "status": "error",
+      "params": {
+        "bench": "kolkata",
+        "filing_no": "1908134021072024"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/nclt_details.json",
+      "note": "Applied a one-off runtime timeout patch to NCLT session.get for this execution only."
+    },
+    {
+      "name": "DRT",
+      "status": "success",
+      "params": {
+        "drt": "delhi",
+        "filing_no": "070110005432019"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/drt_details.json"
+    },
+    {
+      "name": "DRAT",
+      "status": "error",
+      "params": {
+        "drat": "delhi",
+        "filing_no": "071090023872025"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/drat_details.json",
+      "note": "DRAT details can fail upstream; errors are saved to JSON instead of aborting the run."
+    },
+    {
+      "name": "Bombay HC",
+      "status": "success",
+      "params": {
+        "case_type": "WP",
+        "case_no": "5775",
+        "case_year": "2025"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/bombay_hc_details.json"
+    },
+    {
+      "name": "Gujarat HC",
+      "status": "success",
+      "params": {
+        "case_type": "CA",
+        "case_no": "1526",
+        "case_year": "2026"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/gujarat_hc_details.json"
+    },
+    {
+      "name": "Delhi HC",
+      "status": "success",
+      "params": {
+        "case_type": "W.P.(C)",
+        "case_no": "533",
+        "case_year": "2025"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/delhi_hc_details.json"
+    },
+    {
+      "name": "HC Services",
+      "status": "success",
+      "params": {
+        "cnr_number": "GJHC240325432025"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/hc_services_details.json",
+      "note": "Uses the live HC services CNR/history flow."
+    },
+    {
+      "name": "DC Services",
+      "status": "success",
+      "params": {
+        "case_no": "200600003772025",
+        "cino": "GJAH020070222025",
+        "court_code": "21",
+        "hideparty": "",
+        "search_flag": "CScaseNumber",
+        "state_code": "17",
+        "dist_code": "13",
+        "court_complex_code": "1170040",
+        "search_by": "CScaseNumber"
+      },
+      "file": "/Users/tejaswgupta/Downloads/votum/backend/ecourts/results/details_runs_2026-04-12/dc_services_details.json"
+    }
+  ]
+}

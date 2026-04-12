@@ -1,6 +1,5 @@
 import ast
 import asyncio
-from datetime import datetime
 import logging
 import operator
 import os
@@ -8,6 +7,7 @@ import random
 import re
 import string
 import tempfile
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import ddddocr
@@ -283,8 +283,8 @@ def table_to_list(soup):
             {
                 "cino": data.get("Diary Number", ""),
                 "date_of_decision": None,
-                "pet_name": data.get("Petitioner Name", ""),
-                "res_name": data.get("Respondent Name", ""),
+                "pet_name": _strip_leading_number(data.get("Petitioner Name", "")),
+                "res_name": _strip_leading_number(data.get("Respondent Name", "")),
                 "type_name": data.get("Status", ""),
             }
         )
@@ -325,6 +325,20 @@ def _fetch_case_tab(
 
     html_fragment = _extract_html_fragment(payload)
     return html_fragment, payload
+
+
+def _strip_leading_number(name: str) -> str:
+    """Remove leading ordinal numbers from a name string.
+
+    Examples::
+
+        "1. John Doe"  -> "John Doe"
+        "2) Jane Smith" -> "Jane Smith"
+        "3: Bob"        -> "Bob"
+        "10 Alice"      -> "Alice"
+        "Alice"         -> "Alice"
+    """
+    return re.sub(r"^\s*\d+([\.\):]\s*|\s+)", "", name or "").strip()
 
 
 def _normalize_key(label: str) -> str:
@@ -626,7 +640,7 @@ def sci_get_details(diary_no, diary_year):
         if diary_info:
             filing_parts = diary_info.split("Filed on", 1)
             if len(filing_parts) > 1:
-                filing_date = filing_parts[1].split("[", 1)[0].strip()
+                filing_date = _extract_order_date(filing_parts[1].split("[", 1)[0].strip())
 
         case_info = _extract_td_text(soup, "Case Number")
         case_number = (
@@ -637,41 +651,38 @@ def sci_get_details(diary_no, diary_year):
             # Prefer the date immediately following "Registered on"
             m = re.search(r"Registered on\s*(\d{2}-\d{2}-\d{4})", case_info or "")
             if m:
-                registration_date = m.group(1)
+                registration_date = _extract_order_date(m.group(1))
 
 
         verified_on = None
         if case_info and "Verified On" in case_info:
             verified_parts = case_info.split("Verified On", 1)
-            verified_on = verified_parts[1].split("[", 1)[0].strip(" :")
+            verified_on = _extract_order_date(verified_parts[1].split("[", 1)[0].strip(" :"))
 
         listed_info = _extract_td_text(soup, "Present/Last Listed On")
-        listed_on = listed_info.split("[", 1)[0].strip() if listed_info else None
+        listed_on = _extract_order_date(listed_info.split("[", 1)[0].strip()) if listed_info else None
 
 
-        next_listing = _extract_td_text(soup, "Tentatively case may be listed on (likely to be listed on)")
-        # print('next:', next_listing)
-        next_listing = next_listing.split("[", 1)[0].strip() if next_listing else None
-        next_listing = next_listing.split(" ")[0].strip() if next_listing else None
+        next_listing = None  # derived from listing_dates below
 
         status_info = _extract_td_text(soup, "Status/Stage")
 
         status = (
             status_info.split("List On", 1)[0].strip() if status_info else None
         )
-        pending_or_disposed = 'pending' if 'pending' in status.lower() else 'disposed'
+        disposal_nature = 0 if status and 'disposed' in status.lower() else 1
         category = _extract_td_text(soup, "Category")
         acts = [category]
 
         petitioners_raw = _extract_td_text(soup, "Petitioner(s)", separator="\n")
         petitioners = (
-            [p.strip() for p in petitioners_raw.splitlines() if p.strip()]
+            [_strip_leading_number(p) for p in petitioners_raw.splitlines() if p.strip()]
             if petitioners_raw
             else None
         )
         respondents_raw = _extract_td_text(soup, "Respondent(s)", separator="\n")
         respondents = (
-            [r.strip() for r in respondents_raw.splitlines() if r.strip()]
+            [_strip_leading_number(r) for r in respondents_raw.splitlines() if r.strip()]
             if respondents_raw
             else None
         )
@@ -705,6 +716,26 @@ def sci_get_details(diary_no, diary_year):
             logger.warning("Failed to fetch SCI listing dates: %s", exc)
 
         listings = _parse_listing_dates(listing_html) if listing_html else []
+        # Normalize cl_date to ISO in each listing entry
+        for _listing in listings:
+            if _listing.get("cl_date"):
+                _listing["cl_date"] = _extract_order_date(_listing["cl_date"]) or _listing["cl_date"]
+
+        # Derive next_listing_date: earliest cl_date >= today from listing_dates
+        _today = datetime.today().date()
+        _future: list[tuple] = []
+        for _entry in listings:
+            _cl = _entry.get("cl_date")
+            if _cl:
+                try:
+                    _d = datetime.strptime(_cl, "%Y-%m-%d").date()
+                    if _d >= _today:
+                        _future.append((_d, _cl))
+                except ValueError:
+                    pass
+        if _future:
+            _future.sort()
+            next_listing = _future[0][0].strftime("%Y-%m-%d")
 
         ia_details = []
         if listings:
@@ -722,7 +753,7 @@ def sci_get_details(diary_no, diary_year):
                                 "description": None,
                                 "party": None,
                                 "filing_date": None,
-                                "next_date": entry.get("cl_date"),
+                                "next_date": _extract_order_date(entry.get("cl_date")),
                                 "status": entry.get("remarks"),
                                 "disposal_date": None,
                                 "cin_no": None,
@@ -770,7 +801,7 @@ def sci_get_details(diary_no, diary_year):
             "last_listing_date": listed_on,
             "decision_date": None,
             "court_no": None,
-            "disposal_nature": pending_or_disposed,
+            "disposal_nature": disposal_nature,
             "purpose_next": status,
             "case_type": category,
             "pet_name": petitioners or [],
@@ -779,13 +810,13 @@ def sci_get_details(diary_no, diary_year):
             "judges": ", ".join(judges) if judges else None,
             "bench_name": None,
             "court_name": None,
-            "history": None,
+            "history": [],
             "acts": acts,
             "orders": orders,
             "ia_details": ia_details,
-            "listing_dates": listings,
             "additional_info": {
                 "office_reports": office_reports,
+                "listing_dates": listings,
             },
             "original_json": {
                 "case_details": case_payload,
@@ -1013,11 +1044,11 @@ def _parse_single_sci_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     vs_match = re.search(r"\b(Versus|VS\.?|V/S)\b", party_text, re.IGNORECASE)
     
     if vs_match:
-        petitioner = party_text[:vs_match.start()].strip().replace("\n", " ")
-        respondent = party_text[vs_match.end():].strip().replace("\n", " ")
+        petitioner = _strip_leading_number(party_text[:vs_match.start()].strip().replace("\n", " "))
+        respondent = _strip_leading_number(party_text[vs_match.end():].strip().replace("\n", " "))
     else:
         # Fallback: simple join
-        petitioner = party_text.replace("\n", " ")
+        petitioner = _strip_leading_number(party_text.replace("\n", " "))
 
     pet_advocate = None
     res_advocate = None
@@ -1208,7 +1239,7 @@ async def persist_orders_to_storage(
 
 if __name__ == "__main__":
     import json
-    
+
     # Test a single court fetch
     # print("\nFetching cases for Court 1 on 09-02-2026...")
     # cases = sci_get_cause_list("09-02-2026", search_by="court", court="1")
@@ -1221,7 +1252,7 @@ if __name__ == "__main__":
     #     f.write(a)
 
 
-    a = sci_get_details('5699', '2026')
+    a = sci_get_details('8960', '2025')
 
     a = json.dumps(a, indent=4)
     with open('sci_get_details_6-4-26.json', 'w') as f:

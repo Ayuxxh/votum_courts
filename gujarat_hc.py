@@ -552,7 +552,7 @@ class GujaratHCService:
             logger.error(f"Failed to fetch case types: {e}")
             raise
 
-    def _parse_date(self, date_str: str) -> Optional[str]:
+    def _parse_date(self, date_str: Optional[str]) -> Optional[str]:
         if not date_str or date_str.strip() in ['-', '', 'NA']:
             return None
         value = date_str.strip()
@@ -641,6 +641,7 @@ class GujaratHCService:
             "first_hearing_date": None,
             "next_listing_date": None,
             "decision_date": None,
+            "disposal_nature": None,
             "orders": [],
             "history": [],
             "connected_matters": [],
@@ -671,7 +672,11 @@ class GujaratHCService:
             result['judges'] = main.get('judges')
             result['next_listing_date'] = self._parse_date(main.get('listingdate')) # Often listingdate is next date
             result['decision_date'] = self._parse_date(main.get('disposaldate'))
-            
+            result['disposal_nature'] = (
+                0 if (main.get('casestatus') or '').strip().upper() == 'DISPOSED'
+                else 1
+            )
+
             # Format registration number: TYPE/NO/YEAR
             if result['case_type'] and result['case_no'] and result['case_year']:
                 result['registration_no'] = f"{result['case_type']}/{result['case_no']}/{result['case_year']}"

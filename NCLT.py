@@ -748,8 +748,8 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
                 "description": f"Listing: {proc.get('listing_date')} | Purpose: {proc.get('purpose')} | Action: {proc.get('today_action')}",
                 "document_url": order_url,
                 "source_document_url": order_url,
-                "listing_date": proc.get('listing_date'),
-                "upload_date": proc.get('order_upload_date')
+                "listing_date": _normalize_order_date(proc.get('listing_date')),
+                "upload_date": _normalize_order_date(proc.get('order_upload_date')),
             })
             
         # 5. Connected Matters (using IA/MA list or similar)
@@ -784,14 +784,23 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
             "registration_no": case_no, # or case_no?
             "filing_no": filing_no,
             "case_no": case_no,
-            "registration_date": reg_date,
-            "filing_date": final_status.get('date_of_filing'),
-            "first_listing_date": listing_date,
+            "status": case_status,
+            "registration_date": _normalize_order_date(reg_date),
+            "filing_date": _normalize_order_date(final_status.get('date_of_filing')),
+            "first_listing_date": _normalize_order_date(listing_date),
             "next_listing_date": _normalize_order_date(next_listing_date),
             "last_listing_date": _normalize_order_date(last_listing_date),
             "decision_date": _normalize_order_date(final_status.get('disposal_date')),
             "court_no": final_status.get('court_no'),
-            "disposal_nature": final_status.get('action_type'),
+            "disposal_nature": (
+                1
+                if (final_status.get('case_status') or '').strip().upper() == 'PENDING'
+                or (
+                    not (final_status.get('case_status') or '').strip()
+                    and not (final_status.get('disposal_date') or '').strip().upper().replace('NA', '').strip()
+                )
+                else 0
+            ),
             "purpose_next": final_status.get('next_listing_purpose') or final_status.get('last_purpose_step'),
             "case_type": final_status.get('case_type'),
             "pet_name": pet_names,
@@ -817,17 +826,18 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
             or None,
             "judges": None,
             "bench_name": bench,
-            "court_name": final_status.get('bench_nature_descr'),
+            "court_name": final_status.get('bench_nature_descr') or None,
             "history": [], # Detailed history is in orders/proceedings
-            "acts": None,
+            "acts": [],
             "orders": orders,
             "ia_details": ia_details,
+            "connected_matters": connected,
+            "application_appeal_matters": [],
             "additional_info": {
                 "case_status": case_status,
                 "party_name": f"{', '.join(pet_names)} VS {', '.join(res_names)}",
                 "listing_history": proceedings,
                 "ia_ma": ias,
-                "connected_matters": connected,
             },
             "original_json": data,
         }

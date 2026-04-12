@@ -759,7 +759,7 @@ def parse_case_history(html_content):
         'last_listing_date': None,
         'decision_date': None,
         'court_no': None,
-        'disposal_nature': None,
+        'disposal_nature': 1,
         'purpose_next': None,
         'case_type': None,
         'pet_name': None,
@@ -771,7 +771,10 @@ def parse_case_history(html_content):
         'history': [],
         'acts': [],
         'orders': [],
-        'additional_info': None,
+        'ia_details': [],
+        'connected_matters': [],
+        'application_appeal_matters': [],
+        'additional_info': {},
         'original_json': None  # Using this to store additional information
     }
 
@@ -913,15 +916,17 @@ def parse_case_history(html_content):
                 if 'Decision Date' in label:
                     result['decision_date'] = parse_iso_date(value)
                 if 'Case Status' in label:
-                    result['status'] = value
+                    result['additional_info']['case_status'] = value
                 if 'Nature of Disposal' in label:
-                    result['disposal_nature'] = value
+                    result['disposal_nature'] = 0 if value.strip() else 1
+                    if value.strip():
+                        result['additional_info']['disposal_nature_raw'] = value
                 if 'Coram' in label:
                     result['judges'] = value
                 if 'Bench Type' in label:
                     result['bench_name'] = value
                 if 'State' in label:
-                    result['state'] = value
+                    result['additional_info']['state'] = value
                 if 'District' in label:
                     result['court_name'] = value
     
@@ -1060,10 +1065,11 @@ def parse_case_history(html_content):
                     'next_date': parse_iso_date(cells[3].get_text(strip=True)),
                     'status': cells[4].get_text(strip=True)
                 })
+        result['ia_details'] = ia_details
         if 'original_json' not in result or not result['original_json']:
             result['original_json'] = {}
         result['original_json']['ia_details'] = ia_details
-    
+
     # Extract document details
     doc_table = soup.find('table', class_='transfer_table')
     if doc_table:
@@ -1111,9 +1117,6 @@ def parse_case_history(html_content):
             if 'original_json' not in result or not result['original_json']:
                 result['original_json'] = {}
             result['original_json']['subordinate_court_info'] = subordinate_parent.get_text(strip=True)
-    
-    # Add HTML content as additional info
-    result['additional_info'] = html_content[:1000]  # Include partial response as additional info
     
     return result
 

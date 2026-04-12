@@ -1,0 +1,90 @@
+{
+  "cin_no": null,
+  "filing_no": "179682",
+  "case_no": "W.P.(C) - 533 / 2025",
+  "case_type": "W.P.(C)",
+  "registration_date": null,
+  "filing_date": null,
+  "first_listing_date": null,
+  "next_listing_date": "2025-03-24",
+  "last_listing_date": "2025-03-24",
+  "decision_date": null,
+  "court_no": "255",
+  "disposal_nature": 0,
+  "purpose_next": null,
+  "pet_name": [
+    "ZULFIQAR AHMED"
+  ],
+  "res_name": [
+    "THE LT GOVERNOR DELHI AND ORS"
+  ],
+  "advocates": "Petitioner:\nMOHD RASHID",
+  "judges": null,
+  "bench_name": null,
+  "court_name": null,
+  "history": [],
+  "acts": [],
+  "orders": [
+    {
+      "date": "2025-03-24",
+      "description": "Order dated 2025-03-24",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/141731041743164030168_28429_5332025.pdf/2025"
+    },
+    {
+      "date": "2025-03-07",
+      "description": "Order dated 2025-03-07",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501742794139437_79155_5332025.pdf/2025"
+    },
+    {
+      "date": "2025-03-06",
+      "description": "Order dated 2025-03-06",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501741274847185_85732_5332025.pdf/2025"
+    },
+    {
+      "date": "2025-03-04",
+      "description": "Order dated 2025-03-04",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501741430138416_74507_5332025.pdf/2025"
+    },
+    {
+      "date": "2025-02-24",
+      "description": "Order dated 2025-02-24",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501740466769767_45973_5332025.pdf/2025"
+    },
+    {
+      "date": "2025-01-16",
+      "description": "Order dated 2025-01-16",
+      "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501737706327299_4077_5332025.pdf/2025"
+    }
+  ],
+  "ia_details": [],
+  "additional_info": {
+    "petitioner_advocate": "MOHD RASHID",
+    "respondent_advocate": null,
+    "diary_no": "179682",
+    "diary_year": 2025,
+    "category_code": "4400",
+    "listing_details": "NEXT DATE: NA Last Date: 24/03/2025 COURT NO: NA",
+    "case_details_raw": "W.P.(C) - 533 / 2025 [DISPOSED] Click here for Orders Click here forJudgments",
+    "parties": "ZULFIQAR AHMED VS. THE LT GOVERNOR DELHI AND ORS",
+    "status": "DISPOSED"
+  },
+  "original_json": {
+    "pno": "",
+    "ctype": "<a>W.P.(C)</a> - 533 / 2025 <br><font color='red'>[DISPOSED]</font><br> <a href=https://delhihighcourt.nic.in/app/case-type-status-details/eyJpdiI6IjNZdE02YkQ3QkhTK0Q1MElRNmdYcEE9PSIsInZhbHVlIjoiSmNLZlBRSUV5U0ttK1lqTnl6ZFoxUT09IiwibWFjIjoiMzYwOWNkNWE0ZGI3NGNhM2Y5MWJjZDM4N2RjYzA1ZTg0YjgyOWM2NTA2NWI3NTZhYjEyODBkYjViM2M2MGJjOCIsInRhZyI6IiJ9/eyJpdiI6Ik5QYVdkNzRTNko0ZXpSelpmTXZzaHc9PSIsInZhbHVlIjoiZGM0SXptNnF0cG85MkZjK09jYVFBUT09IiwibWFjIjoiZDU5NTUzYTIzMGY3ZDcwNDdkODUzODZkOTZkNGJkNTRhYjMwZTA5MzBiOTQ4ZTgxODcxYzEyMWIxMjU2ZDZjOSIsInRhZyI6IiJ9/eyJpdiI6ImlSWDN0NHdxMGs2Y2RnM1hvVmxKalE9PSIsInZhbHVlIjoiM1Z0S0VXeldNODI5T1FvdVNEamFsQT09IiwibWFjIjoiZDI1MjExOTZhNmFkN2Q3ZTU3MjA0M2Y2Y2Q0OTdjOGVhOTY5NGI4Yjk3YTA4NGJmMjU2NTNiY2JmZjkwNDAyOCIsInRhZyI6IiJ9 ' style='color:blue; text-decoration: underline;'><strong>Click here for Orders</strong></a> </br> <a href=https://delhihighcourt.nic.in/app/case-type-status-judgment/eyJpdiI6IjNZdE02YkQ3QkhTK0Q1MElRNmdYcEE9PSIsInZhbHVlIjoiSmNLZlBRSUV5U0ttK1lqTnl6ZFoxUT09IiwibWFjIjoiMzYwOWNkNWE0ZGI3NGNhM2Y5MWJjZDM4N2RjYzA1ZTg0YjgyOWM2NTA2NWI3NTZhYjEyODBkYjViM2M2MGJjOCIsInRhZyI6IiJ9/eyJpdiI6Ik5QYVdkNzRTNko0ZXpSelpmTXZzaHc9PSIsInZhbHVlIjoiZGM0SXptNnF0cG85MkZjK09jYVFBUT09IiwibWFjIjoiZDU5NTUzYTIzMGY3ZDcwNDdkODUzODZkOTZkNGJkNTRhYjMwZTA5MzBiOTQ4ZTgxODcxYzEyMWIxMjU2ZDZjOSIsInRhZyI6IiJ9/eyJpdiI6ImlSWDN0NHdxMGs2Y2RnM1hvVmxKalE9PSIsInZhbHVlIjoiM1Z0S0VXeldNODI5T1FvdVNEamFsQT09IiwibWFjIjoiZDI1MjExOTZhNmFkN2Q3ZTU3MjA0M2Y2Y2Q0OTdjOGVhOTY5NGI4Yjk3YTA4NGJmMjU2NTNiY2JmZjkwNDAyOCIsInRhZyI6IiJ9 ' style='color:blue; text-decoration: underline;'><strong>Click here forJudgments</strong></a>",
+    "cno": "533",
+    "cyear": 2025,
+    "pet": "ZULFIQAR AHMED <br>VS.&nbsp;&nbsp; <br> THE LT GOVERNOR DELHI AND ORS<br>\r\n\t\t\t\t",
+    "res": "THE LT GOVERNOR DELHI AND ORS",
+    "pet_adv": "MOHD RASHID",
+    "res_adv": "",
+    "h_d_dt": null,
+    "status": "D ",
+    "old_h_dt": "24/03/2025",
+    "catcode": "4400",
+    "courtno": "255",
+    "diary_no": "179682",
+    "diary_yr": 2025,
+    "orderdate": "NEXT DATE: NA\r\n\t\t\t                <br>Last Date: 24/03/2025\r\n\t\t\t                <br>COURT NO: NA",
+    "DT_RowIndex": 1
+  }
+}

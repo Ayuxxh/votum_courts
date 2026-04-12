@@ -1,0 +1,9 @@
+{
+  "status": "error",
+  "error_type": "RetryError",
+  "error": "RetryError[<Future at 0x117a77410 state=finished raised ReadTimeout>]",
+  "params": {
+    "bench": "kolkata",
+    "filing_no": "1908134021072024"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "cino": "GJAH020070222025",
+  "cin_no": "GJAH020070222025",
+  "case_no": "CS CCC/377/2025",
+  "case_type": "CS CCC - CIVIL SUIT (CCC)",
+  "filing_no": "381/2025",
+  "filing_date": "2025-04-25",
+  "registration_no": "CS CCC/377/2025",
+  "registration_date": "2025-04-25",
+  "first_hearing_date": "2025-04-25",
+  "first_listing_date": "2025-04-25",
+  "next_listing_date": "2026-05-02",
+  "decision_date": null,
+  "status": "Pending",
+  "nature_of_disposal": null,
+  "disposal_nature": null,
+  "court_no_judge": "33-JUDGE, CITY CIVIL COURT",
+  "court_no": "33",
+  "judges": "JUDGE, CITY CIVIL COURT",
+  "bench_name": null,
+  "court_name": null,
+  "state": null,
+  "purpose_next": "Sub Stage RETURNABLE - GENERAL",
+  "pet_name": [
+    "M/S GUJARAT TEA DEPOT CO."
+  ],
+  "petitioner": [
+    "M/S GUJARAT TEA DEPOT CO."
+  ],
+  "res_name": [
+    "SAIYED MOJUDDIN MOHAMMAD SALIM"
+  ],
+  "respondent": [
+    "SAIYED MOJUDDIN MOHAMMAD SALIM"
+  ],
+  "advocates": "Petitioner:\n1) M/S GUJARAT TEA DEPOT CO.\nAdvocate- R S PATEL\n2)  GUJARAT TEA PROCESSORS AND PACKERS LTD\nAdvocate-R S PATEL\n\nRespondent:\n1) SAIYED MOJUDDIN MOHAMMAD SALIM\nAdvocate - S M SHAIKH\n2)  RUAAB TEA\nAdvocate-S M SHAIKH3)  WASIM ARIF MEMON\nAdvocate-S M SHAIKH",
+  "acts": [
+    {
+      "act": "CODE OF CIVIL PROCEDURE, 1908",
+      "section": "9,"
+    },
+    {
+      "act": "TRADE MARKS ACT, 1999",
+      "section": "28,29,134,135,"
+    },
+    {
+      "act": "COPYRIGHT ACT, 1957",
+      "section": "51,62,63,"
+    }
+  ],
+  "history": [
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2026-02-19",
+      "hearing_date": "2026-04-02",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2026-02-07",
+      "hearing_date": "2026-02-19",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2026-01-15",
+      "hearing_date": "2026-02-07",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2026-01-03",
+      "hearing_date": "2026-01-15",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-12-20",
+      "hearing_date": "2026-01-03",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-11-06",
+      "hearing_date": "2025-12-20",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-10-10",
+      "hearing_date": "2025-11-06",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-09-11",
+      "hearing_date": "2025-10-10",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-08-21",
+      "hearing_date": "2025-09-11",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-07-31",
+      "hearing_date": "2025-08-21",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-07-24",
+      "hearing_date": "2025-07-31",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-07-09",
+      "hearing_date": "2025-07-24",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-06-25",
+      "hearing_date": "2025-07-09",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    },
+    {
+      "judge": "JUDGE, CITY CIVIL COURT",
+      "business_date": "2025-04-25",
+      "hearing_date": "2025-06-25",
+      "purpose": "HEARING ON INJUNCTION APPLICATION"
+    }
+  ],
+  "ia_details": [
+    {
+      "ia_number": "IA/1/2025 Classification : NOTICE OF MOTION",
+      "party": "M/S GUJARAT TEA DEPOT CO. SAIYED MOJUDDIN MOHAMMAD SALIM",
+      "filing_date": "2025-04-25",
+      "next_date": "02-05-2026 (HEARING ON INJUNCTION APPLICATION)",
+      "status": "Pending"
+    }
+  ],
+  "orders": [],
+  "last_listing_date": "2026-04-02",
+  "additional_info": null,
+  "original_json": {
+    "ia_details": [
+      {
+        "ia_number": "IA/1/2025 Classification : NOTICE OF MOTION",
+        "party": "M/S GUJARAT TEA DEPOT CO. SAIYED MOJUDDIN MOHAMMAD SALIM",
+        "filing_date": "2025-04-25",
+        "next_date": "02-05-2026 (HEARING ON INJUNCTION APPLICATION)",
+        "status": "Pending"
+      }
+    ]
+  }
+}

@@ -52,7 +52,7 @@ def _build_cause_list_table(
     if has_orders:
         headers = [
             Paragraph("S.No", header_style),
-            Paragraph("Case No", header_style),
+            Paragraph("Registration No", header_style),
             Paragraph("Coram", header_style),
             Paragraph("Party Name", header_style),
             Paragraph("Collaborators", header_style),
@@ -74,15 +74,15 @@ def _build_cause_list_table(
     data = [headers]
 
     for idx, entry in enumerate(entries, start=1):
-        case_no = str(entry.get("case_no", "-"))
+        registration_no = str(entry.get("registration_no", "-"))
         case_url = str(entry.get("case_url") or "").strip()
         if case_url:
             case_cell = Paragraph(
-                f'<link href="{case_url}"><u>{escape(case_no)}</u></link>',
+                f'<link href="{case_url}"><u>{escape(registration_no)}</u></link>',
                 link_style,
             )
         else:
-            case_cell = Paragraph(escape(case_no), body_style)
+            case_cell = Paragraph(escape(registration_no), body_style)
 
         row = [
             Paragraph(str(entry.get("sno", idx)), body_style),
@@ -142,12 +142,12 @@ def generate_cause_list_pdf(
     
     entries: List of dicts with keys:
         - sno (Serial Number / Index)
-        - case_no
+        - registration_no
         - court_name
         - item_no (optional)
         - orders (optional)
         - text (optional - raw text snippet)
-        - case_url (optional - hyperlink for case_no)
+        - case_url (optional - hyperlink for registration_no)
     """
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
