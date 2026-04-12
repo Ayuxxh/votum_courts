@@ -2,11 +2,16 @@ import re
 from datetime import datetime
 from functools import lru_cache
 from typing import Any, Optional
-
+from bs4 import BeautifulSoup
 import requests
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
-
+from tenacity import RetryError
 from .order_storage import persist_orders_to_storage as _persist_orders_to_storage
+from lxml import html as lxml_html
+import re
+import hashlib
+from bs4 import BeautifulSoup
+
 
 BASE_URL = "https://drt.gov.in"
 API_URL = f"{BASE_URL}/drtapi"
@@ -79,6 +84,57 @@ PARTY_NAME_ENDPOINTS = {
     TRIBUNAL_TYPE_DRT: "casedetail_party_name_wise",
     TRIBUNAL_TYPE_DRAT: "drat_party_name_wise",
 }
+
+
+SCHEME_NAME_DRT_ID_LIST =  [
+  {"id": 9, "name": "DEBTS RECOVERY TRIBUNAL AHMEDABAD (DRT 1)"},
+  {"id": 10, "name": "DEBTS RECOVERY TRIBUNAL AHMEDABAD (DRT 2)"},
+  {"id": 11, "name": "DEBTS RECOVERY TRIBUNAL ALLAHABAD"},
+  {"id": 12, "name": "DEBTS RECOVERY TRIBUNAL AURANGABAD"},
+  {"id": 13, "name": "DEBTS RECOVERY TRIBUNAL BANGALORE (DRT 1)"},
+  {"id": 39, "name": "DEBTS RECOVERY TRIBUNAL BANGALORE (DRT 2)"},
+  {"id": 14, "name": "DEBTS RECOVERY TRIBUNAL CHANDIGARH (DRT 1)"},
+  {"id": 15, "name": "DEBTS RECOVERY TRIBUNAL CHANDIGARH (DRT 2)"},
+  {"id": 40, "name": "DEBTS RECOVERY TRIBUNAL CHANDIGARH (DRT 3)"},
+  {"id": 16, "name": "DEBTS RECOVERY TRIBUNAL CHENNAI (DRT 1)"},
+  {"id": 17, "name": "DEBTS RECOVERY TRIBUNAL CHENNAI (DRT 2)"},
+  {"id": 18, "name": "DEBTS RECOVERY TRIBUNAL CHENNAI (DRT 3)"},
+  {"id": 19, "name": "DEBTS RECOVERY TRIBUNAL COIMBATORE"},
+  {"id": 20, "name": "DEBTS RECOVERY TRIBUNAL CUTTACK"},
+  {"id": 41, "name": "DEBTS RECOVERY TRIBUNAL DEHRADUN"},
+  {"id": 1, "name": "DEBTS RECOVERY TRIBUNAL DELHI (DRT 1)"},
+  {"id": 2, "name": "DEBTS RECOVERY TRIBUNAL DELHI (DRT 2)"},
+  {"id": 3, "name": "DEBTS RECOVERY TRIBUNAL DELHI (DRT 3)"},
+  {"id": 21, "name": "DEBTS RECOVERY TRIBUNAL ERNAKULAM (DRT 1)"},
+  {"id": 42, "name": "DEBTS RECOVERY TRIBUNAL ERNAKULAM (DRT 2)"},
+  {"id": 22, "name": "DEBTS RECOVERY TRIBUNAL GUWAHATI"},
+  {"id": 23, "name": "DEBTS RECOVERY TRIBUNAL HYDERABAD (DRT 1)"},
+  {"id": 43, "name": "DEBTS RECOVERY TRIBUNAL HYDERABAD (DRT 2)"},
+  {"id": 24, "name": "DEBTS RECOVERY TRIBUNAL JABALPUR"},
+  {"id": 25, "name": "DEBTS RECOVERY TRIBUNAL JAIPUR"},
+  {"id": 26, "name": "DEBTS RECOVERY TRIBUNAL KOLKATA (DRT 1)"},
+  {"id": 27, "name": "DEBTS RECOVERY TRIBUNAL KOLKATA (DRT 2)"},
+  {"id": 28, "name": "DEBTS RECOVERY TRIBUNAL KOLKATA (DRT 3)"},
+  {"id": 29, "name": "DEBTS RECOVERY TRIBUNAL LUCKNOW"},
+  {"id": 30, "name": "DEBTS RECOVERY TRIBUNAL MADURAI"},
+  {"id": 31, "name": "DEBTS RECOVERY TRIBUNAL MUMBAI (DRT 1)"},
+  {"id": 32, "name": "DEBTS RECOVERY TRIBUNAL MUMBAI (DRT 2)"},
+  {"id": 33, "name": "DEBTS RECOVERY TRIBUNAL MUMBAI (DRT 3)"},
+  {"id": 34, "name": "DEBTS RECOVERY TRIBUNAL NAGPUR"},
+  {"id": 35, "name": "DEBTS RECOVERY TRIBUNAL PATNA"},
+  {"id": 36, "name": "DEBTS RECOVERY TRIBUNAL PUNE"},
+  {"id": 37, "name": "DEBTS RECOVERY TRIBUNAL RANCHI"},
+  {"id": 44, "name": "DEBTS RECOVERY TRIBUNAL SILIGURI"},
+  {"id": 38, "name": "DEBTS RECOVERY TRIBUNAL VISHAKHAPATNAM"}
+]
+
+SCHEME_NAME_DRAT_ID_LIST = [
+  { "id": "101", "name": "DEBT RECOVERY APPELLATE TRIBUNAL - ALLAHABAD" },
+  { "id": "102", "name": "DEBT RECOVERY APPELLATE TRIBUNAL - CHENNAI" },
+  { "id": "100", "name": "DEBT RECOVERY APPELLATE TRIBUNAL - DELHI" },
+  { "id": "104", "name": "DEBT RECOVERY APPELLATE TRIBUNAL - KOLKATA" },
+  { "id": "103", "name": "DEBT RECOVERY APPELLATE TRIBUNAL - MUMBAI" }
+]
 
 def _new_session() -> requests.Session:
     session = requests.Session()
@@ -553,6 +609,10 @@ def drat_search_by_diary_number(drat: str, diary_number: str, diary_year: str) -
     )
 
 
+
+
+
+
 @retry(
     retry=retry_if_exception_type(requests.exceptions.RequestException),
     stop=stop_after_attempt(5),
@@ -636,3 +696,443 @@ async def persist_orders_to_storage(
         base_url=BASE_URL,
         referer=f"{BASE_URL}/#/casedetail",
     )
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+    "Referer": "https://drt.gov.in/",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive",
+}
+
+
+def drt_fetch_causelist(listing_date: str, location: str):
+
+    cause_list_links = []
+
+    # Query logic
+    #Date
+    listing_date = _normalize_date(listing_date)
+    listing_date = datetime.strptime(listing_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+
+    session.get("https://drt.gov.in/", headers=headers)
+
+    try:
+        #Location
+        for loc in SCHEME_NAME_DRAT_ID_LIST:
+            if location.upper() in loc['name']:
+                location = loc
+                break
+            elif  loc['name'].upper() in location.upper():
+                location = loc
+                break
+
+        
+        # Fetching court names
+        court_names =  _post("getCourtName", {
+        "schemeNameDrtId": location['id'],
+        "listingDate" : str(listing_date),  
+        })
+
+        # Featching court No
+        for court_name in court_names:
+
+            court_no = _post("getDrtDratCourtNo", {
+            "schemeNameDrtId": location['id'],
+            "listingDate" : str(listing_date),
+            "courtNameId" : court_name['courtNameId']
+            })
+    
+            try:
+        
+                # #Fetching causelist links
+                links = _post("getDrtCauselistReport", {
+                "schemeNameDrtId": location['id'],
+                "causeListDate" : str(listing_date),
+                "courtNameId" : court_name['courtNameId'],
+                "courtNo" : court_no['courtNo'],
+                })
+                for link in links.values():
+                    cause_list_links.append(link)
+
+
+                
+            except RetryError as e:
+                original_exception = e.last_attempt.exception()
+                print(original_exception)  
+                print("No cause-list available for :" , listing_date, location['name'])
+                continue
+
+
+    except Exception as e:
+            print("DRT fetch causelist failed.")
+            original_exception = e.last_attempt.exception()
+            print(original_exception)  
+
+    return cause_list_links
+
+
+
+
+
+
+def parse_cause_list(response_text: str, source_link: str) -> list[dict]:
+    soup = BeautifulSoup(response_text, 'lxml')
+    table = soup.find('table', id='content')
+    if not table:
+        return []
+
+    thead = table.find('thead')
+    tbody = table.find('tbody')
+
+    # --- Coram & VC link ---
+    header_rows = thead.find_all('tr')
+
+    coram_text = ""
+    if len(header_rows) > 4:
+        raw = header_rows[4].get_text(" ", strip=True)
+        coram_text = re.sub(r'\s+', ' ', raw.replace('\xa0', ' ')).strip()
+
+    vc_link = None
+    if len(header_rows) > 5:
+        time_row_text = header_rows[5].get_text(" ", strip=True)
+        vc_match = re.search(r'https?://\S+', time_row_text)
+        vc_link = vc_match.group(0).rstrip('.') if vc_match else None
+
+    # --- Body rows ---
+    entries = []
+    current_section = ""
+
+    for row in tbody.find_all('tr'):
+        section_tag = row.select_one('td[colspan] b u')
+        if section_tag:
+            current_section = section_tag.get_text(strip=True)
+            continue
+
+        cells = row.find_all('td', recursive=False)
+        visible = [c for c in cells if 'display:none' not in c.get('style', '')]
+        if len(visible) < 4:
+            continue
+
+        sl_no = visible[0].get_text(strip=True)
+        if not sl_no.isdigit():
+            continue
+
+        # case_nos — all case numbers including linked IAs
+        case_cell_text = visible[1].get_text(" ", strip=True)
+        case_nos = re.findall(
+            r'(?:OA|SA|NDN|MA|IA|CA|SCA|WP|RCA|RFA)/[\w/\-\(\) ]+?(?=\s+IN\b|\s*$)',
+            case_cell_text, re.IGNORECASE
+        )
+        case_nos = [c.strip() for c in case_nos if c.strip()]
+        primary_case_no = case_nos[0] if case_nos else case_cell_text.strip()
+
+        # parties — list of strings matching GHC format:
+        # [petitioner_name, petitioner_advocate, respondent_name, respondent_advocate]
+        parties_cell = visible[2]
+        parties_raw = parties_cell.get_text("\n", strip=True)
+        vs_split = re.split(r'\n\s*[Vv][Ss]\.?\s*\n', parties_raw)
+        petitioner_block = vs_split[0].strip() if len(vs_split) > 0 else ""
+        respondent_block = vs_split[1].strip() if len(vs_split) > 1 else ""
+
+        advocate_cell = visible[3]
+        advocate_raw = advocate_cell.get_text("\n", strip=True)
+        adv_split = re.split(r'-{3,}', advocate_raw)
+        petitioner_adv = adv_split[0].strip() if len(adv_split) > 0 else ""
+        respondent_adv = adv_split[1].strip() if len(adv_split) > 1 else ""
+
+        # parties list: [petitioner, petitioner_adv, respondent, respondent_adv]
+        parties = [
+            p for p in [petitioner_block, petitioner_adv, respondent_block, respondent_adv]
+            if p
+        ]
+
+        # advocates — remark cell text (matches GHC pattern of putting hearing notes here)
+        remark = re.sub(r'\s+', ' ', visible[4].get_text(" ", strip=True)).strip() if len(visible) > 4 else ""
+
+        # raw text
+        raw_text = "\n".join([
+            sl_no,
+            case_cell_text,
+            parties_cell.get_text("\n", strip=True),
+            advocate_cell.get_text("\n", strip=True),
+        ])
+
+        entry_hash = hashlib.sha256(raw_text.encode()).hexdigest()
+
+        entries.append({
+            "item_no": sl_no,
+            "page_no": None,
+            "case_no": primary_case_no,
+            "case_nos": case_nos,
+            "parties": parties,
+            "petitioner": petitioner_block or None,
+            "respondent": respondent_block or None,
+            "party_names": None,
+            "advocates": remark or None,
+            "court_name": f"CORAM: {coram_text}",
+            "vc_link": vc_link,
+            "text": raw_text,
+            "entry_hash": entry_hash,
+        })
+
+    return entries
+
+def drt_find_entries_in_cause_list(cause_list_links: list, registration_no: str) -> list[dict]:
+    all_entries = []
+    matched = []
+
+    for cause_list_link in cause_list_links:
+        response = session.get(cause_list_link, headers=DEFAULT_HEADERS)
+
+        if not response.text.strip():
+            print("Empty response:", cause_list_link)
+            continue
+
+        entries = parse_cause_list(response.text, cause_list_link)
+        all_entries.extend(entries)
+
+        for entry in entries:
+            if (registration_no.upper() in entry['case_no'].upper() or
+                registration_no.upper() in entry['petitioner'].upper() or
+                registration_no.upper() in entry['respondent'].upper()):
+                matched.append(entry)
+
+    return matched  
+
+
+
+def drat_fetch_causelist(listing_date: str, location: str):
+
+    cause_list_links = []
+
+    # Query logic
+    #Date
+    listing_date = _normalize_date(listing_date)
+    listing_date = datetime.strptime(listing_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+
+    session.get("https://drt.gov.in/", headers=headers)
+
+    try:
+        #Location
+        for loc in SCHEME_NAME_DRAT_ID_LIST:
+            if location.upper() in loc['name']:
+                location = loc
+                break
+            elif  loc['name'].upper() in location.upper():
+                location = loc
+                break
+
+        
+        # Fetching court names
+        court_names =  _post("getDratCourtName", {
+        "schemeNameDrtId": location['id'],
+        "listingDate" : str(listing_date),  
+        })
+
+        # Featching court No
+        for court_name in court_names:
+
+            court_nos = _post("getDratCourtNo", {
+            "schemeNameDrtId": location['id'],
+            "listingDate" : str(listing_date),
+            "benchNature" : court_name['courtNameId']
+            })
+
+            for c_no in court_nos:
+    
+                try:
+            
+                    # #Fetching causelist links
+                    links = _post("getDratCauselistReport", {
+                    "schemeNameDrtId": location['id'],
+                    "causeListDate" : str(listing_date),
+                    "courtNameId" : court_name['courtNameId'],
+                    "courtNo" : c_no['courtNo'],
+                    })
+                    for link in links.values():
+                        cause_list_links.append(link)
+
+
+                    
+                except RetryError as e:
+                    original_exception = e.last_attempt.exception()
+                    print(original_exception)  
+                    print("No cause-list available for :" , listing_date, location['name'])
+                    continue
+
+
+    except Exception as e:
+            print("DRT fetch causelist failed.")
+            original_exception = e.last_attempt.exception()
+            print(original_exception)  
+
+    return cause_list_links
+
+
+def parse_drat_cause_list(response_text: str, source_link: str) -> list[dict]:
+    soup = BeautifulSoup(response_text, 'lxml')
+
+    tables = soup.find_all('table')
+    main_table = None
+    for t in tables:
+        if t.find('td', string=re.compile(r'DEBT RECOVERY APPELLATE TRIBUNAL', re.I)):
+            main_table = t
+            break
+    if not main_table:
+        return []
+
+    all_rows = main_table.find_all('tr')
+
+    # --- Header ---
+# --- Header --- replace the existing coram/vc loop with this ---
+
+    coram_text = ""
+    vc_link = None
+
+    for row in all_rows:
+        cells = row.find_all('td')
+        if not cells:
+            continue
+
+        raw = row.get_text(" ", strip=True).replace('\xa0', ' ')
+        cleaned = re.sub(r'\s+', ' ', raw).strip()
+
+        # Coram: must contain HON'BLE or JUSTICE, must not be a section/data row
+        if not coram_text and re.search(r"HON'BLE|JUSTICE|REGISTRAR", cleaned, re.I):
+            # Skip rows that are clearly address/title rows (contain "Floor", "Road" etc)
+            if not re.search(r'\d+th Floor|Shastri|Haddows|Building|Chennai \d{6}', cleaned, re.I):
+                coram_text = cleaned
+
+        # VC link
+        if not vc_link:
+            vc_match = re.search(r'https?://\S+', cleaned)
+            if vc_match:
+                vc_link = vc_match.group(0).rstrip('.')
+        # --- Body ---
+    entries = []
+    current_section = ""
+
+    for row in all_rows:
+        cells = row.find_all('td')
+        if not cells:
+            continue
+
+        # Section header
+        section_tag = row.select_one('b u') or row.select_one('u b')
+        if section_tag and len(cells) <= 2:
+            current_section = section_tag.get_text(strip=True)
+            continue
+
+        if len(cells) < 6:
+            continue
+
+        sl_no = cells[0].get_text(strip=True)
+        if not sl_no.isdigit():
+            continue
+
+        case_cell_text = cells[1].get_text(" ", strip=True)
+
+        # Primary case no — DN/.../... or REGULAR APPEAL/... or MISC APPEAL/...
+        # These are always the first identifiable case number in the cell
+        primary_match = re.search(
+            r'(?:DN/\s*\d+/\d+\s*\([^)]+\)|'
+            r'(?:REGULAR|MISC)\s+APPEAL/\d+/\d+|'
+            r'(?:OA|SA|TA|TSA)/\d+/\d+)',
+            case_cell_text, re.IGNORECASE
+        )
+        primary_case_no = re.sub(r'\s+', ' ', primary_match.group(0)).strip() if primary_match else case_cell_text.strip()
+
+        # All case nos — filter out empty IA// 
+        raw_case_nos = re.findall(
+            r'(?:DN/\s*\d+/\d+\s*\([^)]+\)|'
+            r'(?:REGULAR|MISC)\s+APPEAL/\d+/\d+|'
+            r'IA/\d+/\d+|'
+            r'(?:OA|SA|TA|TSA)/\d+/\d+(?:\s*\([^)]+\))?)',
+            case_cell_text, re.IGNORECASE
+        )
+        case_nos = [re.sub(r'\s+', ' ', c).strip() for c in raw_case_nos if c.strip()]
+
+        appellant      = cells[2].get_text(" ", strip=True).strip()
+        respondent     = cells[3].get_text(" ", strip=True).strip()
+        appellant_adv  = re.sub(r'[\s\xa0&;]+', ' ', cells[4].get_text(" ", strip=True)).strip()
+        respondent_adv = re.sub(r'[\s\xa0&;]+', ' ', cells[5].get_text(" ", strip=True)).strip()
+
+        # Drop placeholder values
+        for placeholder in ('', '&nbsp;', '\xa0', '0', '&nbsp', 'nbsp'):
+            if appellant_adv == placeholder:
+                appellant_adv = None
+            if respondent_adv == placeholder:
+                respondent_adv = None
+
+        parties = [p for p in [appellant, appellant_adv, respondent, respondent_adv] if p]
+
+        advocates_str = " | ".join(filter(None, [appellant_adv, respondent_adv])) or None
+
+        raw_text = "\n".join([
+            sl_no,
+            case_cell_text,
+            appellant,
+            respondent,
+            appellant_adv or "",
+            respondent_adv or "",
+        ])
+        entry_hash = hashlib.sha256(raw_text.encode()).hexdigest()
+
+        entries.append({
+            "item_no": sl_no,
+            "page_no": None,
+            "case_no": primary_case_no,
+            "case_nos": case_nos,
+            "parties": parties,
+            "petitioner": appellant or None,
+            "respondent": respondent or None,
+            "party_names": None,
+            "advocates": advocates_str,
+            "court_name": f"CORAM: {coram_text}",
+            "vc_link": vc_link,
+            "text": raw_text,
+            "entry_hash": entry_hash,
+        })
+
+    return entries
+
+
+def drat_find_entries_in_cause_list(cause_list_links: list, registration_no: str) -> list[dict]:
+    matched = []
+
+
+    registration_no =  re.sub(r'[^0-9/]', '', registration_no).strip('/')
+
+    for cause_list_link in cause_list_links:
+        response = session.get(cause_list_link, headers=DEFAULT_HEADERS)
+
+        if not response.text.strip():
+            print("Empty response:", cause_list_link)
+            continue
+
+        entries = parse_drat_cause_list(response.text, cause_list_link)
+    
+        for entry in entries:
+            searchable = " ".join(filter(None, [
+                entry.get('case_no', ''),
+                entry.get('petitioner', ''),
+                entry.get('respondent', ''),
+            ])).upper()
+
+            if registration_no.upper() in searchable:
+                matched.append(entry)
+
+    return matched
+
+if __name__ == '__main__':
+    a = drat_fetch_causelist(
+        '13/04/2026',
+        'chennai'
+    )
+
+    print("fetch_causelist  output :",a)    
+    a = drat_find_entries_in_cause_list(a, 'DN/1048/2024')
+    print("find entreies output: " ,a)
+
+    
