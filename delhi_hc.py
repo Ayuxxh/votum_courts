@@ -121,14 +121,34 @@ def _parse_single_cause_list_entry(entry: Dict[str, Any]) -> Dict[str, Any]:
     text = "\n".join(raw_lines).strip()
     entry_hash_src = f"{entry.get('item_no')}|{entry.get('page_no')}|{text}"
     entry_hash = sha256(entry_hash_src.encode("utf-8")).hexdigest()
+    # return {
+    #     "item_no": entry.get("item_no"),
+    #     "page_no": entry.get("page_no"),
+    #     "case_no": case_no,
+    #     "case_nos": case_numbers,
+    #     "text": text,
+    #     "entry_hash": entry_hash,
+    # }
     return {
-        "item_no": entry.get("item_no"),
-        "page_no": entry.get("page_no"),
-        "case_no": case_no,
-        "case_nos": case_numbers,
-        "text": text,
-        "entry_hash": entry_hash,
-    }
+    "item_no": entry.get("item_no"),
+    "page_no": entry.get("page_no"),
+    "case_no": case_no,
+    "case_nos":[
+        case_numbers
+    ],
+    "parties":[
+
+    ],
+    "petitioner":"",
+    "respondent":"",
+    "party_names":"",
+    "advocates":"",
+    "court_name":entry.get('coram'),
+    "vc_link":entry.get('vc_link'),
+    "text":text,
+    "entry_hash":entry_hash
+}
+
 
 
 def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
@@ -139,8 +159,42 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
     with fitz.open(pdf_path) as doc:
         open_entry: Optional[Dict[str, Any]] = None
 
+
+        vc_link = ''
+        coram = ''
         for page_idx in range(doc.page_count):
             page = doc[page_idx]
+            page_txt = page.get_text()
+
+
+            domain = "dhcvirtualcourt.webex.com"
+
+            pattern = rf"https?://[^\s]*{re.escape(domain)}[^\s]*"
+
+            match = re.search(pattern, page_txt)
+
+            if match:
+                match = match.group(0)
+
+
+            pattern = r"(HON\S*BLE\s+(?:MR|MS|DR)\.?\s+JUSTICE\s+[A-Z\s\.]+?)(?=\s+HON|\n|$)"
+
+            matches = re.findall(pattern, page_txt)
+
+            # clean up formatting
+            judges = [" ".join(m.split()) for m in matches]
+
+
+
+            for judge in judges:
+                coram = coram + ', ' + judge
+
+
+
+            if "HON'BLE" in page_txt:
+                if match:
+                    vc_link = match
+        
             lines: List[Dict[str, Any]] = []
 
             for block in page.get_text("dict").get("blocks", []):
@@ -152,6 +206,7 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                         continue
                     line_text = "".join(span.get("text", "") for span in line.get("spans", []))
                     cleaned = _clean_pdf_line(line_text)
+
                     if not cleaned:
                         continue
                     lines.append({"x": float(x0), "y": float(y0), "text": cleaned})
@@ -185,6 +240,8 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                     "item_no": start["text"],
                     "page_no": page_idx + 1,
                     "raw_lines": [],
+                    "vc_link" : vc_link,
+                    "coram" :coram ,
                 }
                 for line in lines:
                     if y_start <= line["y"] < y_end:
@@ -195,9 +252,12 @@ def parse_cause_list_pdf(pdf_path: str) -> List[Dict[str, Any]]:
                 else:
                     open_entry = segment
 
+            
+   
+
         if open_entry:
             entries.append(_parse_single_cause_list_entry(open_entry))
-
+    
     return [entry for entry in entries if entry.get("case_nos")]
 
 
@@ -208,19 +268,25 @@ def find_case_entries(pdf_path: str, case_no: str) -> List[Dict[str, Any]]:
     """
     target_tail = _case_tail(case_no)
     parsed = parse_cause_list_pdf(pdf_path)
+
     
     if not target_tail:
         return parsed
 
     matched_entries: List[Dict[str, Any]] = []
     for entry in parsed:
-        case_nos = entry.get("case_nos") or []
-        tails = {_case_tail(value) for value in case_nos if value}
-        if target_tail in tails:
-            # print(target_tail, tails)
-            # print("*" * 100)
-            # SystemExit()
+        case_nos = entry.get("case_no") or []
+        # tails = {_case_tail(value) for value in case_nos if value}
+
+
+        if target_tail in _case_tail(case_nos):
+            # print(target_tail, _case_tail(case_nos), 'hello')
+
             matched_entries.append(entry)
+
+
+
+
 
     return matched_entries
 
@@ -277,7 +343,7 @@ def fetch_cause_list_pdfs(
     all_page_urls: List[str] = []
 
     for page_idx in range(max_pages):
-        suffix = f"?page={page_idx}" if page_idx else ""
+        suffix = f"?page={str(page_idx)}" if page_idx else ""
         all_page_urls.append(f"{CAUSE_LIST_URL}{suffix}")
 
     found: List[Dict[str, Any]] = []
@@ -623,113 +689,168 @@ class DelhiHCService:
 
     def _parse_results(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
-        Parse the raw DataTables rows into a cleaner format.
-        Uses both the raw row data and HTML parsing for completeness.
+        Parse the raw DataTables rows into canonical case schema.
         """
         parsed_cases = []
         for row in rows:
-            # row is a dict like {'DT_RowIndex': 1, 'ctype': 'HTML...', 'pet': 'HTML...', 'orderdate': 'HTML...'}
-            
-            case_info = {
-                "orders": [],
-                "ia_details": [],
-                "petitioner_advocate": (row.get('pet_adv') or "").strip(),
-                "respondent_advocate": (row.get('res_adv') or "").strip(),
-                "diary_no": row.get('diary_no'),
-                "diary_year": row.get('diary_yr'),
-                "court_no": (row.get('courtno') or "").strip(),
-                "category_code": row.get('catcode'),
-                "respondent": (row.get('res') or "").strip()
-            }
-            
-            # Status normalization from row['status']
+            pet_adv = (row.get('pet_adv') or "").strip()
+            res_adv = (row.get('res_adv') or "").strip()
+            diary_no = row.get('diary_no')
+            diary_year = row.get('diary_yr')
+            court_no = (row.get('courtno') or "").strip()
+            category_code = row.get('catcode')
+            respondent_str = (row.get('res') or "").strip()
+
+            orders: List[Dict[str, Any]] = []
+            ia_details: List[Dict[str, Any]] = []
+
+            # Status normalization
             raw_status = (row.get('status') or "").strip()
             if raw_status == 'P':
-                case_info['status'] = 'PENDING'
+                status_str = 'PENDING'
             elif raw_status == 'D':
-                case_info['status'] = 'DISPOSED'
+                status_str = 'DISPOSED'
             else:
-                case_info['status'] = raw_status
+                status_str = raw_status
+
+            disposal_nature = 0 if status_str == 'DISPOSED' else 1
 
             # Next listing date from row data
-            next_dt = row.get('h_d_dt') or row.get('old_h_dt')
-            if next_dt:
-                case_info['next_listing_date'] = next_dt
-            
+            next_dt_raw = row.get('h_d_dt') or row.get('old_h_dt')
+            next_listing_date = _normalize_date(next_dt_raw) if next_dt_raw else None
+
+            # last listing date / listing details
+            listing_details_text = None
+            last_listing_date = None
+
+            case_no = None
+            case_details_raw = None
+            case_type = None
+
             # Parse 'ctype' column (Diary No. / Case No.[STATUS])
             if 'ctype' in row:
                 soup = BeautifulSoup(row['ctype'], 'html.parser')
                 text = soup.get_text(" ", strip=True)
-                case_info['case_details_raw'] = text
-                
-                # Extract Case No and Status from text (e.g. "ARB.P. - 376 / 2026 [PENDING]")
+                case_details_raw = text
+
                 match = re.search(r'(.*?)\[(.*?)\]', text)
                 if match:
-                    case_info['case_no'] = match.group(1).strip()
-                    if not case_info.get('status'):
-                        case_info['status'] = match.group(2).strip()
+                    case_no = match.group(1).strip()
+                    if not status_str:
+                        status_str = match.group(2).strip()
+                        disposal_nature = 0 if status_str == 'DISPOSED' else 1
                 else:
-                    case_info['case_no'] = text
+                    case_no = text
 
-                # Extract Links robustly
+                # Derive case_type from case_no (part before " - ")
+                if case_no:
+                    ct_match = re.match(r'^([A-Z][A-Z0-9()./ &-]+?)\s*[-–]\s*\d', case_no)
+                    case_type = ct_match.group(1).strip() if ct_match else None
+
                 for a_tag in soup.find_all('a', href=True):
                     link_text = a_tag.get_text(" ", strip=True).lower()
                     href = a_tag['href'].strip()
                     if 'order' in link_text:
-                        case_info['orders'] = self.fetch_orders(href)
+                        orders = self.fetch_orders(href)
                     elif 'ia' in link_text or 'cm' in link_text or 'interlocutory' in link_text:
-                        case_info['ia_details'].extend(self.fetch_ia_details(href))
-                    elif 'judgment' in link_text:
-                        # Judgments can be added here if needed
-                        pass
-                    
+                        ia_details.extend(self.fetch_ia_details(href))
+
             # Parse 'pet' column (Petitioner Vs. Respondent)
+            petitioner_str = ""
+            parties_text = None
             if 'pet' in row:
                 soup = BeautifulSoup(row['pet'], 'html.parser')
                 parties_text = soup.get_text(" ", strip=True)
-                case_info['parties'] = parties_text
-                # Split Pet vs Res
                 parts = re.split(r'\s+VS\.?\s+', parties_text, flags=re.IGNORECASE)
                 if len(parts) >= 2:
-                    case_info['petitioner'] = parts[0].strip()
-                    if not case_info.get('respondent'):
-                        case_info['respondent'] = parts[1].strip()
+                    petitioner_str = parts[0].strip()
+                    if not respondent_str:
+                        respondent_str = parts[1].strip()
                 else:
-                    case_info['petitioner'] = parties_text
-                
-            # Parse 'orderdate' column (Listing Date / Court No.) as fallback
+                    petitioner_str = parties_text
+
+            # Parse 'orderdate' column for listing details and fallback dates
             if 'orderdate' in row:
                 soup = BeautifulSoup(row['orderdate'], 'html.parser')
-                text = soup.get_text(" ", strip=True)
-                case_info['listing_details'] = text
-                
-                # Extract Date if not already found
-                if not case_info.get('next_listing_date'):
-                    # Look for date following "NEXT DATE:"
-                    next_date_match = re.search(r'NEXT DATE\s*:\s*(\d{2}/\d{2}/\d{4})', text, re.IGNORECASE)
-                    if next_date_match:
-                        case_info['next_listing_date'] = next_date_match.group(1)
+                listing_details_text = soup.get_text(" ", strip=True)
+
+                if not next_listing_date:
+                    m = re.search(r'NEXT DATE\s*:\s*(\d{2}/\d{2}/\d{4})', listing_details_text, re.IGNORECASE)
+                    if m:
+                        next_listing_date = _normalize_date(m.group(1))
                     else:
-                        # Fallback to any date in this field
-                        date_match = re.search(r'(\d{2}/\d{2}/\d{4})', text)
-                        if date_match:
-                            case_info['next_listing_date'] = date_match.group(1)
-                
-                # Extract Court No if not already found
-                if not case_info.get('court_no') or case_info['court_no'] == 'NA' or not case_info['court_no'].strip():
-                    court_match = re.search(r'COURT NO\s*:\s*(\d+)', text, re.IGNORECASE)
-                    if court_match:
-                        case_info['court_no'] = court_match.group(1)
+                        m2 = re.search(r'(\d{2}/\d{2}/\d{4})', listing_details_text)
+                        if m2:
+                            next_listing_date = _normalize_date(m2.group(1))
+
+                # Extract last date
+                last_m = re.search(r'Last Date\s*:\s*(\d{2}/\d{2}/\d{4})', listing_details_text, re.IGNORECASE)
+                if last_m:
+                    last_listing_date = _normalize_date(last_m.group(1))
+
+                if not court_no or court_no == 'NA':
+                    cm = re.search(r'COURT NO\s*:\s*(\d+)', listing_details_text, re.IGNORECASE)
+                    if cm:
+                        court_no = cm.group(1)
+
+            # Build canonical advocates string
+            adv_lines: List[str] = []
+            if pet_adv:
+                adv_lines.append(f"Petitioner:\n{pet_adv}")
+            if res_adv:
+                adv_lines.append(f"Respondent:\n{res_adv}")
+            advocates = "\n\n".join(adv_lines).strip() or None
+
+            case_info: Dict[str, Any] = {
+                "cin_no": None,
+                "filing_no": str(diary_no) if diary_no else None,
+                "case_no": case_no,
+                "case_type": case_type,
+                "registration_date": None,
+                "filing_date": None,
+                "first_listing_date": None,
+                "next_listing_date": next_listing_date,
+                "last_listing_date": last_listing_date,
+                "decision_date": None,
+                "court_no": court_no or None,
+                "disposal_nature": disposal_nature,
+                "purpose_next": None,
+                "pet_name": [petitioner_str] if petitioner_str else [],
+                "res_name": [respondent_str] if respondent_str else [],
+                "advocates": advocates,
+                "judges": None,
+                "bench_name": None,
+                "court_name": None,
+                "history": [],
+                "acts": [],
+                "orders": orders,
+                "ia_details": ia_details,
+                "additional_info": {
+                    "petitioner_advocate": pet_adv or None,
+                    "respondent_advocate": res_adv or None,
+                    "diary_no": diary_no,
+                    "diary_year": diary_year,
+                    "category_code": category_code,
+                    "listing_details": listing_details_text,
+                    "case_details_raw": case_details_raw,
+                    "parties": parties_text,
+                    "status": status_str,
+                },
+                "original_json": {k: v for k, v in row.items()},
+            }
 
             parsed_cases.append(case_info)
-            
+
         return parsed_cases
 
 # Global instance
 _service = DelhiHCService()
 
-def get_delhi_case_details(case_type: str, case_no: str, case_year: str):
-    return _service.fetch_case_details(case_type, case_no, case_year)
+def get_delhi_case_details(case_type: str, case_no: str, case_year: str) -> Optional[Dict[str, Any]]:
+    results = _service.fetch_case_details(case_type, case_no, case_year)
+    if not results:
+        return None
+    return results[0]
 
 async def persist_orders_to_storage(
     orders: list[dict] | None,

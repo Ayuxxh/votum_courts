@@ -7,8 +7,8 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import ddddocr
-import requests
 import fitz
+import requests
 from bs4 import BeautifulSoup
 from tenacity import (retry, retry_if_exception_type, stop_after_attempt,
                       wait_exponential)
@@ -53,6 +53,39 @@ CASE_TYPE_NAME_TO_ID: dict[str, str] = {
     "transfer original petition (mrtp-at)": "61",
 }
 
+# Compact version of the map: all spaces around parentheses stripped.
+# Used as fallback when the portal adds/removes spaces around parentheses.
+_CASE_TYPE_COMPACT_MAP: dict[str, str] = {
+    re.sub(r"\s*\)\s*", ")", re.sub(r"\s*\(\s*", "(", k)): v
+    for k, v in CASE_TYPE_NAME_TO_ID.items()
+}
+
+# Shorthand / abbreviation → canonical long name.
+# Cause-list PDFs use abbreviated type names that won't hit the main map.
+CASE_TYPE_SHORTHAND_TO_NAME: dict[str, str] = {
+    "ia":                         "interlocutory application",
+    "i.a.":                       "interlocutory application",
+    "i.a":                        "interlocutory application",
+    "ca(at)":                     "company appeal(at)",
+    "ca(at)(ins)":                "company appeal(at)(ins)",
+    "ca(at)(insolvency)":         "company appeal(at)(ins)",
+    "comp.appeal(at)":            "company appeal(at)",
+    "comp. appeal(at)":           "company appeal(at)",
+    "comp.appeal(at)(ins)":       "company appeal(at)(ins)",
+    "comp. appeal(at)(ins)":      "company appeal(at)(ins)",
+    "competition appeal(at)":     "competition appeal(at)",  # already in map, kept for completeness
+    "contempt(at)":               "contempt case(at)",
+    "cont.(at)":                  "contempt case(at)",
+    "ra":                         "review application",
+    "r.a.":                       "review application",
+    "roa":                        "restoration application",
+    "ta":                         "transfer appeal",
+    "t.a.":                       "transfer appeal",
+    "top(mrtp-at)":               "transfer original petition (mrtp-at)",
+    "comp.app.(at)":              "company appeal(at)",
+    "comp.app.(at)(ins)":         "company appeal(at)(ins)",
+}
+
 
 def _normalize_location(location: str | None) -> str:
     """
@@ -73,7 +106,21 @@ def _normalize_case_type(case_type: str | None) -> str | None:
     if value.isdigit():
         return value
     key = re.sub(r"\s+", " ", value.lower())
-    return CASE_TYPE_NAME_TO_ID.get(key)
+    result = CASE_TYPE_NAME_TO_ID.get(key)
+    if result:
+        return result
+    # Fallback 1: strip all spaces around parentheses and look up in compact map.
+    # Handles portal variants like "Company Appeal ( AT ) ( Ins )".
+    key_compact = re.sub(r"\s*\)\s*", ")", re.sub(r"\s*\(\s*", "(", key)).strip()
+    result = _CASE_TYPE_COMPACT_MAP.get(key_compact)
+    if result:
+        return result
+    # Fallback 2: abbreviation/shorthand map (cause-list PDFs use short forms).
+    # Expand to canonical long name first, then resolve to id.
+    long_name = CASE_TYPE_SHORTHAND_TO_NAME.get(key) or CASE_TYPE_SHORTHAND_TO_NAME.get(key_compact)
+    if long_name:
+        return CASE_TYPE_NAME_TO_ID.get(long_name)
+    return None
 
 
 def _normalize_date(value: str | None) -> str | None:
@@ -120,8 +167,10 @@ def _reformat_case_no(case_no: str | None) -> str | None:
         return None
     # Normalize spaces
     text = re.sub(r"\s+", " ", case_no).strip()
-    # Replace ' - ' or ' No. ' or ' No ' with '/'
-    text = re.sub(r"\s*-\s*|\s+No\.?\s+", "/", text, flags=re.IGNORECASE)
+    # Replace ' - ' (spaced hyphen separator) or ' No. ' / ' No ' with '/'.
+    # Require at least one space on each side of '-' so hyphens embedded in
+    # type names like "(MRTP-AT)" are NOT replaced.
+    text = re.sub(r"\s+-\s+|\s+No\.?\s+", "/", text, flags=re.IGNORECASE)
     # Ensure only single slashes
     text = re.sub(r"/+", "/", text)
     return text
@@ -130,14 +179,17 @@ def _reformat_case_no(case_no: str | None) -> str | None:
 def _extract_type_name(case_no: str | None) -> str | None:
     """
     Extracts the type part from 'Company Appeal(AT)(Ins)/69/2026'.
+    Returns None when the first segment is purely numeric (no type prefix present).
     """
     if not case_no:
         return None
-    # Assuming type is everything before the first numeric component or slash
-    # Better: if reformatted, take everything before the first '/'
     parts = case_no.split("/")
     if len(parts) > 1:
-        return parts[0].strip()
+        raw = parts[0].strip()
+        # Pure number means there is no type prefix (e.g. "559/2021")
+        if not raw or raw.isdigit():
+            return None
+        return raw
     return None
 
 
@@ -305,12 +357,17 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
     def _header_indexes(headers: list[str]) -> dict[str, int]:
         idx: dict[str, int] = {}
         for i, header in enumerate(headers):
-            if "ia" in header or "interlocutory" in header or "application no" in header:
+            # "case no" / "case number" maps to ia_number (portal uses "Case No" column for IA case number)
+            if "ia" in header or "interlocutory" in header or "application no" in header or "case no" in header or "case number" in header:
                 idx.setdefault("ia_number", i)
+            if "filing no" in header or "filing number" in header:
+                idx.setdefault("ia_filing_no", i)
             if any(k in header for k in ["party", "applicant", "respondent", "petitioner", "filed by"]):
                 idx.setdefault("party", i)
             if "filing date" in header or "date of filing" in header:
                 idx.setdefault("filing_date", i)
+            if "registration date" in header or "reg date" in header:
+                idx.setdefault("registration_date", i)
             if any(k in header for k in ["next date", "next hearing", "next listing", "hearing date"]):
                 idx.setdefault("next_date", i)
             if "status" in header or "stage" in header:
@@ -321,7 +378,7 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                 idx.setdefault("disposal_date", i)
         return idx
 
-    def _extract_ia_rows(table) -> list[dict[str, Any]]:
+    def _extract_ia_rows(table, force_ia: bool = False) -> list[dict[str, Any]]:
         rows: list[dict[str, Any]] = []
         if not table or table.find("table"):
             return rows
@@ -329,7 +386,8 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         ths = [th for th in table.find_all("th") if th.find_parent("table") == table]
         headers = [_norm_key(_clean(th.get_text(" ", strip=True))) for th in ths]
         indexes = _header_indexes(headers)
-        has_ia_signal = bool(
+        # force_ia=True when called from inside an IA card — skip the signal check entirely
+        has_ia_signal = force_ia or bool(
             indexes.get("ia_number") is not None
             or any("interlocutory" in h or h == "ia" or h.startswith("ia ") for h in headers)
         )
@@ -355,23 +413,27 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
             if not has_ia_signal and not re.search(r"\b(?:I\.?A\.?|IA|INTERLOCUTORY)\b", ia_number, re.IGNORECASE):
                 continue
 
-
             party_idx = indexes.get("party")
             filing_idx = indexes.get("filing_date")
+            reg_idx = indexes.get("registration_date")
             next_idx = indexes.get("next_date")
             status_idx = indexes.get("status")
             purpose_idx = indexes.get("purpose")
             disposal_idx = indexes.get("disposal_date")
+            ia_filing_idx = indexes.get("ia_filing_no")
 
             filing_raw = cells[filing_idx] if filing_idx is not None and filing_idx < len(cells) else None
+            reg_raw = cells[reg_idx] if reg_idx is not None and reg_idx < len(cells) else None
             next_raw = cells[next_idx] if next_idx is not None and next_idx < len(cells) else None
             disposal_raw = cells[disposal_idx] if disposal_idx is not None and disposal_idx < len(cells) else None
 
             rows.append(
                 {
                     "ia_number": ia_number,
+                    "ia_filing_no": (cells[ia_filing_idx] if ia_filing_idx is not None and ia_filing_idx < len(cells) else None) or None,
                     "party": (cells[party_idx] if party_idx is not None and party_idx < len(cells) else None) or None,
                     "filing_date": _normalize_date(filing_raw) or filing_raw or None,
+                    "registration_date": _normalize_date(reg_raw) or reg_raw or None,
                     "next_date": _normalize_date(next_raw) or next_raw or None,
                     "status": (cells[status_idx] if status_idx is not None and status_idx < len(cells) else None) or None,
                     "purpose": (cells[purpose_idx] if purpose_idx is not None and purpose_idx < len(cells) else None) or None,
@@ -379,7 +441,6 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                     "raw_row": cells,
                 }
             )
-        
 
         return rows
 
@@ -504,12 +565,16 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
                 "i.a.",
                 "ia/ma",
                 "application details",
+                "ia's",
+                "ia's/other",
+                "other applications",
             )
         ):
             for table in body.find_all("table"):
-                ia_details.extend(_extract_ia_rows(table))
+                ia_details.extend(_extract_ia_rows(table, force_ia=True))
 
     fmt_case_no = _reformat_case_no(case_no)
+
     # Deduplicate IA rows while preserving order.
     seen_ias: set[tuple[Any, ...]] = set()
     deduped_ias: list[dict[str, Any]] = []
@@ -526,30 +591,70 @@ def _parse_details(html: str, location: str, filing_no: str) -> dict[str, Any]:
         seen_ias.add(key)
         deduped_ias.append(row)
 
+    # Derive first/last listing dates from hearing history
+    _today_str = datetime.today().strftime("%Y-%m-%d")
+    hearing_dates = sorted(
+        h["hearing_date"]
+        for h in hearings
+        if h.get("hearing_date") and re.match(r"\d{4}-\d{2}-\d{2}", h["hearing_date"])
+    )
+    first_listing_date = hearing_dates[0] if hearing_dates else None
+    # last = most recent hearing on or before today
+    past_dates = [d for d in hearing_dates if d <= _today_str]
+    last_listing_date = past_dates[-1] if past_dates else None
+
+    # Purpose for next hearing (from hearings list, first future date)
+    future_hearings = [
+        h for h in hearings
+        if h.get("hearing_date") and h["hearing_date"] > _today_str
+    ]
+    purpose_next = future_hearings[0].get("purpose") if future_hearings else None
+
     return {
         "cin_no": filing_no,
+        "registration_no": None,
         "filing_no": filing_no,
         "case_no": fmt_case_no,
         "type_name": _extract_type_name(fmt_case_no),
-        "filing_date": filing_date,
+        "case_type": _extract_type_name(fmt_case_no),
+        "status": status,  # 'Disposed' or 'Pending'
         "registration_date": registration_date,
+        "filing_date": filing_date,
+        "first_listing_date": first_listing_date,
+        "next_listing_date": next_listing_date,
+        "last_listing_date": last_listing_date,
+        "decision_date": None,
+        "court_no": None,
+        "disposal_nature": 0 if (status or "").strip() == "Disposed" else 1,
+        "purpose_next": purpose_next,
         "bench_name": location,
         "court_name": "NCLAT",
         "pet_name": petitioners or ([pet_title] if pet_title else []),
         "res_name": respondents or ([res_title] if res_title else []),
+        "advocates": "\n".join(
+            x
+            for x in [
+                f"Petitioner: {', '.join(sorted({a for a in pet_advs if a}))}" if pet_advs else None,
+                f"Respondent: {', '.join(sorted({a for a in res_advs if a}))}" if res_advs else None,
+            ]
+            if x
+        ).strip() or None,
         "petitioner_advocates": sorted({a for a in pet_advs if a}),
         "respondent_advocates": sorted({a for a in res_advs if a}),
-        "next_listing_date": next_listing_date,
+        "judges": None,
+        "acts": [],
         "orders": orders,
         "history": [],
         "ia_details": deduped_ias,
+        "connected_matters": [],
+        "application_appeal_matters": [],
         "additional_info": {
             "status": status,
             "case_title": title_text,
             "hearings": hearings,
             "location": location,
         },
-        "original_html": html,
+        "original_json": {"original_html": html},
     }
 
 
@@ -980,16 +1085,74 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
 
     return matched
 
+def _test_case_type_extraction() -> None:
+    """
+    Validates that every canonical case-type name in CASE_TYPE_NAME_TO_ID survives the
+    full extraction pipeline:
+        raw case_no  →  _reformat_case_no  →  _extract_type_name  →  _normalize_case_type
+
+    Also checks common portal variations (spaces around parentheses, uppercase).
+    Prints PASS / FAIL per entry.
+    """
+    failures: list[str] = []
+
+    # Build test inputs: for each map entry, construct a realistic case_no string
+    # as the NCLAT portal would return it, in several variants.
+    for canonical_name, expected_id in CASE_TYPE_NAME_TO_ID.items():
+        # Title-case version of the name (closest to what portal returns)
+        portal_name = canonical_name.title()
+
+        variants = [
+            f"{portal_name} - 69/2026",           # normal portal format
+            f"{portal_name.upper()} - 69/2026",   # all-caps
+            f"{portal_name}/69/2026",              # already reformatted
+            # With spaces around parentheses (portal sometimes adds them)
+            re.sub(r"\(", " ( ", re.sub(r"\)", " ) ", portal_name)).strip() + " - 69/2026",
+        ]
+
+        for variant in variants:
+            fmt = _reformat_case_no(variant)
+            extracted = _extract_type_name(fmt)
+            resolved_id = _normalize_case_type(extracted) if extracted else None
+
+            if resolved_id != expected_id:
+                failures.append(
+                    f"  FAIL  canonical='{canonical_name}'  expected_id={expected_id}\n"
+                    f"        input='{variant}'\n"
+                    f"        reformatted='{fmt}'  extracted='{extracted}'  resolved_id={resolved_id}"
+                )
+            else:
+                print(f"  PASS  '{canonical_name}' → id={resolved_id}  (input='{variant}')")
+
+    # Also verify pure-numeric case numbers produce no type name
+    for bad in ["559/2021", "121/2026", "100/2024"]:
+        fmt = _reformat_case_no(bad)
+        extracted = _extract_type_name(fmt)
+        if extracted is not None:
+            failures.append(
+                f"  FAIL  numeric case_no '{bad}' should produce type_name=None, got '{extracted}'"
+            )
+        else:
+            print(f"  PASS  numeric case_no '{bad}' → type_name=None")
+
+    if failures:
+        print("\n--- FAILURES ---")
+        for f in failures:
+            print(f)
+        raise SystemExit(f"{len(failures)} extraction test(s) failed.")
+    else:
+        print(f"\nAll {len(CASE_TYPE_NAME_TO_ID) * 4 + 3} extraction checks passed.")
+
+
 if __name__ == '__main__':
     import json
-    a= nclat_find_case_in_causelist(datetime.strptime('06/04/2026', "%d/%m/%Y"),'965')
-    a = json.dumps(a, indent=4)# Use a valid filing number found from search
-    with open('nclat_find_case_causelist_.json', 'w') as f:
-        f.write(a)
 
-    print(a)
-    
+    # print("=== Case-type extraction tests ===")
+    # _test_case_type_extraction()
+    # Live search example (uncomment to run against portal):
+    # a = nclat_search_by_case_no('delhi', '35', '121', '2026')
+    # print(json.dumps(a, indent=4))
 
-    # print(nclat_search_by_case_no('delhi','35', '2262', '2020'))
-
-    # print(nclat_get_details('9910100052102020', 'delhi'))
+    a = nclat_get_details('9910110084442023', 'delhi')
+    with open("nclt_output.json", "w") as f:
+        json.dump(a, f, indent=4)

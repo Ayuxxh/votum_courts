@@ -668,21 +668,20 @@ class EcourtsWebScraper:
 
                             soup = BeautifulSoup(submit_resp['case_data'], 'html.parser')
 
-                            vc_link = None
-                            corum = None
-                            item_no = None
-                            next_hearing_date = None
+
 
 
                             # saving corum and Vc link incase match is found later
 
                             center_div = soup.find('center')
                             if center_div:
+                                cause_list_text = center_div.get_text()
                                 another_center_div = center_div.find('center')
                                 if another_center_div:
                                     corum = another_center_div( "span", string=lambda x: x and "In the court of" in x)
                                     designation = another_center_div.find_all('span')
                                     if len(designation) >= 3:
+
 
                                         corum = corum[0].get_text(" ", strip=True).split(":")[-1].strip() + " " + (designation[-1].text).strip()
 
@@ -692,7 +691,7 @@ class EcourtsWebScraper:
                                     vc_link = (vc_span[-1].text).split('url :')[-1].strip() 
                                     link_is_valid = bool(re.match(r'https?://[^\s]+', vc_link))
                                     if not link_is_valid:
-                                        vc_link = None
+                                        vc_link = ''
 
 
 
@@ -707,61 +706,67 @@ class EcourtsWebScraper:
                                     if len(tds) >= 3:
                                         item_no = (tds[0].text).strip()
                                         text = list(tds[1].stripped_strings)
+                                        advocate_names =  tds[3].get_text(separator="\n", strip=True).split("\n")
+                                        party =  tds[2].get_text()
+                                        case_no = _case_tail(text[1].strip())
 
-                                        details = tds[1].find('a').get('onclick')
-                                        args_str = re.search(r"viewHistory\((.*)\)", details).group(1)
-                                        p = list(ast.literal_eval(f"({args_str})"))
-                                        print(p)
+                                        # details = tds[1].find('a').get('onclick')
+                                        # args_str = re.search(r"viewHistory\((.*)\)", details).group(1)
+                                        # p = list(ast.literal_eval(f"({args_str})"))
+                                        # # print(p)
 
-                                        if len(text) >= 3 :
-                                            next_hearing_date =  datetime.strptime((text[2]).split('\xa0')[-1], '%d-%m-%Y' )   
-                                        if _case_tail(text[1].strip()) == case_match:
-                                            html_response = self._post(
-                                                        "home/viewHistory",
-                                                        {
-                                                            "state_code": state_code,
-                                                            "dist_code": dist_code,
-                                                            "court_complex_code": complex_code,
-                                                            "est_code": parts[1] if len(parts) > 1 else selected_est_code,
-                                                            "search_flag": "CLcauselist",
-                                                            "search_by" : "CauseList",
-                                                            "case_no" : p[0],
-                                                            "cino" : p[1],
-                                                            "court_code":[2]
-                                                        },
-                                                )
-                                            print('case_match found!')
+                                        # if len(text) >= 3 :
+                                        #     next_hearing_date =  datetime.strptime((text[2]).split('\xa0')[-1], '%d-%m-%Y' )   
+                                        # if _case_tail(text[1].strip()) == case_match:
+                                        #     html_response = self._post(
+                                        #                 "home/viewHistory",
+                                        #                 {
+                                        #                     "state_code": state_code,
+                                        #                     "dist_code": dist_code,
+                                        #                     "court_complex_code": complex_code,
+                                        #                     "est_code": parts[1] if len(parts) > 1 else selected_est_code,
+                                        #                     "search_flag": "CLcauselist",
+                                        #                     "search_by" : "CauseList",
+                                        #                     "case_no" : p[0],
+                                        #                     "cino" : p[1],
+                                        #                     "court_code":[2]
+                                        #                 },
+                                        #         )
+                                        #     print('case_match found!')
 
-                                            parsed = self._parse_case_details(html_response)
 
+                                        if case_match in _case_tail(text[1].strip()) :
+
+                                            
                                             matched_entry = {
-                                                "matched_entries": [
-                                                    {
-                                                        "status": "success",
-                                                        "case_no": parsed.get('case_no'),
-                                                        "case_nos": parsed.get('case_nos'),
-                                                        "listing_date": formatted_date,
-                                                        "item_no": item_no,
-                                                        "vc_link": vc_link,
-                                                        "page_no": '1',
-                                                        "coram": corum,
-                                                        "next_date": next_hearing_date.strftime("%Y-%m-%d") if next_hearing_date else None,
-                                                        "case_details": parsed,
-                                                        # "text": html_response.text
-                                                    }
-                                                ]
-                                            }
+                                            
+                                                    "item_no":item_no,
+                                                    "page_no": '1',
+                                                    "case_no": case_no,
+                                                    "case_nos":[
+                                                        case_no
+                                                    ],
+                                                    "parties":[
 
+                                                    ],
+                                                    "petitioner":"",
+                                                    "respondent":"",
+                                                    "party_names":party,
+                                                    "advocates":advocate_names,
+                                                    "court_name": corum,
+                                                    "vc_link":vc_link,
+                                                    "text":'',
+                                                    "entry_hash": ''
+                                                }
+                                            
 
+                                            matched_entries.append(matched_entry)
 
-                                            return matched_entry
-
-                            print('success_request')
                             break
                 
                             
                     except Exception as e:
-                        print("ERROR HERE:", e)
+
                         logger.debug(
                             "Cause-list submit failed for court=%s cicri=%s",
                             court.get("value"),
@@ -770,7 +775,7 @@ class EcourtsWebScraper:
                         )
                         continue
 
-            return []
+            return matched_entries
 
 
                     
