@@ -1,0 +1,51 @@
+[
+  {
+    "orders": [
+      {
+        "date": "2025-03-24",
+        "description": "Order dated 2025-03-24",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/141731041743164030168_28429_5332025.pdf/2025"
+      },
+      {
+        "date": "2025-03-07",
+        "description": "Order dated 2025-03-07",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501742794139437_79155_5332025.pdf/2025"
+      },
+      {
+        "date": "2025-03-06",
+        "description": "Order dated 2025-03-06",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501741274847185_85732_5332025.pdf/2025"
+      },
+      {
+        "date": "2025-03-04",
+        "description": "Order dated 2025-03-04",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501741430138416_74507_5332025.pdf/2025"
+      },
+      {
+        "date": "2025-02-24",
+        "description": "Order dated 2025-02-24",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501740466769767_45973_5332025.pdf/2025"
+      },
+      {
+        "date": "2025-01-16",
+        "description": "Order dated 2025-01-16",
+        "document_url": "https://delhihighcourt.nic.in/app/showlogo/100018501737706327299_4077_5332025.pdf/2025"
+      }
+    ],
+    "ia_details": [],
+    "petitioner_advocate": "MOHD RASHID",
+    "respondent_advocate": "",
+    "diary_no": "179682",
+    "diary_year": 2025,
+    "court_no": "255",
+    "category_code": "4400",
+    "respondent": "THE LT GOVERNOR DELHI AND ORS",
+    "status": "DISPOSED",
+    "next_listing_date": "24/03/2025",
+    "case_details_raw": "W.P.(C) - 533 / 2025 [DISPOSED] Click here for Orders Click here forJudgments",
+    "case_no": "W.P.(C) - 533 / 2025",
+    "parties": "ZULFIQAR AHMED VS. THE LT GOVERNOR DELHI AND ORS",
+    "petitioner": "ZULFIQAR AHMED",
+    "listing_details": "NEXT DATE: NA Last Date: 24/03/2025 COURT NO: NA"
+  }
+]

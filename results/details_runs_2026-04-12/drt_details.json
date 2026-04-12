@@ -1,0 +1,722 @@
+{
+  "cin_no": "070110005432019",
+  "filing_no": "070110005432019",
+  "registration_no": "SA/131/2019",
+  "case_no": "SA/131/2019",
+  "diary_no": "543/2019",
+  "registration_date": "2019-03-23",
+  "filing_date": "2019-03-23",
+  "next_listing_date": null,
+  "decision_date": "2025-09-29",
+  "court_no": null,
+  "court_name": "DEBTS RECOVERY TRIBUNAL DELHI(DRT 1)",
+  "bench_name": "DEBTS RECOVERY TRIBUNAL DELHI(DRT 1)",
+  "disposal_nature": "Dismiss in Default",
+  "purpose_next": null,
+  "case_type": "SA",
+  "pet_name": [
+    "RAKESH GUPTA"
+  ],
+  "res_name": [
+    "UNION BANK OF INDIA"
+  ],
+  "advocates": "Petitioner: AMIT DHALL",
+  "orders": [
+    {
+      "date": "2025-09-29",
+      "description": "Purpose: Cases Receive after Transfer | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvU2VwdGVtYmVyLzA3MDExMDAwNTQzMjAxOV9lYzVkNzU2NzQ0MDM0MmM5YWZjYTUwNWFjYmVjZjNlOS5wZGYqKiozODAwNzcjMSNkZWxoaQ==",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvU2VwdGVtYmVyLzA3MDExMDAwNTQzMjAxOV9lYzVkNzU2NzQ0MDM0MmM5YWZjYTUwNWFjYmVjZjNlOS5wZGYqKiozODAwNzcjMSNkZWxoaQ==",
+      "listing_date": "29/9/2025",
+      "purpose": "Cases Receive after Transfer",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2025-07-16",
+      "description": "Purpose: Cases Receive after Transfer | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvSnVseS8wNzAxMTAwMDU0MzIwMTlfNTQxMjk4YTcyMTM2ZDNjZGU1MTVlNzZhZjZjZmFmZjgucGRmKioqMzY5OTMxIzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvSnVseS8wNzAxMTAwMDU0MzIwMTlfNTQxMjk4YTcyMTM2ZDNjZGU1MTVlNzZhZjZjZmFmZjgucGRmKioqMzY5OTMxIzEjZGVsaGk=",
+      "listing_date": "16/7/2025",
+      "purpose": "Cases Receive after Transfer",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2025-04-09",
+      "description": "Purpose: Cases Receive after Transfer | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzkwMDU1MTdkNjdkMmQxMWE5NGRhYjdkYzIyMmIxZGUzLnBkZioqKjM1ODk0MCMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzkwMDU1MTdkNjdkMmQxMWE5NGRhYjdkYzIyMmIxZGUzLnBkZioqKjM1ODk0MCMxI2RlbGhp",
+      "listing_date": "9/4/2025",
+      "purpose": "Cases Receive after Transfer",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2025-02-10",
+      "description": "Purpose: Cases Receive after Transfer | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzRkMGY0OGYxNGVmNzk0NDAyNzU3NWU3YzBiOTk3MzFjLnBkZioqKjM1MDYwMSMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzRkMGY0OGYxNGVmNzk0NDAyNzU3NWU3YzBiOTk3MzFjLnBkZioqKjM1MDYwMSMxI2RlbGhp",
+      "listing_date": "10/2/2025",
+      "purpose": "Cases Receive after Transfer",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2024-12-13",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzFlODRkZWM4MTlmODJlMzk1ZmY3MmYzMzJlZmNiNGVkLnBkZioqKjM0Mzc5NyMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzFlODRkZWM4MTlmODJlMzk1ZmY3MmYzMzJlZmNiNGVkLnBkZioqKjM0Mzc5NyMxI2RlbGhp",
+      "listing_date": "13/12/2024",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2024-07-31",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSnVseS8wNzAxMTAwMDU0MzIwMTlfMGI1OTdlN2FkYjM2NzE3YmIxNDE5MTkzYjM1ZWJhOGQucGRmKioqMzI2MDY4IzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSnVseS8wNzAxMTAwMDU0MzIwMTlfMGI1OTdlN2FkYjM2NzE3YmIxNDE5MTkzYjM1ZWJhOGQucGRmKioqMzI2MDY4IzEjZGVsaGk=",
+      "listing_date": "31/7/2024",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2024-04-26",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzNlN2U0ODk0ZmQ1YTIwNzkwODI0NGUxZWYyMDMyMGE0LnBkZioqKjMxMzc0MyMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzNlN2U0ODk0ZmQ1YTIwNzkwODI0NGUxZWYyMDMyMGE0LnBkZioqKjMxMzc0MyMxI2RlbGhp",
+      "listing_date": "26/4/2024",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2024-02-29",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzAyNjAxYjY3YzBhM2ExYWRmNzdjNTFiOGNkMDdlMDM4LnBkZioqKjMwNTEzNiMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzAyNjAxYjY3YzBhM2ExYWRmNzdjNTFiOGNkMDdlMDM4LnBkZioqKjMwNTEzNiMxI2RlbGhp",
+      "listing_date": "29/2/2024",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2024-01-08",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfOTM1ODIxZjkzNGQ0Mjk4OTVhZThlNDhiYTMwMDU0YjcucGRmKioqMjk4MDUyIzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfOTM1ODIxZjkzNGQ0Mjk4OTVhZThlNDhiYTMwMDU0YjcucGRmKioqMjk4MDUyIzEjZGVsaGk=",
+      "listing_date": "8/1/2024",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2023-07-03",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvSnVseS8wNzAxMTAwMDU0MzIwMTlfYWUzMGNiYWM2OTQxMmRhYjAyYmZjZjI1MDVhOTVkNzEucGRmKioqMjU3Nzk4IzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvSnVseS8wNzAxMTAwMDU0MzIwMTlfYWUzMGNiYWM2OTQxMmRhYjAyYmZjZjI1MDVhOTVkNzEucGRmKioqMjU3Nzk4IzEjZGVsaGk=",
+      "listing_date": "3/7/2023",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2023-03-23",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzU5ZTEyM2UyZjY3NmM5MWE4YTA0MzMzYTZkY2EwMThjLnBkZioqKjIzNzQyMSMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzU5ZTEyM2UyZjY3NmM5MWE4YTA0MzMzYTZkY2EwMThjLnBkZioqKjIzNzQyMSMxI2RlbGhp",
+      "listing_date": "23/3/2023",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2022-12-01",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzZmMGQ4OWEzODNjOTA4NDNiODEzNGNjZDFjZWQ4NzI5LnBkZioqKjE5MjQwMSMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzZmMGQ4OWEzODNjOTA4NDNiODEzNGNjZDFjZWQ4NzI5LnBkZioqKjE5MjQwMSMxI2RlbGhp",
+      "listing_date": "1/12/2022",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2022-10-10",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfNzg3YmEwOTYxNGRlZDlhZjg3MWQ3ZWNjNWJmNjNkZmUucGRmKioqMTUzODIyIzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfNzg3YmEwOTYxNGRlZDlhZjg3MWQ3ZWNjNWJmNjNkZmUucGRmKioqMTUzODIyIzEjZGVsaGk=",
+      "listing_date": "10/10/2022",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2022-07-15",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvSnVseS8wNzAxMTAwMDU0MzIwMTlfYjZkOGQ1MzlkN2ZhMjk1ZTgyMGJkNGMwM2JjOWFjZTMucGRmKioqMTQxNjkxIzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvSnVseS8wNzAxMTAwMDU0MzIwMTlfYjZkOGQ1MzlkN2ZhMjk1ZTgyMGJkNGMwM2JjOWFjZTMucGRmKioqMTQxNjkxIzEjZGVsaGk=",
+      "listing_date": "15/7/2022",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2022-03-23",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzVjMjBkYjgyMTk0ZjU5NDRlZGFmNDJmZDdiNWFmMjZlLnBkZioqKjEyNDk0NiMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzVjMjBkYjgyMTk0ZjU5NDRlZGFmNDJmZDdiNWFmMjZlLnBkZioqKjEyNDk0NiMxI2RlbGhp",
+      "listing_date": "23/3/2022",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2021-11-18",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTm92ZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzAzMDk2OGY3OGI2NmI0ZjkwMTJjNTliNGQ0MDE4NjZmLnBkZioqKjEwNzgwNCMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTm92ZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzAzMDk2OGY3OGI2NmI0ZjkwMTJjNTliNGQ0MDE4NjZmLnBkZioqKjEwNzgwNCMxI2RlbGhp",
+      "listing_date": "18/11/2021",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2021-05-31",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTWF5LzA3MDExMDAwNTQzMjAxOV9hN2ZlZjI5YjU2YzkwMTgxZWY0OWQ0Y2RhZTYyYzBlZC5wZGYqKio4NDk4MyMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTWF5LzA3MDExMDAwNTQzMjAxOV9hN2ZlZjI5YjU2YzkwMTgxZWY0OWQ0Y2RhZTYyYzBlZC5wZGYqKio4NDk4MyMxI2RlbGhp",
+      "listing_date": "31/5/2021",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2020-12-09",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5Xzg4YTBlMTkyMWY1MjdlOWFmY2QwZjAxNjRkMDkyYjI3LnBkZioqKjYyMjEyIzEjZGVsaGk=",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5Xzg4YTBlMTkyMWY1MjdlOWFmY2QwZjAxNjRkMDkyYjI3LnBkZioqKjYyMjEyIzEjZGVsaGk=",
+      "listing_date": "9/12/2020",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2020-06-09",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSnVuZS8wNzAxMTAwMDU0MzIwMTlfNGVjZTEzNGMwMDQ1NDk5NjFiNzEzYWYwZDlkM2I4YjgucGRmKioqNDUwNTAjMSNkZWxoaQ==",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSnVuZS8wNzAxMTAwMDU0MzIwMTlfNGVjZTEzNGMwMDQ1NDk5NjFiNzEzYWYwZDlkM2I4YjgucGRmKioqNDUwNTAjMSNkZWxoaQ==",
+      "listing_date": "9/6/2020",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2020-01-10",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfZDc5NzNkNzRiYzY5MmM2NTc5NDk5ZDliMDQxNDllNTAucGRmKioqMzMzNDUjMSNkZWxoaQ==",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfZDc5NzNkNzRiYzY5MmM2NTc5NDk5ZDliMDQxNDllNTAucGRmKioqMzMzNDUjMSNkZWxoaQ==",
+      "listing_date": "10/1/2020",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2019-10-03",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfZGU5Mzg4YWY4N2MyZjdmM2IwZjBjYTAyOTE3NTA3ZDUucGRmKioqMjc3NTIjMSNkZWxoaQ==",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfZGU5Mzg4YWY4N2MyZjdmM2IwZjBjYTAyOTE3NTA3ZDUucGRmKioqMjc3NTIjMSNkZWxoaQ==",
+      "listing_date": "3/10/2019",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2019-07-26",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvSnVseS8wNzAxMTAwMDU0MzIwMTlfYmQ5ZTBmMTdkODk2YWI4NDQ4YTg1ZDNkNGQwYTc5Y2YucGRmKioqMjc0MzIjMSNkZWxoaQ==",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvSnVseS8wNzAxMTAwMDU0MzIwMTlfYmQ5ZTBmMTdkODk2YWI4NDQ4YTg1ZDNkNGQwYTc5Y2YucGRmKioqMjc0MzIjMSNkZWxoaQ==",
+      "listing_date": "26/7/2019",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    },
+    {
+      "date": "2019-06-26",
+      "description": "Purpose: FRESH MATTERS | As Court: Registrar | Court: Registrar / 1",
+      "document_url": null,
+      "source_document_url": null,
+      "listing_date": "26/6/2019",
+      "purpose": "FRESH MATTERS",
+      "court_name": "Registrar",
+      "court_no": "1"
+    },
+    {
+      "date": "2019-04-24",
+      "description": "Purpose: Pleading Stage | As Court: Registrar | Court: Registrar / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7REVCVFMgUkVDT1ZFUlkgVFJJQlVOQUwtSSwgREVMSEkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy91JmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpjZW50ZXImYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgRGF0ZTogMjQuMDQuMjAxOSZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyBJdGVtIE5vLjY3JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7TkROLzU0My8xOSAoU0EpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1Jha2VzaCZhbXA7YW1wO25ic3A7IEd1cHRhICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7IFZzJmFtcDthbXA7bmJzcDsgJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3Ryb25nJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246Y2VudGVyJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzdHJvbmcmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7VUJJJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7UFJFU0VOVCZhbXA7bHQ7L3NwYW4mYW1wO2d0OzomYW1wO2FtcDtuYnNwOyAmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxNC4wcHQmYW1wO3F1b3Q7JmFtcDtndDtTaC4gRGV2IEt1bWFyICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O2NvdW5zZWwmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7IGZvciB0aGUgYXBwbGljYW50ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7U2guIFMuSy4gVGFud2FyICZhbXA7YW1wO25ic3A7Y291bnNlbCAmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7Zm9yIHRoZSByZXNwb25kZW50JmFtcDthbXA7bmJzcDsgYmFuayZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyAmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW4mYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBtYXR0ZXIgaXMgbGlzdGVkIHRvZGF5IGZvciBmaWxpbmcgcmVwbHkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDtUaGUgbGQuIGNvdW5zZWwgZm9yIHRoZSByZXNwb25kZW50IGJhbmsgaGFzIHNvdWdodCBzb21lIG1vcmUgdGltZSBmb3IgZmlsaW5nIHJlcGx5IHRvIHRoaXMgU0EuIFJlcXVlc3QgYWxsb3dlZC4gJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgTGV0IHRoZSBtYXR0ZXIgYmUgbGlzdGVkIG9uIDI2LjA2LjIwMTkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOnJpZ2h0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsoUy5LLiBEdWJleSkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246cmlnaHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1JlZ2lzdHJhciZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7RFJULUksIERlbGhpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxOTQyMiMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7REVCVFMgUkVDT1ZFUlkgVFJJQlVOQUwtSSwgREVMSEkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy91JmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpjZW50ZXImYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgRGF0ZTogMjQuMDQuMjAxOSZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyBJdGVtIE5vLjY3JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7TkROLzU0My8xOSAoU0EpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1Jha2VzaCZhbXA7YW1wO25ic3A7IEd1cHRhICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7IFZzJmFtcDthbXA7bmJzcDsgJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3Ryb25nJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246Y2VudGVyJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzdHJvbmcmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7VUJJJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7UFJFU0VOVCZhbXA7bHQ7L3NwYW4mYW1wO2d0OzomYW1wO2FtcDtuYnNwOyAmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxNC4wcHQmYW1wO3F1b3Q7JmFtcDtndDtTaC4gRGV2IEt1bWFyICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O2NvdW5zZWwmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7IGZvciB0aGUgYXBwbGljYW50ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7U2guIFMuSy4gVGFud2FyICZhbXA7YW1wO25ic3A7Y291bnNlbCAmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7Zm9yIHRoZSByZXNwb25kZW50JmFtcDthbXA7bmJzcDsgYmFuayZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyAmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW4mYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBtYXR0ZXIgaXMgbGlzdGVkIHRvZGF5IGZvciBmaWxpbmcgcmVwbHkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDtUaGUgbGQuIGNvdW5zZWwgZm9yIHRoZSByZXNwb25kZW50IGJhbmsgaGFzIHNvdWdodCBzb21lIG1vcmUgdGltZSBmb3IgZmlsaW5nIHJlcGx5IHRvIHRoaXMgU0EuIFJlcXVlc3QgYWxsb3dlZC4gJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgTGV0IHRoZSBtYXR0ZXIgYmUgbGlzdGVkIG9uIDI2LjA2LjIwMTkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOnJpZ2h0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsoUy5LLiBEdWJleSkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246cmlnaHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1JlZ2lzdHJhciZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7RFJULUksIERlbGhpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxOTQyMiMxI2RlbGhp",
+      "listing_date": "24/4/2019",
+      "purpose": "Pleading Stage",
+      "court_name": "Registrar",
+      "court_no": "1"
+    },
+    {
+      "date": "2019-03-25",
+      "description": "Purpose: SEC APPLICATION | As Court: PO | Court: PO / 1",
+      "document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGNtOyBtYXJnaW4tcmlnaHQ6MGNtOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBIb24mYW1wO2FtcDtyc3F1bztibGUgUHJlc2lkaW5nIE9mZmljZXIgaXMgb24gbGVhdmUgdG9kYXkuIEhlbmNlIHRoZSBtYXR0ZXIgaXMgYWRqb3VybmVkIHRvICZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OzQuNC4yMDE5ICZhbXA7bHQ7L3UmYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7Zm9yIHRoZSBzYW1lIHB1cnBvc2UgZm9yIHdoaWNoIGl0IHdhcyBsaXN0ZWQgdG9kYXkuJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxNzI5NSMxI2RlbGhp",
+      "source_document_url": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGNtOyBtYXJnaW4tcmlnaHQ6MGNtOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBIb24mYW1wO2FtcDtyc3F1bztibGUgUHJlc2lkaW5nIE9mZmljZXIgaXMgb24gbGVhdmUgdG9kYXkuIEhlbmNlIHRoZSBtYXR0ZXIgaXMgYWRqb3VybmVkIHRvICZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OzQuNC4yMDE5ICZhbXA7bHQ7L3UmYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7Zm9yIHRoZSBzYW1lIHB1cnBvc2UgZm9yIHdoaWNoIGl0IHdhcyBsaXN0ZWQgdG9kYXkuJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxNzI5NSMxI2RlbGhp",
+      "listing_date": "25/3/2019",
+      "purpose": "SEC APPLICATION",
+      "court_name": "PO",
+      "court_no": "1"
+    }
+  ],
+  "ia_details": [],
+  "additional_info": {
+    "case_status": "DISPOSAL",
+    "status_code": "D",
+    "status_label": "DISPOSAL",
+    "petitioner_address": "4 10 1ST FLOOR EAST PATEL NAGAR",
+    "respondent_address": null,
+    "main_case_case_no": null,
+    "additional_party_petitioner": null,
+    "additional_party_respondent": null,
+    "suit_amount": null,
+    "rc_detail": false,
+    "listing_history": [
+      {
+        "causelistdate": "29/9/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvU2VwdGVtYmVyLzA3MDExMDAwNTQzMjAxOV9lYzVkNzU2NzQ0MDM0MmM5YWZjYTUwNWFjYmVjZjNlOS5wZGYqKiozODAwNzcjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "16/7/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvSnVseS8wNzAxMTAwMDU0MzIwMTlfNTQxMjk4YTcyMTM2ZDNjZGU1MTVlNzZhZjZjZmFmZjgucGRmKioqMzY5OTMxIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/4/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzkwMDU1MTdkNjdkMmQxMWE5NGRhYjdkYzIyMmIxZGUzLnBkZioqKjM1ODk0MCMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/2/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzRkMGY0OGYxNGVmNzk0NDAyNzU3NWU3YzBiOTk3MzFjLnBkZioqKjM1MDYwMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "13/12/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzFlODRkZWM4MTlmODJlMzk1ZmY3MmYzMzJlZmNiNGVkLnBkZioqKjM0Mzc5NyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "31/7/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSnVseS8wNzAxMTAwMDU0MzIwMTlfMGI1OTdlN2FkYjM2NzE3YmIxNDE5MTkzYjM1ZWJhOGQucGRmKioqMzI2MDY4IzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/4/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzNlN2U0ODk0ZmQ1YTIwNzkwODI0NGUxZWYyMDMyMGE0LnBkZioqKjMxMzc0MyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "29/2/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzAyNjAxYjY3YzBhM2ExYWRmNzdjNTFiOGNkMDdlMDM4LnBkZioqKjMwNTEzNiMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "8/1/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfOTM1ODIxZjkzNGQ0Mjk4OTVhZThlNDhiYTMwMDU0YjcucGRmKioqMjk4MDUyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "3/7/2023",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvSnVseS8wNzAxMTAwMDU0MzIwMTlfYWUzMGNiYWM2OTQxMmRhYjAyYmZjZjI1MDVhOTVkNzEucGRmKioqMjU3Nzk4IzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "23/3/2023",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzU5ZTEyM2UyZjY3NmM5MWE4YTA0MzMzYTZkY2EwMThjLnBkZioqKjIzNzQyMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "1/12/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzZmMGQ4OWEzODNjOTA4NDNiODEzNGNjZDFjZWQ4NzI5LnBkZioqKjE5MjQwMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/10/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfNzg3YmEwOTYxNGRlZDlhZjg3MWQ3ZWNjNWJmNjNkZmUucGRmKioqMTUzODIyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "15/7/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvSnVseS8wNzAxMTAwMDU0MzIwMTlfYjZkOGQ1MzlkN2ZhMjk1ZTgyMGJkNGMwM2JjOWFjZTMucGRmKioqMTQxNjkxIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "23/3/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzVjMjBkYjgyMTk0ZjU5NDRlZGFmNDJmZDdiNWFmMjZlLnBkZioqKjEyNDk0NiMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "18/11/2021",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTm92ZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzAzMDk2OGY3OGI2NmI0ZjkwMTJjNTliNGQ0MDE4NjZmLnBkZioqKjEwNzgwNCMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "31/5/2021",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTWF5LzA3MDExMDAwNTQzMjAxOV9hN2ZlZjI5YjU2YzkwMTgxZWY0OWQ0Y2RhZTYyYzBlZC5wZGYqKio4NDk4MyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/12/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5Xzg4YTBlMTkyMWY1MjdlOWFmY2QwZjAxNjRkMDkyYjI3LnBkZioqKjYyMjEyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/6/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSnVuZS8wNzAxMTAwMDU0MzIwMTlfNGVjZTEzNGMwMDQ1NDk5NjFiNzEzYWYwZDlkM2I4YjgucGRmKioqNDUwNTAjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/1/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfZDc5NzNkNzRiYzY5MmM2NTc5NDk5ZDliMDQxNDllNTAucGRmKioqMzMzNDUjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "3/10/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfZGU5Mzg4YWY4N2MyZjdmM2IwZjBjYTAyOTE3NTA3ZDUucGRmKioqMjc3NTIjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/7/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvSnVseS8wNzAxMTAwMDU0MzIwMTlfYmQ5ZTBmMTdkODk2YWI4NDQ4YTg1ZDNkNGQwYTc5Y2YucGRmKioqMjc0MzIjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/6/2019",
+        "purpose": "FRESH MATTERS",
+        "ascourtName": "Registrar",
+        "orderUrl": null,
+        "item_no": null,
+        "courtName": "Registrar",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "24/4/2019",
+        "purpose": "Pleading Stage",
+        "ascourtName": "Registrar",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7REVCVFMgUkVDT1ZFUlkgVFJJQlVOQUwtSSwgREVMSEkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy91JmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpjZW50ZXImYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgRGF0ZTogMjQuMDQuMjAxOSZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyBJdGVtIE5vLjY3JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7TkROLzU0My8xOSAoU0EpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1Jha2VzaCZhbXA7YW1wO25ic3A7IEd1cHRhICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7IFZzJmFtcDthbXA7bmJzcDsgJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3Ryb25nJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246Y2VudGVyJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzdHJvbmcmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7VUJJJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7UFJFU0VOVCZhbXA7bHQ7L3NwYW4mYW1wO2d0OzomYW1wO2FtcDtuYnNwOyAmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxNC4wcHQmYW1wO3F1b3Q7JmFtcDtndDtTaC4gRGV2IEt1bWFyICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O2NvdW5zZWwmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7IGZvciB0aGUgYXBwbGljYW50ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7U2guIFMuSy4gVGFud2FyICZhbXA7YW1wO25ic3A7Y291bnNlbCAmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7Zm9yIHRoZSByZXNwb25kZW50JmFtcDthbXA7bmJzcDsgYmFuayZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyAmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW4mYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBtYXR0ZXIgaXMgbGlzdGVkIHRvZGF5IGZvciBmaWxpbmcgcmVwbHkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDtUaGUgbGQuIGNvdW5zZWwgZm9yIHRoZSByZXNwb25kZW50IGJhbmsgaGFzIHNvdWdodCBzb21lIG1vcmUgdGltZSBmb3IgZmlsaW5nIHJlcGx5IHRvIHRoaXMgU0EuIFJlcXVlc3QgYWxsb3dlZC4gJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgTGV0IHRoZSBtYXR0ZXIgYmUgbGlzdGVkIG9uIDI2LjA2LjIwMTkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOnJpZ2h0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsoUy5LLiBEdWJleSkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246cmlnaHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1JlZ2lzdHJhciZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7RFJULUksIERlbGhpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxOTQyMiMxI2RlbGhp",
+        "courtName": "Registrar",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "25/3/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGNtOyBtYXJnaW4tcmlnaHQ6MGNtOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBIb24mYW1wO2FtcDtyc3F1bztibGUgUHJlc2lkaW5nIE9mZmljZXIgaXMgb24gbGVhdmUgdG9kYXkuIEhlbmNlIHRoZSBtYXR0ZXIgaXMgYWRqb3VybmVkIHRvICZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OzQuNC4yMDE5ICZhbXA7bHQ7L3UmYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7Zm9yIHRoZSBzYW1lIHB1cnBvc2UgZm9yIHdoaWNoIGl0IHdhcyBsaXN0ZWQgdG9kYXkuJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxNzI5NSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      }
+    ]
+  },
+  "original_json": {
+    "diaryno": "543",
+    "diaryyear": "2019",
+    "casestatus": "DISPOSAL",
+    "dateoffiling": "23/3/2019",
+    "caseno": "131",
+    "caseyear": "2019",
+    "casetype": "SA",
+    "maincasecaseno": null,
+    "additionalpartypet": null,
+    "additionalpartyres": null,
+    "nextlistingdate": null,
+    "dateofdisposal": "29/9/2025",
+    "nextListingPurpose": null,
+    "disposalNature": "Dismiss in Default",
+    "petitionerName": "RAKESH GUPTA ",
+    "petitionerApplicantAddress": "4 10 1ST FLOOR EAST PATEL NAGAR",
+    "advocatePetName": " AMIT DHALL",
+    "advocateResName": null,
+    "respondentName": "UNION BANK OF INDIA",
+    "courtNo": null,
+    "courtName": null,
+    "status": "D",
+    "respondentDefendentAddress": null,
+    "caseProceedingDetails": [
+      {
+        "causelistdate": "29/9/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvU2VwdGVtYmVyLzA3MDExMDAwNTQzMjAxOV9lYzVkNzU2NzQ0MDM0MmM5YWZjYTUwNWFjYmVjZjNlOS5wZGYqKiozODAwNzcjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "16/7/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvSnVseS8wNzAxMTAwMDU0MzIwMTlfNTQxMjk4YTcyMTM2ZDNjZGU1MTVlNzZhZjZjZmFmZjgucGRmKioqMzY5OTMxIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/4/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzkwMDU1MTdkNjdkMmQxMWE5NGRhYjdkYzIyMmIxZGUzLnBkZioqKjM1ODk0MCMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/2/2025",
+        "purpose": "Cases Receive after Transfer",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjUvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzRkMGY0OGYxNGVmNzk0NDAyNzU3NWU3YzBiOTk3MzFjLnBkZioqKjM1MDYwMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "13/12/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzFlODRkZWM4MTlmODJlMzk1ZmY3MmYzMzJlZmNiNGVkLnBkZioqKjM0Mzc5NyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "31/7/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSnVseS8wNzAxMTAwMDU0MzIwMTlfMGI1OTdlN2FkYjM2NzE3YmIxNDE5MTkzYjM1ZWJhOGQucGRmKioqMzI2MDY4IzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/4/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvQXByaWwvMDcwMTEwMDA1NDMyMDE5XzNlN2U0ODk0ZmQ1YTIwNzkwODI0NGUxZWYyMDMyMGE0LnBkZioqKjMxMzc0MyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "29/2/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvRmVicnVhcnkvMDcwMTEwMDA1NDMyMDE5XzAyNjAxYjY3YzBhM2ExYWRmNzdjNTFiOGNkMDdlMDM4LnBkZioqKjMwNTEzNiMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "8/1/2024",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjQvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfOTM1ODIxZjkzNGQ0Mjk4OTVhZThlNDhiYTMwMDU0YjcucGRmKioqMjk4MDUyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "3/7/2023",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvSnVseS8wNzAxMTAwMDU0MzIwMTlfYWUzMGNiYWM2OTQxMmRhYjAyYmZjZjI1MDVhOTVkNzEucGRmKioqMjU3Nzk4IzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "23/3/2023",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjMvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzU5ZTEyM2UyZjY3NmM5MWE4YTA0MzMzYTZkY2EwMThjLnBkZioqKjIzNzQyMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "1/12/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzZmMGQ4OWEzODNjOTA4NDNiODEzNGNjZDFjZWQ4NzI5LnBkZioqKjE5MjQwMSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/10/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfNzg3YmEwOTYxNGRlZDlhZjg3MWQ3ZWNjNWJmNjNkZmUucGRmKioqMTUzODIyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "15/7/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvSnVseS8wNzAxMTAwMDU0MzIwMTlfYjZkOGQ1MzlkN2ZhMjk1ZTgyMGJkNGMwM2JjOWFjZTMucGRmKioqMTQxNjkxIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "23/3/2022",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjIvTWFyY2gvMDcwMTEwMDA1NDMyMDE5XzVjMjBkYjgyMTk0ZjU5NDRlZGFmNDJmZDdiNWFmMjZlLnBkZioqKjEyNDk0NiMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "18/11/2021",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTm92ZW1iZXIvMDcwMTEwMDA1NDMyMDE5XzAzMDk2OGY3OGI2NmI0ZjkwMTJjNTliNGQ0MDE4NjZmLnBkZioqKjEwNzgwNCMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "31/5/2021",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjEvTWF5LzA3MDExMDAwNTQzMjAxOV9hN2ZlZjI5YjU2YzkwMTgxZWY0OWQ0Y2RhZTYyYzBlZC5wZGYqKio4NDk4MyMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/12/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvRGVjZW1iZXIvMDcwMTEwMDA1NDMyMDE5Xzg4YTBlMTkyMWY1MjdlOWFmY2QwZjAxNjRkMDkyYjI3LnBkZioqKjYyMjEyIzEjZGVsaGk=",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "9/6/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSnVuZS8wNzAxMTAwMDU0MzIwMTlfNGVjZTEzNGMwMDQ1NDk5NjFiNzEzYWYwZDlkM2I4YjgucGRmKioqNDUwNTAjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "10/1/2020",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMjAvSmFudWFyeS8wNzAxMTAwMDU0MzIwMTlfZDc5NzNkNzRiYzY5MmM2NTc5NDk5ZDliMDQxNDllNTAucGRmKioqMzMzNDUjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "3/10/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvT2N0b2Jlci8wNzAxMTAwMDU0MzIwMTlfZGU5Mzg4YWY4N2MyZjdmM2IwZjBjYTAyOTE3NTA3ZDUucGRmKioqMjc3NTIjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/7/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0L2RhaWx5X29yZGVyLzIwMTkvSnVseS8wNzAxMTAwMDU0MzIwMTlfYmQ5ZTBmMTdkODk2YWI4NDQ4YTg1ZDNkNGQwYTc5Y2YucGRmKioqMjc0MzIjMSNkZWxoaQ==",
+        "courtName": "PO",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "26/6/2019",
+        "purpose": "FRESH MATTERS",
+        "ascourtName": "Registrar",
+        "orderUrl": null,
+        "item_no": null,
+        "courtName": "Registrar",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "24/4/2019",
+        "purpose": "Pleading Stage",
+        "ascourtName": "Registrar",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7REVCVFMgUkVDT1ZFUlkgVFJJQlVOQUwtSSwgREVMSEkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy91JmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpjZW50ZXImYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgRGF0ZTogMjQuMDQuMjAxOSZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyBJdGVtIE5vLjY3JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7TkROLzU0My8xOSAoU0EpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1Jha2VzaCZhbXA7YW1wO25ic3A7IEd1cHRhICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7IFZzJmFtcDthbXA7bmJzcDsgJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3Ryb25nJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246Y2VudGVyJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzdHJvbmcmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7VUJJJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmNlbnRlciZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7UFJFU0VOVCZhbXA7bHQ7L3NwYW4mYW1wO2d0OzomYW1wO2FtcDtuYnNwOyAmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxNC4wcHQmYW1wO3F1b3Q7JmFtcDtndDtTaC4gRGV2IEt1bWFyICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O2NvdW5zZWwmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7IGZvciB0aGUgYXBwbGljYW50ICZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7ICZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7U2guIFMuSy4gVGFud2FyICZhbXA7YW1wO25ic3A7Y291bnNlbCAmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7Zm9yIHRoZSByZXNwb25kZW50JmFtcDthbXA7bmJzcDsgYmFuayZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyAmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW4mYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgJmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246anVzdGlmeSZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBtYXR0ZXIgaXMgbGlzdGVkIHRvZGF5IGZvciBmaWxpbmcgcmVwbHkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpqdXN0aWZ5JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDtUaGUgbGQuIGNvdW5zZWwgZm9yIHRoZSByZXNwb25kZW50IGJhbmsgaGFzIHNvdWdodCBzb21lIG1vcmUgdGltZSBmb3IgZmlsaW5nIHJlcGx5IHRvIHRoaXMgU0EuIFJlcXVlc3QgYWxsb3dlZC4gJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3N0cm9uZyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsmYW1wO2FtcDtuYnNwOyZhbXA7YW1wO25ic3A7JmFtcDthbXA7bmJzcDsgTGV0IHRoZSBtYXR0ZXIgYmUgbGlzdGVkIG9uIDI2LjA2LjIwMTkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zdHJvbmcmYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7YW1wO25ic3A7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoNCiZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGluOyBtYXJnaW4tcmlnaHQ6MGluOyB0ZXh0LWFsaWduOnJpZ2h0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTFwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6Q2FsaWJyaSxzYW5zLXNlcmlmJmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LXNpemU6MTIuMHB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTomYW1wO2FtcDtxdW90O0FyaWFsJmFtcDthbXA7cXVvdDssJmFtcDthbXA7cXVvdDtzYW5zLXNlcmlmJmFtcDthbXA7cXVvdDsmYW1wO3F1b3Q7JmFtcDtndDsoUy5LLiBEdWJleSkmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9zcGFuJmFtcDtndDsmYW1wO2x0Oy9wJmFtcDtndDsNCg0KJmFtcDtsdDtwIHN0eWxlPSZhbXA7cXVvdDttYXJnaW4tbGVmdDowaW47IG1hcmdpbi1yaWdodDowaW47IHRleHQtYWxpZ246cmlnaHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1JlZ2lzdHJhciZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3NwYW4mYW1wO2d0OyZhbXA7bHQ7L3AmYW1wO2d0Ow0KDQomYW1wO2x0O3Agc3R5bGU9JmFtcDtxdW90O21hcmdpbi1sZWZ0OjBpbjsgbWFyZ2luLXJpZ2h0OjBpbjsgdGV4dC1hbGlnbjpyaWdodCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjExcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OkNhbGlicmksc2Fucy1zZXJpZiZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1zaXplOjEyLjBwdCZhbXA7cXVvdDsmYW1wO2d0OyZhbXA7bHQ7c3BhbiBzdHlsZT0mYW1wO3F1b3Q7Zm9udC1mYW1pbHk6JmFtcDthbXA7cXVvdDtBcmlhbCZhbXA7YW1wO3F1b3Q7LCZhbXA7YW1wO3F1b3Q7c2Fucy1zZXJpZiZhbXA7YW1wO3F1b3Q7JmFtcDtxdW90OyZhbXA7Z3Q7RFJULUksIERlbGhpJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxOTQyMiMxI2RlbGhp",
+        "courtName": "Registrar",
+        "courtNo": "1"
+      },
+      {
+        "causelistdate": "25/3/2019",
+        "purpose": "SEC APPLICATION",
+        "ascourtName": "PO",
+        "orderUrl": "https://cis.drt.gov.in/drtlive/order/pdf/pdf1.php?file=L3VwbG9hZHMvZHJ0L2RydGNvdXJ0LyZhbXA7bHQ7cCBzdHlsZT0mYW1wO3F1b3Q7bWFyZ2luLWxlZnQ6MGNtOyBtYXJnaW4tcmlnaHQ6MGNtOyB0ZXh0LWFsaWduOmp1c3RpZnkmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMXB0JmFtcDtxdW90OyZhbXA7Z3Q7JmFtcDtsdDtzcGFuIHN0eWxlPSZhbXA7cXVvdDtmb250LWZhbWlseTpDYWxpYnJpLHNhbnMtc2VyaWYmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtc2l6ZToxMi4wcHQmYW1wO3F1b3Q7JmFtcDtndDsmYW1wO2x0O3NwYW4gc3R5bGU9JmFtcDtxdW90O2ZvbnQtZmFtaWx5OiZhbXA7YW1wO3F1b3Q7QXJpYWwmYW1wO2FtcDtxdW90OywmYW1wO2FtcDtxdW90O3NhbnMtc2VyaWYmYW1wO2FtcDtxdW90OyZhbXA7cXVvdDsmYW1wO2d0O1RoZSBIb24mYW1wO2FtcDtyc3F1bztibGUgUHJlc2lkaW5nIE9mZmljZXIgaXMgb24gbGVhdmUgdG9kYXkuIEhlbmNlIHRoZSBtYXR0ZXIgaXMgYWRqb3VybmVkIHRvICZhbXA7bHQ7c3Ryb25nJmFtcDtndDsmYW1wO2x0O3UmYW1wO2d0OzQuNC4yMDE5ICZhbXA7bHQ7L3UmYW1wO2d0OyZhbXA7bHQ7L3N0cm9uZyZhbXA7Z3Q7Zm9yIHRoZSBzYW1lIHB1cnBvc2UgZm9yIHdoaWNoIGl0IHdhcyBsaXN0ZWQgdG9kYXkuJmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvc3BhbiZhbXA7Z3Q7JmFtcDtsdDsvcCZhbXA7Z3Q7DQoqKioxNzI5NSMxI2RlbGhp",
+        "courtName": "PO",
+        "courtNo": "1"
+      }
+    ],
+    "iaDetails": [],
+    "rcdetail": false
+  }
+}

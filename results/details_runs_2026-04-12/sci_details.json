@@ -1,0 +1,274 @@
+{
+  "cin_no": "SCIN010089602025",
+  "registration_no": null,
+  "filing_no": "8960/2025",
+  "case_no": "Crl.A. No. 000001 / 2026",
+  "registration_date": "02-01-2026",
+  "filing_date": "17-02-2025 03:25 PM",
+  "first_listing_date": "07-04-2025)",
+  "next_listing_date": "15-04-2026",
+  "last_listing_date": "15-04-2026",
+  "decision_date": null,
+  "court_no": null,
+  "disposal_nature": "pending",
+  "purpose_next": "SCLSC PENDING[] (Final Hearing) Not taken up/ Not Today-Ord dt:09-04-2026",
+  "case_type": "1506LI-Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+  "pet_name": [
+    "DHIRENDRA SINGH @ DHIRAJ SINGH @ DHIRENDRA KUMAR SINGH"
+  ],
+  "res_name": [
+    "THE STATE OF BIHAR"
+  ],
+  "advocates": "Petitioner:\nPARMANAND GAUR\n\nRespondent:\nSAMIR ALI KHAN[R-1]",
+  "judges": "HON'BLE MR. JUSTICE MANOJ MISRA, HON'BLE MR. JUSTICE MANMOHAN",
+  "bench_name": null,
+  "court_name": null,
+  "history": null,
+  "acts": [
+    "1506LI-Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)"
+  ],
+  "orders": [
+    {
+      "date": "2025-12-19",
+      "description": "ROP - of Main Case",
+      "document_url": "https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_14_40_67116_Order_19-Dec-2025.pdf"
+    },
+    {
+      "date": "2025-08-26",
+      "description": "ROP - of Main Case",
+      "document_url": "https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_21_41_53511_Order_26-Aug-2025.pdf"
+    },
+    {
+      "date": "2025-07-18",
+      "description": "ROP - of Main Case",
+      "document_url": "https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_21_63_53511_Order_18-Jul-2025.pdf"
+    },
+    {
+      "date": "2025-04-15",
+      "description": "ROP - of Main Case",
+      "document_url": "https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_4_22_60893_Order_15-Apr-2025.pdf"
+    }
+  ],
+  "ia_details": [
+    {
+      "ia_no": "87412/2025",
+      "ia_number": "87412/2025",
+      "description": null,
+      "party": null,
+      "filing_date": null,
+      "next_date": "15-04-2025",
+      "status": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
+      "disposal_date": null,
+      "cin_no": null
+    },
+    {
+      "ia_no": "87413/2025",
+      "ia_number": "87413/2025",
+      "description": null,
+      "party": null,
+      "filing_date": null,
+      "next_date": "15-04-2025",
+      "status": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
+      "disposal_date": null,
+      "cin_no": null
+    }
+  ],
+  "listing_dates": [
+    {
+      "cl_date": "15-04-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "09-04-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE VIPUL M. PANCHOLI",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "08-04-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "19-03-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "18-03-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "12-03-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "11-03-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "26-02-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "25-02-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Next Week / Week Commencing / C.O.Week",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "19-02-2026",
+      "misc_regular": "Regular",
+      "stage": "Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)",
+      "purpose": "Fixed Date by Court",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN",
+      "ia": "",
+      "remarks": "Not taken up/ Not Today",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "19-12-2025",
+      "misc_regular": "Misc.",
+      "stage": "[AFTER NOTICE (FOR ADMISSION) - CRIMINAL CASES]",
+      "purpose": "After Week/Month/Vacation",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+      "ia": "",
+      "remarks": "Leave Granted / Rule NISI / Appeal Admitted, Week Commencing [16-02-2026]",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "26-08-2025",
+      "misc_regular": "Misc.",
+      "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
+      "purpose": "Fixed Date by Court",
+      "proposed_list_in": "Registrar",
+      "judges": "REGISTRAR",
+      "ia": "",
+      "remarks": "List before court/bench",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "18-07-2025",
+      "misc_regular": "Misc.",
+      "stage": "[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J)",
+      "purpose": "Fixed Date by Court",
+      "proposed_list_in": "Registrar",
+      "judges": "REGISTRAR",
+      "ia": "",
+      "remarks": "List On (Date) [26-08-2025]",
+      "listed": "LISTED"
+    },
+    {
+      "cl_date": "15-04-2025",
+      "misc_regular": "Misc.",
+      "stage": "[FRESH (FOR ADMISSION) - CRIMINAL CASES]",
+      "purpose": "FRESH",
+      "proposed_list_in": "Judge",
+      "judges": "HON'BLE MR. JUSTICE ABHAY S. OKA and HON'BLE MR. JUSTICE UJJAL BHUYAN",
+      "ia": "87412/2025,87413/2025",
+      "remarks": "IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]",
+      "listed": "LISTED"
+    }
+  ],
+  "additional_info": {
+    "office_reports": [
+      {
+        "date": "15-04-2025",
+        "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-04-15_682.html"
+      },
+      {
+        "date": "18-07-2025",
+        "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-07-18.pdf"
+      },
+      {
+        "date": "26-08-2025",
+        "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-08-26.pdf"
+      },
+      {
+        "date": "19-12-2025",
+        "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-12-19_1568.pdf"
+      },
+      {
+        "date": "18-02-2026",
+        "url": "https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2026-02-18_284.pdf"
+      }
+    ]
+  },
+  "original_json": {
+    "case_details": {
+      "success": true,
+      "data": "           \n    <div class='distTableContent'>\n            <table class=\"caseDetailsTable no-responsive\">\n                                <tbody class=\"\" data-fetched=\"true\">\n                <tr>\n                    <td style=\"width:20%\">Diary Number</td>\n                    <td>\n                        <font color='blue' style='font-weight:bold;'>8960/2025</font> Filed on 17-02-2025 03:25 PM                                                    [<font style='font-weight:bold;'> SECTION: </font><font color='red' style='font-weight:bold;'>II-A</font>]\n                                                <div class=\"push-right caseStatus p\" >SCLSC PENDING</div>\n                    </td>\n                </tr>\n                <tr>\n                    <td>Case Number</td>\n                    <td>Crl.A. No. 000001 / 2026 Registered on 02-01-2026<br>SLP(Crl) No. 005921 -  / 2025 Registered on 19-04-2025<br>(Verified On 07-04-2025)</td>\n                </tr>\n                <tr>\n                    <td>CNR Number</td>\n                    <td>SCIN010089602025</td>\n                </tr>\n                <tr>\n                    <td>Present/Last Listed On</td>\n                    <td><font color='blue' style='font-weight:bold;'>15-04-2026 [<font color='green' style='font-weight:bold;'>HON'BLE MR. JUSTICE MANOJ MISRAand HON'BLE MR. JUSTICE MANMOHAN </font>] [CL.NO. : 104]</b></td>\n                </tr>\n                <tr>\n                    <td>Status/Stage</td>\n                    <td><font color='red'>SCLSC PENDING[] (Final Hearing) Not taken up/ Not Today-Ord dt:09-04-2026 </font></td>\n                </tr>\n                                                                <tr>\n                    <td>Admitted</td>\n                    <td>[<font color='red'>ADMITTED ON : 19-12-2025</font>]</td>\n                </tr>\n                                <tr>\n                    <td>Category</td>\n                    <td>1506LI-Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                </tr>\n                                <tr>\n                    <td>Petitioner(s)</td>\n                    <td>1 DHIRENDRA SINGH @ DHIRAJ SINGH @ DHIRENDRA KUMAR SINGH<br></td>\n                </tr>\n                <tr>\n                    <td>Respondent(s)</td>\n                    <td>1 THE STATE OF BIHAR<br></td>\n                </tr>\n                <tr>\n                    <td>Petitioner Advocate(s)</td>\n                    <td>PARMANAND GAUR<br></td>\n                </tr>\n                <tr>\n                    <td>Respondent Advocate(s)</td>\n                    <td>SAMIR ALI KHAN[R-1]<br></td>\n                </tr>\n                                                                                                </tbody>\n            </table>\n                    </div>\n"
+    },
+    "listing_dates": {
+      "success": true,
+      "data": "<tr>\n    <td class=\"over-x-scroll\">\n        <table>\n            <thead>\n            <tr>\n                <td>CL Date</td>\n                <td>Misc./Regular</td>\n                <td>Stage</td>\n                <td>Purpose</td>\n                <td>Proposed/ List in</td>\n                <td>Judges</td>\n                <td>IA</td>\n                <td>Remarks</td>\n                <td>Listed</td>\n            </tr>\n            </thead>\n            <tbody>\n                            <tr>\n                    <td>15-04-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td></td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>09-04-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE VIPUL M. PANCHOLI</td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>08-04-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN</td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>19-03-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>18-03-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>12-03-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>11-03-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>26-02-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>25-02-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Next Week / Week Commencing / C.O.Week</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>19-02-2026</td>\n                    <td>Regular</td>\n                    <td>Criminal Law : Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act, 1989, Protection of Civil Rights Act, 1955(Cases where sentence of life imprisonment is imposed)</td>\n                    <td>Fixed Date by Court</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE MANMOHAN </td>\n                    <td></td>\n                    <td>Not taken up/ Not Today</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>19-12-2025</td>\n                    <td>Misc.</td>\n                    <td>[AFTER NOTICE (FOR ADMISSION) - CRIMINAL CASES]</td>\n                    <td>After Week/Month/Vacation</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE MANOJ MISRA and HON'BLE MR. JUSTICE UJJAL BHUYAN</td>\n                    <td></td>\n                    <td>Leave Granted / Rule NISI / Appeal Admitted, Week Commencing [16-02-2026]</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>26-08-2025</td>\n                    <td>Misc.</td>\n                    <td>[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J) </td>\n                    <td>Fixed Date by Court</td>\n                    <td>Registrar</td>\n                    <td>REGISTRAR</td>\n                    <td></td>\n                    <td>List before court/bench</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>18-07-2025</td>\n                    <td>Misc.</td>\n                    <td>[SERVICE/COMPLIANCE]-BEFORE REGISTRAR(J) </td>\n                    <td>Fixed Date by Court</td>\n                    <td>Registrar</td>\n                    <td>REGISTRAR</td>\n                    <td></td>\n                    <td>List On (Date) [26-08-2025]</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                            <tr>\n                    <td>15-04-2025</td>\n                    <td>Misc.</td>\n                    <td>[FRESH (FOR ADMISSION) - CRIMINAL CASES]</td>\n                    <td>FRESH</td>\n                    <td>Judge</td>\n                    <td>HON'BLE MR. JUSTICE ABHAY S. OKA and HON'BLE MR. JUSTICE UJJAL BHUYAN</td>\n                    <td>87412/2025,87413/2025</td>\n                    <td>IA Allowed [87412/2025,87413/2025], List After (Weeks) [6], List after service of notice is complete, Notice Returnable [D:0,W:0,M:0]</td>\n                    <td><font color='red'>LISTED</font></td>\n                </tr>\n                        </tbody>\n        </table>\n    </td>\n</tr>"
+    },
+    "judgement_orders": {
+      "success": true,
+      "data": "<tr>\n    <td><strong>Date of Judgment/Order</strong></td>\n</tr>\n    <tr>\n        <td>\n            <a target=\"_blank\" href=\"https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_14_40_67116_Order_19-Dec-2025.pdf\"> 19-12-2025 </a>\n            &nbsp&nbsp [ROP - of Main Case ]\n        </td>\n    </tr>\n    <tr>\n        <td>\n            <a target=\"_blank\" href=\"https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_21_41_53511_Order_26-Aug-2025.pdf\"> 26-08-2025 </a>\n            &nbsp&nbsp [ROP - of Main Case ]\n        </td>\n    </tr>\n    <tr>\n        <td>\n            <a target=\"_blank\" href=\"https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_21_63_53511_Order_18-Jul-2025.pdf\"> 18-07-2025 </a>\n            &nbsp&nbsp [ROP - of Main Case ]\n        </td>\n    </tr>\n    <tr>\n        <td>\n            <a target=\"_blank\" href=\"https://api.sci.gov.in/supremecourt/2025/8960/8960_2025_4_22_60893_Order_15-Apr-2025.pdf\"> 15-04-2025 </a>\n            &nbsp&nbsp [ROP - of Main Case ]\n        </td>\n    </tr>\n"
+    },
+    "office_report": {
+      "success": true,
+      "data": "<tr>\n    <td class=\"over-x-scroll\">\n        <table>\n            <thead>\n                <tr>\n                    <th>Serial Number</th>\n                    <th>Process Id</th>\n                    <th>Order Date</th>\n                    <th>Receiving Date</th>\n                </tr>\n            </thead>\n            <tbody>\n                            <tr>\n                    <td>1</td>\n                    <td>682</td>\n                    <td><a target=\"_blank\" href=\"https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-04-15_682.html\">15-04-2025</a></td>\n                    <td>09-04-2025 11:52:08 </td>\n                </tr>\n                            <tr>\n                    <td>2</td>\n                    <td>&nbsp;</td>\n                    <td><a target=\"_blank\" href=\"https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-07-18.pdf\">18-07-2025</a></td>\n                    <td>17-07-2025 15:40:31 </td>\n                </tr>\n                            <tr>\n                    <td>3</td>\n                    <td>&nbsp;</td>\n                    <td><a target=\"_blank\" href=\"https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-08-26.pdf\">26-08-2025</a></td>\n                    <td>25-08-2025 18:17:42 </td>\n                </tr>\n                            <tr>\n                    <td>4</td>\n                    <td>1568</td>\n                    <td><a target=\"_blank\" href=\"https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2025-12-19_1568.pdf\">19-12-2025</a></td>\n                    <td>18-12-2025 14:14:46 </td>\n                </tr>\n                            <tr>\n                    <td>5</td>\n                    <td>284</td>\n                    <td><a target=\"_blank\" href=\"https://api.sci.gov.in/../../officereport/2025/8960/8960_2025_2026-02-18_284.pdf\">18-02-2026</a></td>\n                    <td>17-02-2026 14:58:42 </td>\n                </tr>\n                        </tbody>\n        </table>\n    </td>\n</tr>"
+    }
+  }
+}

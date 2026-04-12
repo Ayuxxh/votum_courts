@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "error_type": "RetryError",
+  "error": "RetryError[<Future at 0x1177bc390 state=finished raised HTTPError>]",
+  "params": {
+    "drat": "delhi",
+    "filing_no": "071090023872025"
+  },
+  "note": "Live upstream DRAT details call returned an error during this run."
+}

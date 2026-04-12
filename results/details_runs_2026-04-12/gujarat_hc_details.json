@@ -1,0 +1,239 @@
+{
+  "status": "PENDING",
+  "cin_no": "GJHC240189902026",
+  "registration_no": "CA/1526/2026",
+  "registration_date": null,
+  "filing_no": "CA/8046/2026",
+  "filing_date": "2026-03-10",
+  "case_type": "CA",
+  "case_no": "1526",
+  "case_year": "2026",
+  "pet_name": [
+    "PANDYA PUNITKUMAR KIRTIKUMAR"
+  ],
+  "res_name": [
+    "PRACHI W/O PUNITKUMAR KIRTIKUMAR PANDYA AND D/O ASHWINKUMAR SHARMA"
+  ],
+  "advocates": "Petitioner: MR. RAJESH G BAROT(7134)\nPetitioner: ARNIKA L OJHA(8657)",
+  "judges": "HONOURABLE MR. JUSTICE A.Y. KOGJE and HONOURABLE MS. JUSTICE NISHA M. THAKORE",
+  "court_name": "Gujarat High Court",
+  "bench_name": "DIVISION",
+  "district": "ANAND",
+  "first_hearing_date": null,
+  "next_listing_date": "2026-04-20",
+  "decision_date": null,
+  "disposal_nature": 1,
+  "orders": [
+    {
+      "date": "2026-03-17",
+      "description": "SCA/7774/2026 | ADDITIONAL REGISTRAR (JUDICIAL) | 17/03/2026",
+      "judge": "ADDITIONAL REGISTRAR (JUDICIAL)",
+      "order_no": "1",
+      "ccin": "GJHC240184772026",
+      "document_url": "https://gujarathc-casestatus.nic.in/gujarathc/OrderHistoryViewDownload?ccin_no=GJHC240184772026&order_no=1&order_date=17/03/2026&flag=v&casedetail=SCA/7774/2026&nc=-"
+    }
+  ],
+  "history": [
+    {
+      "business_date": "2026-04-06",
+      "hearing_date": "2026-04-06",
+      "judge": "HONOURABLE MR. JUSTICE A.Y. KOGJE and HONOURABLE MS. JUSTICE NISHA M. THAKORE",
+      "purpose": "529-FOR ADMISSION",
+      "result": "1-NEXT DATE"
+    }
+  ],
+  "connected_matters": [],
+  "application_appeal_matters": [],
+  "ia_details": [],
+  "original_json": {
+    "documents": [],
+    "objections": [],
+    "ia_details": []
+  },
+  "raw_data": [
+    {
+      "litigant": [
+        {
+          "litigantname": "PANDYA PUNITKUMAR KIRTIKUMAR",
+          "srno": "1",
+          "litiganttype": "1"
+        }
+      ]
+    },
+    {
+      "respondant": [
+        {
+          "respondantname": "PRACHI W/O PUNITKUMAR KIRTIKUMAR PANDYA AND D/O ASHWINKUMAR SHARMA",
+          "srno": "1",
+          "respondanttype": "2"
+        }
+      ]
+    },
+    {
+      "advocate": [
+        {
+          "rcname": "ADVOCATE",
+          "advocatecode": "7134",
+          "namelist": "1",
+          "advocatename": "MR. RAJESH G BAROT(7134)",
+          "litiganttype": "Applicant(s)",
+          "litiganttypecode": "1"
+        },
+        {
+          "rcname": "ADVOCATE",
+          "advocatecode": "8657",
+          "namelist": "1",
+          "advocatename": "ARNIKA L OJHA(8657)",
+          "litiganttype": "Applicant(s)",
+          "litiganttypecode": "1"
+        }
+      ]
+    },
+    {},
+    {
+      "maindetails": [
+        {
+          "resnotation": "Respondent(s)",
+          "stagename": "529-FOR ADMISSION",
+          "disposaldate": "-",
+          "registrationdate": "30/03/2026",
+          "originname": "-",
+          "casedesc": "CIVIL APPLICATION",
+          "maincasestatus": "-",
+          "readyunready": "-",
+          "disposaldatemain": "-",
+          "casenumber": "1526",
+          "courtcode": "5326",
+          "mainnumber": "GJHC240182222026",
+          "casetypefr": "R",
+          "maincasedesc": "F/FA/7667/2026",
+          "mainyear": "",
+          "benchname": "DIVISION",
+          "stampnumber": "CA/8046/2026",
+          "stagecode": "1529",
+          "sgnldstatus": "",
+          "ccin": "GJHC240189902026",
+          "listingdate": "20/04/2026",
+          "presentdate": "10/03/2026",
+          "districtname": "ANAND",
+          "nc": "-",
+          "subdesc": "FOR CONDONATION OF DELAY",
+          "departmentname": "-",
+          "caseyear": "2026",
+          "casetype": "CA",
+          "sidecode": "C",
+          "casestatus": "PENDING",
+          "maintype": "-",
+          "judges": "HONOURABLE MR. JUSTICE A.Y. KOGJE and HONOURABLE MS. JUSTICE NISHA M. THAKORE",
+          "numberoflisting": "-",
+          "petnotation": "Applicant(s)"
+        }
+      ]
+    },
+    {
+      "classification": [
+        {
+          "classcode": "0000000##428",
+          "description": "LIMITATION ACT, 1963                    "
+        },
+        {
+          "classcode": "0",
+          "description": "940-DB - CIVIL  APPLICATION - LIMITATION ACT, 1963 - CONDONATION OF DELAY"
+        }
+      ]
+    },
+    {},
+    {},
+    {
+      "officedetails": [
+        {
+          "advcd": "8657",
+          "ADVOCATEDISPLAYNAME": "ARNIKA L OJHA(8657)",
+          "rcname": "",
+          "name_list": "",
+          "documentfee": "0",
+          "documentdetails": "<P>-PANDYA PUNITKUMAR KIRTIKUMAR",
+          "FILINGDATE": "30/03/2026",
+          "DOCUMENTNAME": "APPEARANCE NOTE",
+          "litgantypes": "PETITIONER(s)"
+        },
+        {
+          "advcd": "7134",
+          "ADVOCATEDISPLAYNAME": "MR. RAJESH G BAROT(7134)",
+          "rcname": "",
+          "serialnumber": "2",
+          "name_list": "",
+          "documentfee": "0",
+          "documentdetails": "<P>-PANDYA PUNITKUMAR KIRTIKUMAR",
+          "FILINGDATE": "30/03/2026",
+          "DOCUMENTNAME": "APPEARANCE NOTE",
+          "litgantypes": "PETITIONER(s)"
+        },
+        {
+          "advcd": "7134",
+          "ADVOCATEDISPLAYNAME": "MR. RAJESH G BAROT(7134)",
+          "rcname": "",
+          "serialnumber": "3",
+          "name_list": "",
+          "documentfee": "20",
+          "documentdetails": "<P>-PANDYA PUNITKUMAR KIRTIKUMAR",
+          "FILINGDATE": "30/03/2026",
+          "DOCUMENTNAME": "MEMO",
+          "litgantypes": "PETITIONER(s)"
+        }
+      ]
+    },
+    {},
+    {
+      "linkedmatterscp": [
+        {
+          "BOARDSRNOlmcp": "1",
+          "PROCEEDINGDATElmcp": "06/04/2026",
+          "JUDGESlmcp": "HONOURABLE MR. JUSTICE A.Y. KOGJE and HONOURABLE MS. JUSTICE NISHA M. THAKORE",
+          "ACTIONNAMElmcp": "1-NEXT DATE",
+          "COURTCODElmcp": "2              ",
+          "STAGENAMElmcp": "529-FOR ADMISSION"
+        }
+      ]
+    },
+    {
+      "orderhistory": [
+        {
+          "judgesoh": "ADDITIONAL REGISTRAR (JUDICIAL)",
+          "judgement": "N",
+          "transferred": "Y",
+          "transferredby": "PARMAR CHIRAG",
+          "questions": "-",
+          "ccinoh": "GJHC240184772026",
+          "orderdate": "17/03/2026",
+          "descriptionoh": "SCA/7774/2026",
+          "casenumberoh": "7774",
+          "cavjudgement": "N",
+          "dsdate": "17/03/2026",
+          "nc": "-",
+          "ordernooh": "1"
+        }
+      ]
+    },
+    {
+      "certifiedcopy": "NO DATA FOR CERTIFIED COPY"
+    },
+    {},
+    {},
+    {},
+    {
+      "notbefore": [
+        {}
+      ]
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+      "officeobjection": "NO DATA FOR OFFICE OBJECTIONS"
+    }
+  ]
+}
