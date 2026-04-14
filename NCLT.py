@@ -805,25 +805,10 @@ def nclt_get_details(bench, filing_no, flag_ia=False):
             "case_type": final_status.get('case_type'),
             "pet_name": pet_names,
             "res_name": res_names,
-            "advocates": "\n".join(
-                [
-                    x
-                    for x in [
-                        (
-                            f"Petitioner: {', '.join(sorted({a for a in pet_advs if a}))}"
-                            if pet_advs
-                            else None
-                        ),
-                        (
-                            f"Respondent: {', '.join(sorted({a for a in res_advs if a}))}"
-                            if res_advs
-                            else None
-                        ),
-                    ]
-                    if x
-                ]
-            ).strip()
-            or None,
+            "advocates": (
+                [{"name": a, "side": "petitioner"} for a in sorted({x for x in pet_advs if x})]
+                + [{"name": a, "side": "respondent"} for a in sorted({x for x in res_advs if x})]
+            ) or None,
             "judges": None,
             "bench_name": bench,
             "court_name": final_status.get('bench_nature_descr') or None,
