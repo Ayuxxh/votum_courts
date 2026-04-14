@@ -85,7 +85,36 @@ CASE_TYPE_SHORTHAND_TO_NAME: dict[str, str] = {
     "comp.app.(at)":              "company appeal(at)",
     "comp.app.(at)(ins)":         "company appeal(at)(ins)",
 }
-
+FLIPPED_CASE_TYPE = {
+    "ia": [
+        "ia", "i.a.", "i.a"
+    ],
+    "company appeal(at)": [
+        "ca(at)", "comp.appeal(at)", "comp. appeal(at)", "comp.app.(at)"
+    ],
+    "company appeal(at)(ins)": [
+        "ca(at)(ins)", "ca(at)(insolvency)", "comp.appeal(at)(ins)",
+        "comp. appeal(at)(ins)", "comp.app.(at)(ins)"
+    ],
+    "competition appeal(at)": [
+        "competition appeal(at)"
+    ],
+    "contempt case(at)": [
+        "contempt(at)", "cont.(at)"
+    ],
+    "review application": [
+        "ra", "r.a."
+    ],
+    "restoration application": [
+        "roa"
+    ],
+    "transfer appeal": [
+        "ta", "t.a."
+    ],
+    "transfer original petition (mrtp-at)": [
+        "top(mrtp-at)"
+    ]
+}
 
 def _normalize_location(location: str | None) -> str:
     """
@@ -981,9 +1010,8 @@ def nclat_fetch_cause_list(listing_date: datetime, bench: str = "delhi") -> List
     Fetch and parse NCLAT cause list for a given date and bench.
     """
 
-    print(listing_date)
     date_str = listing_date.strftime("%Y-%m-%d")
-    print(date_str,type(date_str))
+
     
     params = {
         "field_final_date_value": date_str,
@@ -1057,6 +1085,7 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     # 1. Full normalized case string containment.
     target_full = re.sub(r"[^A-Z0-9]+", "", case_no.upper())
 
+
     # 2. Exact numeric case token (e.g., "69/2026" or "No. 69 of 2026").
     nums = re.findall(r"\d+", case_no)
     target_no_year_pattern = None
@@ -1071,17 +1100,37 @@ def nclat_find_case_in_causelist(listing_date: datetime, case_no: str, bench: st
     matched = []
     for e in entries:
         curr_text = e["case_no"].upper()
+        
         curr_norm = re.sub(r"[^A-Z0-9]+", "", curr_text)
 
-        # Check full normalized substring in candidate text.
-        if target_full and target_full in curr_norm:
-            matched.append(e)
+        case_type = case_no.split('/')[0]
+
+
+        case_type = case_type.lower().strip()
+
+        try:
+
+            case_type = FLIPPED_CASE_TYPE[case_type]
+        except KeyError:
             continue
+        
+
+
+        # # Check full normalized substring in candidate text.
+        # if target_full and target_full in curr_norm:
+        #     matched.append(e)
+        #     continue
 
         # Check exact no/year token match.
         if target_no_year_pattern and target_no_year_pattern.search(curr_text):
-            matched.append(e)
+            for c_type in case_type:
+                c_type  = re.sub(r"[^A-Z0-9]+", "", c_type)
+  
+                if c_type in curr_norm:
+                    matched.append(e)
+                    break
             continue
+    
 
     return matched
 
@@ -1153,6 +1202,13 @@ if __name__ == '__main__':
     # a = nclat_search_by_case_no('delhi', '35', '121', '2026')
     # print(json.dumps(a, indent=4))
 
-    a = nclat_get_details('9910110084442023', 'delhi')
-    with open("nclt_output.json", "w") as f:
-        json.dump(a, f, indent=4)
+    # a = nclat_get_details('9910110084442023', 'delhi')
+    # with open("nclt_output.json", "w") as f:
+    #     json.dump(a, f, indent=4)
+    listing_data = datetime.strptime('4-15-2026', '%m-%d-%Y')   
+    a = nclat_find_case_in_causelist(listing_data, 'Company Appeal(AT)(Ins)/1809/2024')
+    print(a)
+    a = nclat_find_case_in_causelist(listing_data, 'Company Appeal(AT)(Ins)/1969/2024')
+    print(a)
+
+     
